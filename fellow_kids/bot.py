@@ -1,6 +1,5 @@
 import os
 import random
-import discord.utils
 
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -15,13 +14,13 @@ tf2images = ['https://i.ytimg.com/vi/OMUurmalxdc/hqdefault.jpg',
 'https://wiki.teamfortress.com/w/images/thumb/7/7f/Zombified_Engineer_RED.png/250px-Zombified_Engineer_RED.png',
 'https://scontent-atl3-1.cdninstagram.com/v/t51.2885-15/e35/53001684_454915401714262_5744163766126447936_n.jpg?_nc_ht=scontent-atl3-1.cdninstagram.com&_nc_cat=110&_nc_ohc=ByAB04rp3pMAX8f0goS&oh=087304d0e840977dca7dd58ddc8fa891&oe=5EE518A0',
 'https://pbs.twimg.com/media/D_ggShHUYAA5jda.png',
-'https://i.ytimg.com/vi/1a23gJ40Auo/hqdefault.jpg']
+'https://i.ytimg.com/vi/1a23gJ40Auo/hqdefault.jpg',
+'https://media.discordapp.net/attachments/684474004563689539/684852013313687640/images.jpg']
 
 load_dotenv()
 token = os.getenv('DISCORD_TOKEN')
 
 bot = commands.Bot(command_prefix='!')
-client = discord.Client()
 
 @bot.command(name='die', help='kill somone')
 async def die(ctx, arg):
