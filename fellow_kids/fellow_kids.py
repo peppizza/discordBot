@@ -116,9 +116,12 @@ async def smite(ctx, arg):
 async def smite_on_error(ctx):
     await ctx.send('you fool')
 
-@bot.command(name='nou', help='nou')
+@bot.command(name='nou', help='no u')
 async def nou(ctx, arg):
-    await ctx.send('{}, no u'.format(arg))
+    if (arg):
+        await ctx.send('{}, https://cdn.discordapp.com/attachments/684474004563689539/685130037585772552/deepfried_1583418116265.png'.format(arg))
+    else:
+        await ctx.send('https://cdn.discordapp.com/attachments/684474004563689539/685130037585772552/deepfried_1583418116265.png')
 
 @nou.error
 async def nou_on_error(ctx, error):
@@ -132,7 +135,7 @@ async def gay(ctx):
 async def yeah(ctx):
     await ctx.send('https://i.pinimg.com/736x/e2/d2/4a/e2d24a8338a81191c59b928c2cbeedcf.jpg')
 
-@bot.command(name='insult')
+@bot.command(name='insult', help='sends an insult')
 async def insult(ctx, arg):
     role = (str(ctx.message.author.roles[len(ctx.message.author.roles) - 1]))
     if (role == 'Administrator'):
