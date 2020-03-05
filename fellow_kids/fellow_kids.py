@@ -39,13 +39,18 @@ async def nword(ctx):
     await ctx.send('im gonna say the n word\nnigeria')
 
 @bot.command(name='bean', help='beanify')
-@commands.has_role('Moderator')
-async def bean(ctx, arg, arg2):
-    await ctx.send('{} has been beaned lol reason: {}'.format(arg, arg2))
+@commands.has_role('Administrator')
+async def bean(ctx, *args):
+    if (len(args) == 1):
+        await ctx.send('{} has been beaned lol'.format(args[0]))
+    elif (len(args) == 2):
+        await ctx.send('{} has been beaned lol reason: {}'.format(args[0], args[1]))
+    else:
+        bean_on_error
 
 @bean.error
 async def bean_on_error(ctx, error):
-    await ctx.send('you fucked up the command you peice of subhuman trash')
+    await ctx.send(error)
 
 @bot.command(name='kids', help='how do you do fellow kids')
 async def kids(ctx):
@@ -122,5 +127,21 @@ async def nou_on_error(ctx, error):
 @bot.command(name='gay', help='gay')
 async def gay(ctx):
     await ctx.send('https://www.villagevoice.com/wp-content/uploads/2011/02/thatsgay.png')
+
+@bot.command(name='ohyeah', help='kool aid man')
+async def yeah(ctx):
+    await ctx.send('https://i.pinimg.com/736x/e2/d2/4a/e2d24a8338a81191c59b928c2cbeedcf.jpg')
+
+@bot.command(name='insult')
+async def insult(ctx, arg):
+    role = (str(ctx.message.author.roles[len(ctx.message.author.roles) - 1]))
+    if (role == 'Administrator'):
+        await ctx.send('{} is my favorite ~~Guinee pig~~ friend'.format(arg))
+    elif (role == 'LITTERALLY JESUS'):
+        await ctx.send('If god had wanted you to live he would not have created me')
+    elif (role == 'Gay Boys'):
+        await ctx.send('you fap to gay hentai')
+    elif (role == 'Over 13'):
+        await ctx.send('you fap to hentai')
 
 bot.run(token)
