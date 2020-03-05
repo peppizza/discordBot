@@ -161,4 +161,8 @@ async def laugh(ctx):
 async def donkey(ctx, arg):
     await ctx.send('{} is a fucking donkey'.format(arg))
 
+@donkey.error
+async def donkey_on_error(ctx, error):
+    await ctx.send(error)
+
 bot.run(token)
