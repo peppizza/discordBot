@@ -100,15 +100,18 @@ async def tf2(ctx):
     await ctx.send(random.choice(tf2images))
 
 @bot.command(name='ping', help='ping')
-@commands.has_role('Administrator')
+@commands.has_role('pinging rights')
 async def ping(ctx, arg1, arg2):
     times = int(arg2)
-    for i in range(times):
-        await ctx.send(arg1)
+    if (times <= 10):
+    	for i in range(times):
+    	    await ctx.send(arg1)
+    else:
+        await ctx.send(ctx, OverflowError)
 
 @ping.error
 async def ping_on_error(ctx, error):
-    await ctx.send(error)
+    await ctx.send('ping limit is 10')
 
 @bot.command(name='smite', help='smite')
 @commands.has_role('LITTERALLY JESUS')
