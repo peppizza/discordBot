@@ -44,7 +44,7 @@ async def bean(ctx, *args):
     if (len(args) == 1):
         await ctx.send('{} has been beaned lol'.format(args[0]))
     elif (len(args) >= 2):
-        await ctx.send('{} has been beaned lol reason: {}'.format(args[0], ', '.join(args[1: len(args)])))
+        await ctx.send('{} has been beaned lol reason: {}'.format(args[0], ' '.join(args[1: len(args)])))
     else:
         bean_on_error
 
