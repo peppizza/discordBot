@@ -41,7 +41,9 @@ async def nword(ctx):
 @bot.command(name='bean', help='beanify')
 @commands.has_role('Administrator')
 async def bean(ctx, *args):
-    if (len(args) == 1):
+    if (args == ()):
+        await bean_on_error(ctx, NotImplementedError)
+    elif (len(args) == 1):
         await ctx.send('{} has been beaned lol'.format(args[0]))
     elif (len(args) >= 2):
         await ctx.send('{} has been beaned lol reason: {}'.format(args[0], ' '.join(args[1: len(args)])))
@@ -50,7 +52,7 @@ async def bean(ctx, *args):
 
 @bean.error
 async def bean_on_error(ctx, error):
-    await ctx.send(error)
+    await ctx.send('fix your god damn command')
 
 @bot.command(name='kids', help='how do you do fellow kids')
 async def kids(ctx):
