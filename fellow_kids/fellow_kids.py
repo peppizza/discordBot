@@ -16,7 +16,8 @@ tf2images = ['https://i.ytimg.com/vi/OMUurmalxdc/hqdefault.jpg',
 'https://pbs.twimg.com/media/D_ggShHUYAA5jda.png',
 'https://i.ytimg.com/vi/1a23gJ40Auo/hqdefault.jpg',
 'https://media.discordapp.net/attachments/684474004563689539/684852013313687640/images.jpg',
-'https://cdn.discordapp.com/attachments/684474004563689539/685243913925427241/guh.jpg']
+'https://cdn.discordapp.com/attachments/684474004563689539/685243913925427241/guh.jpg',
+'https://cdn.discordapp.com/attachments/684474004563689539/685259476470988995/scout.png']
 
 load_dotenv()
 token = os.getenv('DISCORD_TOKEN')
