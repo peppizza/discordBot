@@ -157,4 +157,8 @@ async def deep(ctx):
 async def laugh(ctx):
     await ctx.send('https://i.redd.it/l32xlpu8vad31.jpg')
 
+@bot.command(name='donkey', help='fucking donkey')
+async def donkey(ctx, arg):
+    await ctx.send('{} is a fucking donkey'.format(arg))
+
 bot.run(token)
