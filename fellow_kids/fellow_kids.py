@@ -43,8 +43,8 @@ async def nword(ctx):
 async def bean(ctx, *args):
     if (len(args) == 1):
         await ctx.send('{} has been beaned lol'.format(args[0]))
-    elif (len(args) == 2):
-        await ctx.send('{} has been beaned lol reason: {}'.format(args[0], args[1]))
+    elif (len(args) >= 2):
+        await ctx.send('{} has been beaned lol reason: {}'.format(args[0], ', '.join(args[1: len(args)])))
     else:
         bean_on_error
 
@@ -143,5 +143,7 @@ async def insult(ctx, arg):
         await ctx.send('you fap to gay hentai')
     elif (role == 'Over 13'):
         await ctx.send('you fap to hentai')
+    elif (role == 'bot haters'):
+        await ctx.send('I will rape you')
 
 bot.run(token)
