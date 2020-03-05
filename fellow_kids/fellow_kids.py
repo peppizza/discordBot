@@ -149,4 +149,8 @@ async def insult(ctx, arg):
     elif (role == 'bot haters'):
         await ctx.send('I will rape you')
 
+@bot.command(name='deep', help='deep')
+async def deep(ctx):
+    await ctx.send('https://preview.redd.it/she0nt0g5b131.jpg?auto=webp&s=e77d77c2bf39d54d9cb89457eee61220d5700df4')
+
 bot.run(token)
