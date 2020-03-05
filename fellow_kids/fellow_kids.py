@@ -117,8 +117,8 @@ async def smite_on_error(ctx):
     await ctx.send('you fool')
 
 @bot.command(name='nou', help='no u')
-async def nou(ctx, arg):
-    if (arg):
+async def nou(ctx, arg=None):
+    if (arg != None):
         await ctx.send('{}, https://cdn.discordapp.com/attachments/684474004563689539/685130037585772552/deepfried_1583418116265.png'.format(arg))
     else:
         await ctx.send('https://cdn.discordapp.com/attachments/684474004563689539/685130037585772552/deepfried_1583418116265.png')
@@ -152,5 +152,9 @@ async def insult(ctx, arg):
 @bot.command(name='deep', help='deep')
 async def deep(ctx):
     await ctx.send('https://preview.redd.it/she0nt0g5b131.jpg?auto=webp&s=e77d77c2bf39d54d9cb89457eee61220d5700df4')
+
+@bot.command(name='laugh', help='demoman laughing')
+async def laugh(ctx):
+    await ctx.send('https://i.redd.it/l32xlpu8vad31.jpg')
 
 bot.run(token)

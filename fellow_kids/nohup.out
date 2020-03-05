@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "fellow_kids.py", line 156, in <module>
+    @bon.command(name='laugh', help='demoman laughing')
+NameError: name 'bon' is not defined
