@@ -20,7 +20,11 @@ tf2images = ['https://i.ytimg.com/vi/OMUurmalxdc/hqdefault.jpg',
 'https://cdn.discordapp.com/attachments/684474004563689539/685259476470988995/scout.png',
 'https://cdn.discordapp.com/attachments/684474004563689539/685260611655041135/download.jpg',
 'https://cdn.discordapp.com/attachments/684474004563689539/685260665782403170/70783045_522992848459733_1340534253499123815_n.jpg',
-'https://cdn.discordapp.com/attachments/684474004563689539/685260666612875329/d1m5icxyd3k31.png']
+'https://cdn.discordapp.com/attachments/684474004563689539/685260666612875329/d1m5icxyd3k31.png',
+'https://cdn.discordapp.com/attachments/685262422252191781/685282281908207626/s1vnHrPTsVk.jpg',
+'https://cdn.discordapp.com/attachments/685262422252191781/685282287759392928/if-u-were-huntin-trouble-lad-ya-found-it-1808-62507520.png',
+'https://cdn.discordapp.com/attachments/685262422252191781/685282290707857441/images.jpg',
+'https://cdn.discordapp.com/attachments/685262422252191781/685282391681400875/FearfulNauticalBittern-size_restricted.gif']
 
 load_dotenv()
 token = os.getenv('DISCORD_TOKEN')
