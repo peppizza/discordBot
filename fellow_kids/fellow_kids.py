@@ -188,4 +188,8 @@ async def uaregay(ctx, arg):
 async def uaregay_on_error(ctx, error):
     await ctx.send(error)
 
+@bot.command(name='bruh', help='bruh sound effect #2')
+async def bruh(ctx):
+    await ctx.send('https://www.youtube.com/watch?v=2ZIpFytCSVc')
+
 bot.run(token)
