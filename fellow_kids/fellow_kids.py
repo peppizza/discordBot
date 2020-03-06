@@ -179,9 +179,12 @@ async def donkey(ctx, arg):
 async def donkey_on_error(ctx, error):
     await ctx.send(error)
 
-@bot.command(name='counterisgay', help='he is')
-async def counterisgay(ctx):
-	counter = '<@684528294292750472>'
-	await ctx.send(counter +  ' is gay')
+@bot.command(name='uaregay', help='you are gay')
+async def uaregay(ctx, arg):
+	await ctx.send('{} is gay'.format(arg))
+
+@uaregay.error
+async def uaregay_on_error(ctx, error):
+    await ctx.send(error)
 
 bot.run(token)
