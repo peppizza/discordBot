@@ -192,4 +192,12 @@ async def uaregay_on_error(ctx, error):
 async def bruh(ctx):
     await ctx.send('https://www.youtube.com/watch?v=2ZIpFytCSVc')
 
+@bot.command(name='vector', help='get vectored')
+async def vector(ctx):
+    await ctx.send('https://cdn.discordapp.com/attachments/685262422252191781/685591126442377266/download.jpg')
+
+@bot.command(name='gonk', help='gonk image')
+async def gonk(ctx):
+    await ctx.send('https://cdn.discordapp.com/attachments/685262422252191781/685621651970326545/unknown.png')
+
 bot.run(token)
