@@ -469,4 +469,8 @@ async def smug(ctx):
         await ctx.send(random.choice(smuganime))
         print(johney)
 
+@bot.command(name='didntseethat', help='demoman tf2')
+async def didntseethat(ctx):
+    await ctx.send('https://cdn.discordapp.com/attachments/685262422252191781/689161554318721042/maxresdefault.jpg')
+
 bot.run(token)
