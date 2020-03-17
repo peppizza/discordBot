@@ -2,6 +2,7 @@ import os
 import random
 
 from discord.ext import commands
+from discord import File
 from dotenv import load_dotenv
 from PIL import Image, ImageFont, ImageDraw
 
@@ -479,14 +480,19 @@ async def dio(ctx, *args):
     msg = " ".join(args[:]).upper()
     if len(msg) <= 18:
         fontSize = 144
-    else:
+    elif len(msg) <= 25:
         fontSize = 100
+    elif len(msg) <= 30:
+        fontSize = 70
+    else:
+        fontSize = 50
     font = ImageFont.truetype("/usr/share/fonts/truetype/msttcorefonts/Impact.ttf", fontSize)
     img = Image.open('dio.jpg')
     draw = ImageDraw.Draw(img)
     w, h = draw.textsize(msg, font=font)
     draw.text(((W-w)/2, 0), msg, (255, 255, 255), font=font)
-    img.save("a_test.png")
+    img.save("final.png")
+    await ctx.send(file=File('final.png'))
 
 @dio.error
 async def dio_on_error(error):
