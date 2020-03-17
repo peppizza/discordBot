@@ -3,6 +3,7 @@ import random
 
 from discord.ext import commands
 from dotenv import load_dotenv
+from PIL import Image, ImageFont, ImageDraw
 
 tf2images = ['https://i.ytimg.com/vi/OMUurmalxdc/hqdefault.jpg',
 'https://i.redd.it/kyczj16ebgl01.jpg',
@@ -283,8 +284,7 @@ smuganime = ['https://i.imgur.com/zZ86SqQ.jpg',
 'https://i.imgur.com/AZ9UidF.png',
 'https://i.imgur.com/rEWwjXF.jpg',
 'https://i.imgur.com/pxrzoKF.gif',
-'https://i.imgur.com/H9oKZXz.png',
-]
+'https://i.imgur.com/H9oKZXz.png']
 
 load_dotenv()
 token = os.getenv('DISCORD_TOKEN')
@@ -472,5 +472,24 @@ async def smug(ctx):
 @bot.command(name='didntseethat', help='demoman tf2')
 async def didntseethat(ctx):
     await ctx.send('https://cdn.discordapp.com/attachments/685262422252191781/689161554318721042/maxresdefault.jpg')
+
+@bot.command(name='dio')
+async def dio(ctx, *args):
+    W = 1280
+    msg = " ".join(args[:]).upper()
+    if len(msg) <= 18:
+        fontSize = 144
+    else:
+        fontSize = 100
+    font = ImageFont.truetype("/usr/share/fonts/truetype/msttcorefonts/Impact.ttf", fontSize)
+    img = Image.open('dio.jpg')
+    draw = ImageDraw.Draw(img)
+    w, h = draw.textsize(msg, font=font)
+    draw.text(((W-w)/2, 0), msg, (255, 255, 255), font=font)
+    img.save("a_test.png")
+
+@dio.error
+async def dio_on_error(error):
+    await print(error)
 
 bot.run(token)
