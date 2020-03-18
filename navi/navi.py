@@ -19,6 +19,7 @@ bot = commands.Bot(command_prefix='!')
 @bot.command(name='start')
 async def start(ctx):
     print('commaned recieved')
+    await ctx.send('starting...')
     global active
     active = True
     while (active == True):
@@ -28,6 +29,7 @@ async def start(ctx):
 @bot.command(name='stop')
 async def stop(ctx):
     print('stopping...')
+    await ctx.send('stopping...')
     global active
     active = False
 
