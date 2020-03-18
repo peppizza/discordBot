@@ -17,7 +17,7 @@ token = os.getenv('DISCORD_TOKEN')
 bot = commands.Bot(command_prefix='!')
 
 @bot.command(name='start')
-@commands.has_role('Administrator')
+@commands.has_role('pinging rights')
 async def start(ctx):
     print('commaned recieved')
     await ctx.send('starting...')
@@ -28,7 +28,7 @@ async def start(ctx):
         await ctx.send(random.choice(quotes))
 
 @bot.command(name='stop')
-@commands.has_role('Administrator')
+@commands.has_role('pinging rights')
 async def stop(ctx):
     print('stopping...')
     await ctx.send('stopping...')
