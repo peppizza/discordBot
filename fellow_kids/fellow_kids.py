@@ -489,7 +489,7 @@ async def dio(ctx, *args):
     font = ImageFont.truetype("/usr/share/fonts/truetype/msttcorefonts/Impact.ttf", fontSize)
     img = Image.open('dio.jpg')
     draw = ImageDraw.Draw(img)
-    w, h = draw.textsize(msg, font=font)
+    w = draw.textsize(msg, font=font)[0]
     draw.text(((W-w)/2, 0), msg, (255, 255, 255), font=font)
     img.save("final.png")
     await ctx.send(file=File('final.png'))
