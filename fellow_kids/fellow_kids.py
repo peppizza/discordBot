@@ -486,6 +486,7 @@ async def dio(ctx, *args):
         fontSize = 70
     else:
         fontSize = 50
+
     font = ImageFont.truetype("/usr/share/fonts/truetype/msttcorefonts/Impact.ttf", fontSize)
     img = Image.open('dio.jpg')
     draw = ImageDraw.Draw(img)
