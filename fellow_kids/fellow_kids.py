@@ -1,5 +1,6 @@
 import os
 import random
+import discord
 
 from discord.ext import commands
 from discord import File
@@ -498,5 +499,23 @@ async def dio(ctx, *args):
 @dio.error
 async def dio_on_error(error):
     await print(error)
+
+@bot.command(name='mute')
+@commands.has_role('Administrator')
+async def mute(ctx, member: discord.Member):
+     role = discord.utils.get(ctx.guild.roles, name='Muted')
+     await member.add_roles(role)
+     await ctx.send('this american boot just muted your american ass back to american canada')
+     await ctx.send('BECAUSE AMERICA')
+
+@mute.error
+async def mute_on_error(ctx, error):
+    await ctx.send(error)
+
+@bot.command(name='unmute')
+@commands.has_role('Administrator')
+async def unmute(ctx, member: discord.Member):
+    role = discord.utils.get(ctx.guild.roles, name='Muted')
+    await member.remove_roles(role)
 
 bot.run(token)
