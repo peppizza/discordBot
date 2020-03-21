@@ -4,6 +4,7 @@ import os
 import random
 import time
 import asyncio
+import discord
 
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -19,6 +20,7 @@ bot = commands.Bot(command_prefix='!')
 @bot.command(name='start')
 @commands.has_role('pinging rights')
 async def start(ctx):
+    await bot.change_presence(status=discord.Status.online)
     print('commaned recieved')
     await ctx.send('starting...')
     global active
@@ -34,5 +36,6 @@ async def stop(ctx):
     await ctx.send('stopping...')
     global active
     active = False
+    await bot.change_presence(status=discord.Status.idle)
 
 bot.run(token)
