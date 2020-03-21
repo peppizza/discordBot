@@ -291,9 +291,9 @@ smuganime = ['https://i.imgur.com/zZ86SqQ.jpg',
 load_dotenv()
 token = os.getenv('DISCORD_TOKEN')
 
-bot = commands.Bot(command_prefix='!')
+bot = commands.Bot(command_prefix=commands.when_mentioned_or('!'))
 
-@bot.command(name='die', help='kill somone')
+@bot.command(name='die', help='kill someone')
 async def die(ctx, arg):
     await ctx.send(f'{arg}, kys')
 
@@ -505,8 +505,7 @@ async def dio_on_error(error):
 async def mute(ctx, member: discord.Member):
      role = discord.utils.get(ctx.guild.roles, name='Muted')
      await member.add_roles(role)
-     await ctx.send('this american boot just muted your american ass back to american canada')
-     await ctx.send('BECAUSE AMERICA')
+     await ctx.send('this american boot just muted your american ass back to american canada\nBECAUSE AMERICA')
 
 @mute.error
 async def mute_on_error(ctx, error):
@@ -517,5 +516,10 @@ async def mute_on_error(ctx, error):
 async def unmute(ctx, member: discord.Member):
     role = discord.utils.get(ctx.guild.roles, name='Muted')
     await member.remove_roles(role)
+
+@bot.command(name='is')
+async def dumb(ctx, arg):
+    if arg == "dumb":
+        await ctx.send('the fuck you say to me you little shit')
 
 bot.run(token)
