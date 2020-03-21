@@ -6,6 +6,7 @@ from discord.ext import commands
 from discord import File
 from dotenv import load_dotenv
 from PIL import Image, ImageFont, ImageDraw
+from time import sleep
 
 tf2images = ['https://i.ytimg.com/vi/OMUurmalxdc/hqdefault.jpg',
 'https://i.redd.it/kyczj16ebgl01.jpg',
@@ -295,7 +296,13 @@ bot = commands.Bot(command_prefix=commands.when_mentioned_or('!'))
 
 @bot.command(name='die', help='kill someone')
 async def die(ctx, arg):
-    await ctx.send(f'{arg}, kys')
+    if arg == '<@!681886537046163506>':
+        await bot.change_presence(status=discord.Status.invisible)
+        sleep(5)
+        await ctx.send('Like jesus I too have respawned')
+        await bot.change_presence(status=discord.Status.online)
+    else:
+        await ctx.send(f'{arg}, kys')
 
 @die.error
 async def die_on_error(ctx, error):
