@@ -529,4 +529,8 @@ async def dumb(ctx, arg):
     if arg == "dumb":
         await ctx.send('the fuck you say to me you little shit')
 
+@bot.command(name='spycrab')
+async def spycrab(ctx):
+    await ctx.send('https://i.imgur.com/ufzaw81.png')
+
 bot.run(token)
