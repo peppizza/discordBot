@@ -306,7 +306,7 @@ def getapi(word):
     try:
         syns = parsed[0]['meta']['syns'][0]
         return random.choice(syns)
-    except TypeError:
+    except TypeError or IndexError:
         return word
     
 
@@ -551,7 +551,17 @@ async def spycrab(ctx):
 
 @bot.command()
 async def mimic(ctx, member: discord.Member):
-    msg = await bot.wait_for('message')
+
+    msg = ()
+
+    def check(m):
+        return m.content and m.author
+
+    while (True):
+        msg = await bot.wait_for('message', check=check)
+        print(member == check(msg))
+        if member == check(msg):
+            break
     content = str(msg.content)
     final = content
     if 'im' in content or 'i\'m' in content:
