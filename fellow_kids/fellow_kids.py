@@ -1,6 +1,8 @@
 import os
 import random
 import discord
+import requests
+import json
 
 from discord.ext import commands
 from discord import File
@@ -289,12 +291,26 @@ smuganime = ['https://i.imgur.com/zZ86SqQ.jpg',
 'https://i.imgur.com/pxrzoKF.gif',
 'https://i.imgur.com/H9oKZXz.png']
 
+# https://dictionaryapi.com/api/v3/references/thesaurus/json/{word}?key={key}
+
+
 load_dotenv()
 token = os.getenv('DISCORD_TOKEN')
+key = os.getenv('API_KEY')
 
 bot = commands.Bot(command_prefix=commands.when_mentioned_or('!'))
 
-@bot.command(name='die', help='kill someone')
+def getapi(word):
+    response = requests.get('https://dictionaryapi.com/api/v3/references/thesaurus/json/{0}?key={1}'.format(word, key))
+    parsed = response.json()
+    try:
+        syns = parsed[0]['meta']['syns'][0]
+        return random.choice(syns)
+    except TypeError:
+        return word
+    
+
+@bot.command(help='kill someone')
 async def die(ctx, arg):
     if arg == '<@!681886537046163506>':
         await bot.change_presence(status=discord.Status.invisible)
@@ -308,15 +324,15 @@ async def die(ctx, arg):
 async def die_on_error(ctx, error):
     await ctx.send('you fucked up the command you peice of subhuman trash')
 
-@bot.command(name='rr', help='rick roll')
+@bot.command(help='rick roll')
 async def rr(ctx):
     await ctx.send('https://www.youtube.com/watch?v=dQw4w9WgXcQ')
 
-@bot.command(name='nword', help='say the n word')
+@bot.command(help='say the n word')
 async def nword(ctx):
     await ctx.send('im gonna say the n word\nnigeria')
 
-@bot.command(name='bean', help='beanify')
+@bot.command(help='beanify')
 @commands.has_role('Administrator')
 async def bean(ctx, *args):
     if (args == ()):
@@ -332,11 +348,11 @@ async def bean(ctx, *args):
 async def bean_on_error(ctx, error):
     await ctx.send('fix your god damn command')
 
-@bot.command(name='kids', help='how do you do fellow kids')
+@bot.command(help='how do you do fellow kids')
 async def kids(ctx):
     await ctx.send('https://www.youtube.com/watch?v=bI2PdskxE_s')
 
-@bot.command(name='bonk', help='bonk')
+@bot.command(help='bonk')
 async def bonk(ctx, arg):
     await ctx.send('{} has been bonked'.format(arg))
 
@@ -344,7 +360,7 @@ async def bonk(ctx, arg):
 async def bonk_on_error(ctx, error):
     await ctx.send(error)
 
-@bot.command(name='pootis', help='pootis')
+@bot.command(help='pootis')
 async def pootis(ctx):
     await ctx.send('pootis')
 
@@ -356,7 +372,7 @@ async def jesus(ctx):
 async def mom(ctx):
     await ctx.send('https://www.youtube.com/watch?v=iYx_aGlmyc4')
 
-@bot.command(name='hey', help='heyayayaya')
+@bot.command(help='heyayayaya')
 async def hey(ctx):
     await ctx.send('https://www.youtube.com/watch?v=ZZ5LpwO-An4&t=13s')
 
@@ -364,7 +380,7 @@ async def hey(ctx):
 async def hitler(ctx):
     await ctx.send('https://www.youtube.com/watch?v=lLwguZnvguQ')
 
-@bot.command(name='shrek', help='shrek')
+@bot.command(help='shrek')
 async def shrek(ctx):
     await ctx.send('https://www.youtube.com/watch?v=psFzJv8g6jc')
 
@@ -376,7 +392,7 @@ async def hamburger(ctx):
 async def tf2(ctx):
     await ctx.send(random.choice(tf2images))
 
-@bot.command(name='ping', help='ping')
+@bot.command(help='ping')
 @commands.has_role('pinging rights')
 async def ping(ctx, arg1, arg2):
     times = int(arg2)
@@ -390,7 +406,7 @@ async def ping(ctx, arg1, arg2):
 async def ping_on_error(ctx, error):
     await ctx.send('ping limit is 10')
 
-@bot.command(name='smite', help='smite')
+@bot.command(help='smite')
 @commands.has_role('LITTERALLY JESUS')
 async def smite(ctx, arg):
     await ctx.send('{}, feel the wrath of jesus'.format(arg))
@@ -399,7 +415,7 @@ async def smite(ctx, arg):
 async def smite_on_error(ctx):
     await ctx.send('you fool')
 
-@bot.command(name='nou', help='no u')
+@bot.command(help='no u')
 async def nou(ctx, arg=None):
     if (arg != None):
         await ctx.send('{}, https://cdn.discordapp.com/attachments/684474004563689539/685130037585772552/deepfried_1583418116265.png'.format(arg))
@@ -410,7 +426,7 @@ async def nou(ctx, arg=None):
 async def nou_on_error(ctx, error):
     await ctx.send(error)
 
-@bot.command(name='gay', help='gay')
+@bot.command(help='gay')
 async def gay(ctx):
     await ctx.send('https://www.villagevoice.com/wp-content/uploads/2011/02/thatsgay.png')
 
@@ -418,7 +434,7 @@ async def gay(ctx):
 async def yeah(ctx):
     await ctx.send('https://i.pinimg.com/736x/e2/d2/4a/e2d24a8338a81191c59b928c2cbeedcf.jpg')
 
-@bot.command(name='insult', help='sends an insult')
+@bot.command(help='sends an insult')
 async def insult(ctx, arg):
     role = (str(ctx.message.author.roles[len(ctx.message.author.roles) - 1]))
     if (role == 'Administrator'):
@@ -432,15 +448,15 @@ async def insult(ctx, arg):
     elif (role == 'bot haters'):
         await ctx.send('I will rape you')
 
-@bot.command(name='deep', help='deep')
+@bot.command(help='deep')
 async def deep(ctx):
     await ctx.send('https://preview.redd.it/she0nt0g5b131.jpg?auto=webp&s=e77d77c2bf39d54d9cb89457eee61220d5700df4')
 
-@bot.command(name='laugh', help='demoman laughing')
+@bot.command(help='demoman laughing')
 async def laugh(ctx):
     await ctx.send('https://i.redd.it/l32xlpu8vad31.jpg')
 
-@bot.command(name='donkey', help='fucking donkey')
+@bot.command(help='fucking donkey')
 async def donkey(ctx, arg):
     await ctx.send('{} is a fucking donkey'.format(arg))
 
@@ -448,7 +464,7 @@ async def donkey(ctx, arg):
 async def donkey_on_error(ctx, error):
     await ctx.send(error)
 
-@bot.command(name='uaregay', help='you are gay')
+@bot.command(help='you are gay')
 async def uaregay(ctx, arg):
 	await ctx.send('{} is gay'.format(arg))
 
@@ -456,19 +472,19 @@ async def uaregay(ctx, arg):
 async def uaregay_on_error(ctx, error):
     await ctx.send(error)
 
-@bot.command(name='bruh', help='bruh sound effect #2')
+@bot.command(help='bruh sound effect #2')
 async def bruh(ctx):
     await ctx.send('https://www.youtube.com/watch?v=2ZIpFytCSVc')
 
-@bot.command(name='vector', help='get vectored')
+@bot.command(help='get vectored')
 async def vector(ctx):
     await ctx.send('https://cdn.discordapp.com/attachments/685262422252191781/685591126442377266/download.jpg')
 
-@bot.command(name='gonk', help='gonk image')
+@bot.command(help='gonk image')
 async def gonk(ctx):
     await ctx.send('https://cdn.discordapp.com/attachments/685262422252191781/685621651970326545/unknown.png')
 
-@bot.command(name='smug', help='prints smug anime girl')
+@bot.command(help='prints smug anime girl')
 async def smug(ctx):
     johney = random.randrange(0, 10)
     if johney <= 1:
@@ -478,11 +494,11 @@ async def smug(ctx):
         await ctx.send(random.choice(smuganime))
         print(johney)
 
-@bot.command(name='didntseethat', help='demoman tf2')
+@bot.command(help='demoman tf2')
 async def didntseethat(ctx):
     await ctx.send('https://cdn.discordapp.com/attachments/685262422252191781/689161554318721042/maxresdefault.jpg')
 
-@bot.command(name='dio')
+@bot.command()
 async def dio(ctx, *args):
     W = 1280
     msg = " ".join(args[:]).upper()
@@ -507,7 +523,7 @@ async def dio(ctx, *args):
 async def dio_on_error(error):
     await print(error)
 
-@bot.command(name='mute')
+@bot.command()
 @commands.has_role('Administrator')
 async def mute(ctx, member: discord.Member):
      role = discord.utils.get(ctx.guild.roles, name='Muted')
@@ -518,7 +534,7 @@ async def mute(ctx, member: discord.Member):
 async def mute_on_error(ctx, error):
     await ctx.send(error)
 
-@bot.command(name='unmute')
+@bot.command()
 @commands.has_role('Administrator')
 async def unmute(ctx, member: discord.Member):
     role = discord.utils.get(ctx.guild.roles, name='Muted')
@@ -529,8 +545,29 @@ async def dumb(ctx, arg):
     if arg == "dumb":
         await ctx.send('the fuck you say to me you little shit')
 
-@bot.command(name='spycrab')
+@bot.command()
 async def spycrab(ctx):
     await ctx.send('https://i.imgur.com/ufzaw81.png')
+
+@bot.command()
+async def mimic(ctx, member: discord.Member):
+    msg = await bot.wait_for('message')
+    content = str(msg.content)
+    final = content
+    if 'im' in content or 'i\'m' in content:
+        final = content.replace('im', 'you\'re')
+        final = final.replace('i\'m', 'you\'re')
+
+    final = final.split()
+    i = random.choice(range(len(final)))
+    print(i)
+    api = getapi(final[i])
+    final[i] = api
+    final = ' '.join(final)
+    await ctx.send(final)
+        
+# @mimic.error
+# async def mimic_on_error(ctx, error):
+#     await ctx.send(error)
 
 bot.run(token)
