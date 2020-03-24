@@ -557,6 +557,9 @@ async def mimic(ctx, member: discord.Member):
     if 'im' in content or 'i\'m' in content:
         final = content.replace('im', 'you\'re')
         final = final.replace('i\'m', 'you\'re')
+    elif 'fuck' in content or 'Fuck' in content:
+        final = content.replace('fuck', 'frick')
+        final = final.replace('Fuck', 'Frick')
 
     final = final.split()
     i = random.choice(range(len(final)))
