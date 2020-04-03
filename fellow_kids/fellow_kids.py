@@ -3,6 +3,7 @@ import random
 import discord
 import requests
 import json
+import datetime
 
 from discord.ext import commands
 from discord import File
@@ -297,6 +298,7 @@ smuganime = ['https://i.imgur.com/zZ86SqQ.jpg',
 load_dotenv()
 token = os.getenv('DISCORD_TOKEN')
 key = os.getenv('API_KEY')
+bday = datetime.datetime(2020, 10, 26)
 
 bot = commands.Bot(command_prefix=commands.when_mentioned_or('!'))
 
@@ -309,6 +311,12 @@ def getapi(word):
     except TypeError or IndexError:
         return word
     
+
+@bot.event
+async def on_message(message):
+    channel = bot.get_channel(685262422252191781)
+    if message.content.startswith('okay'):
+        await channel.send('ok>okay')
 
 @bot.command(help='kill someone')
 async def die(ctx, arg):
@@ -550,7 +558,7 @@ async def spycrab(ctx):
     await ctx.send('https://i.imgur.com/ufzaw81.png')
 
 @bot.command()
-async def mimic(ctx, member: discord.Member):
+async def mimic(ctx, member: discord.Member, word=''):
 
     msg = ()
 
@@ -578,9 +586,11 @@ async def mimic(ctx, member: discord.Member):
     final[i] = api
     final = ' '.join(final)
     await ctx.send(final)
-        
-# @mimic.error
-# async def mimic_on_error(ctx, error):
-#     await ctx.send(error)
+   
+@bot.command()
+async def ooopbday(ctx):
+    now = datetime.datetime.now()
+    days = bday - now
+    await ctx.send('there are {0} until ooop is no longer a gay boy'.format(days.days))
 
 bot.run(token)
