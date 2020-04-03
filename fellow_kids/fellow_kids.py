@@ -317,6 +317,7 @@ async def on_message(message):
     channel = bot.get_channel(685262422252191781)
     if message.content.startswith('okay'):
         await channel.send('ok>okay')
+    await bot.process_commands(message)
 
 @bot.command(help='kill someone')
 async def die(ctx, arg):
