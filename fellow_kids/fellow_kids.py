@@ -342,7 +342,7 @@ async def nword(ctx):
     await ctx.send('im gonna say the n word\nnigeria')
 
 @bot.command(help='beanify')
-@commands.has_role('Administrator')
+@commands.has_role('Moderators')
 async def bean(ctx, *args):
     if (args == ()):
         await bean_on_error(ctx, NotImplementedError)
@@ -533,7 +533,7 @@ async def dio_on_error(error):
     await print(error)
 
 @bot.command()
-@commands.has_role('Administrator')
+@commands.has_role('Moderators')
 async def mute(ctx, member: discord.Member):
      role = discord.utils.get(ctx.guild.roles, name='Muted')
      await member.add_roles(role)
@@ -544,7 +544,7 @@ async def mute_on_error(ctx, error):
     await ctx.send(error)
 
 @bot.command()
-@commands.has_role('Administrator')
+@commands.has_role('Moderators')
 async def unmute(ctx, member: discord.Member):
     role = discord.utils.get(ctx.guild.roles, name='Muted')
     await member.remove_roles(role)
