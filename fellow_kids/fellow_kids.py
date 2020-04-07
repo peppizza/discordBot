@@ -314,8 +314,8 @@ def getapi(word):
 
 @bot.event
 async def on_message(message):
-    channel = bot.get_channel(685262422252191781)
     if message.content.startswith('okay'):
+        channel = message.channel
         await channel.send('ok>okay')
     await bot.process_commands(message)
 
