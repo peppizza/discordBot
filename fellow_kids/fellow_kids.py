@@ -4,6 +4,7 @@ import discord
 import requests
 import json
 import datetime
+import asyncio
 
 from discord.ext import commands
 from discord import File
@@ -593,5 +594,29 @@ async def ooopbday(ctx):
     now = datetime.datetime.now()
     days = bday - now
     await ctx.send('there are {0} until ooop is no longer a gay boy'.format(days.days))
+
+@bot.command()
+async def remindme(ctx, *args):
+    author = ctx.message.author.id
+    def convert(time):
+        indicators = ['hr', 'min', 'sec']
+        if any(substring in time for substring in indicators):
+            originaltime = time
+            time = time.replace('hr', '')
+            time = time.replace('min', '')
+            time = time.replace('sec', '')
+            time = int(time)
+            if 'hr' in originaltime:
+                time = time * 3600
+            elif 'min' in originaltime:
+                time = time * 60
+            return time
+    await ctx.send('set a reminder \"{0}\" for <@!{1}> for {2}'.format(' '.join(args[1:]), author, args[0]))
+    await asyncio.sleep(convert(args[0]))
+    await ctx.send('<@!{0}> {1}'.format(author, ' '.join(args[1:])))
+
+@remindme.error
+async def remindme_on_error(ctx, error):
+    await ctx.send(error)
 
 bot.run(token)
