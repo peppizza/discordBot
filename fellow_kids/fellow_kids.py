@@ -5,6 +5,7 @@ import requests
 import json
 import datetime
 import asyncio
+import secrets
 
 from discord.ext import commands
 from discord import File
@@ -400,7 +401,7 @@ async def hamburger(ctx):
 
 @bot.command(name='tf2image', help='selects random tf2 image')
 async def tf2(ctx):
-    await ctx.send(random.choice(tf2images))
+    await ctx.send(secrets.choice(tf2images))
 
 @bot.command(help='ping')
 @commands.has_role('pinging rights')
@@ -501,7 +502,7 @@ async def smug(ctx):
         await ctx.send('https://pm1.narvii.com/6445/e408777d009b89e2dc006a0ef0512f209a953501_hq.jpg')
         print(johney)
     else:
-        await ctx.send(random.choice(smuganime))
+        await ctx.send(secrets.choice(smuganime))
         print(johney)
 
 @bot.command(help='demoman tf2')
