@@ -2,7 +2,6 @@ import os
 import random
 import discord
 import requests
-import json
 import datetime
 import asyncio
 import secrets
@@ -364,9 +363,9 @@ async def bean(ctx, *args):
     else:
         bean_on_error
 
-# @bean.error
-# async def bean_on_error(ctx, error):
-#     await ctx.send(error)
+@bean.error
+async def bean_on_error(ctx, error):
+    await ctx.send(error)
 
 @bot.command(help='how do you do fellow kids')
 async def kids(ctx):
@@ -598,7 +597,7 @@ async def mimic(ctx, member: discord.Member, word=''):
     final[i] = api
     final = ' '.join(final)
     await ctx.send(final)
-   
+
 @bot.command()
 async def ooopbday(ctx):
     now = datetime.datetime.now()
