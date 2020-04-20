@@ -2,7 +2,6 @@
 
 import os
 import random
-import time
 import asyncio
 import discord
 
@@ -10,7 +9,7 @@ from discord.ext import commands
 from dotenv import load_dotenv
 
 quotes = ['HEY', 'LOOK', 'LISTEN', 'HEY LISTEN']
-global active
+active = False
 
 load_dotenv()
 token = os.getenv('DISCORD_TOKEN')
