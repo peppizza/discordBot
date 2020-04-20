@@ -349,15 +349,24 @@ async def bean(ctx, *args):
     if (args == ()):
         await bean_on_error(ctx, NotImplementedError)
     elif (len(args) == 1):
-        await ctx.send('{} has been beaned lol'.format(args[0]))
+        embed = discord.Embed(title="bean", description="you have been beaned", color=0xff0000)
+        embed.set_author(name=ctx.message.author.name)
+        embed.add_field(name="person", value=args[0])
+        embed.set_image(url="https://images.immediate.co.uk/production/volatile/sites/4/2018/08/GettyImages-149069817-15d7368.jpg?webp=true&quality=45&resize=1880%2C799")
+        await ctx.send(embed=embed)
     elif (len(args) >= 2):
-        await ctx.send('{} has been beaned lol reason: {}'.format(args[0], ' '.join(args[1: len(args)])))
+        embed = discord.Embed(title="bean", description="you have been beaned", color=0xff0000)
+        embed.set_author(name=ctx.message.author.name)
+        embed.add_field(name="person", value=args[0])
+        embed.add_field(name="reason", value=' '.join(args[1: len(args)]))
+        embed.set_image(url="https://images.immediate.co.uk/production/volatile/sites/4/2018/08/GettyImages-149069817-15d7368.jpg?webp=true&quality=45&resize=1880%2C799")
+        await ctx.send(embed=embed)
     else:
         bean_on_error
 
-@bean.error
-async def bean_on_error(ctx, error):
-    await ctx.send('fix your god damn command')
+# @bean.error
+# async def bean_on_error(ctx, error):
+#     await ctx.send(error)
 
 @bot.command(help='how do you do fellow kids')
 async def kids(ctx):
