@@ -1,7 +1,7 @@
 # 'HEY' 'LOOK" "LISTEN" "HEY LISTEN"
 
 import os
-import random
+import secrets
 import asyncio
 import discord
 
@@ -25,8 +25,8 @@ async def start(ctx):
     global active
     active = True
     while (active == True):
-        await asyncio.sleep(random.randrange(2, 5))
-        await ctx.send(random.choice(quotes))
+        await asyncio.sleep(secrets.randbelow(5))
+        await ctx.send(secrets.choice(quotes))
 
 @bot.command(name='stop')
 @commands.has_role('pinging rights')
