@@ -339,11 +339,12 @@ async def on_message(message):
 @commands.has_role('Bot Developer')
 async def close(ctx):
     channel = ctx.channel
-    if channel.id == 697102775959552052 or channel.id == 702882611256754289 or channel.id == 702882635365613662:
-        embed = discord.Embed(title='finished', description='this channel is now open for suggestions', color=0x00ff00)
-        category = bot.get_channel(702882329332285471)
-        await channel.edit(name='{}-✅'.format((ctx.channel.name).replace('⌛', '')), category=category, sync_permissions=True)
-        await ctx.send(embed=embed)
+    category = bot.get_channel(702882329332285471)
+    if channel.id == 697102775959552052 or channel.id == 702882611256754289 or channel.id == 70288263536561366:
+        if channel.category_id == 702882449159618663:
+            embed = discord.Embed(title='finished', description='this channel is now open for suggestions', color=0x00ff00)
+            await channel.edit(name='{}-✅'.format((ctx.channel.name).replace('⌛', '')), category=category, sync_permissions=True)
+            await ctx.send(embed=embed)
 
 @bot.command(help='kill someone')
 async def die(ctx, arg):
