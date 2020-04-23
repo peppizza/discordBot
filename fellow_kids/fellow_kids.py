@@ -318,7 +318,32 @@ async def on_message(message):
     if message.content.startswith('okay'):
         channel = message.channel
         await channel.send('ok>okay')
+    if message.channel.id == 697102775959552052 or message.channel.id == 702882611256754289 or message.channel.id == 702882635365613662:
+        channel = message.channel
+        catagory = channel.category
+        if catagory.id == 702882329332285471 and message.author.id != 681886537046163506 and message.author.id != 253290704384557057:
+            embed = discord.Embed(title='working on..', description='Your request is now being worked on by the devs', color=0x00ff00)
+            category = bot.get_channel(702882449159618663)
+            guild = message.guild
+            everyone = guild.get_role(684472795639447621)
+            dev = guild.get_role(697125812465565746)
+            await channel.edit(name='suggestion-1-⌛', category=category)
+            await channel.set_permissions(message.author, send_messages=True)
+            await channel.set_permissions(everyone, send_messages=False)
+            await channel.set_permissions(dev, send_messages=True)
+            await channel.send('<@!{}>'.format(253290704384557057), embed=embed)
+        
     await bot.process_commands(message)
+
+@bot.command()
+@commands.has_role('Bot Developer')
+async def done(ctx):
+    channel = ctx.channel
+    if channel.id == 697102775959552052 or channel.id == 702882611256754289 or channel.id == 702882635365613662:
+        embed = discord.Embed(title='finished', description='this channel is now open for suggestions', color=0x00ff00)
+        category = bot.get_channel(702882329332285471)
+        await channel.edit(name='suggestion-1-✅', category=category, sync_permissions=True)
+        await ctx.send(embed=embed)
 
 @bot.command(help='kill someone')
 async def die(ctx, arg):
