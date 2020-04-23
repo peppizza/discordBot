@@ -337,7 +337,7 @@ async def on_message(message):
 
 @bot.command()
 @commands.has_role('Bot Developer')
-async def done(ctx):
+async def close(ctx):
     channel = ctx.channel
     if channel.id == 697102775959552052 or channel.id == 702882611256754289 or channel.id == 702882635365613662:
         embed = discord.Embed(title='finished', description='this channel is now open for suggestions', color=0x00ff00)
