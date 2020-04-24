@@ -293,6 +293,8 @@ smuganime = ['https://i.imgur.com/zZ86SqQ.jpg',
 'https://i.imgur.com/pxrzoKF.gif',
 'https://i.imgur.com/H9oKZXz.png']
 
+suggestions = [697102775959552052, 702882611256754289, 702882635365613662, 703312812096749599, 703312842715037766, 703312883055984730, 703312953637863515, 703313003889688696, 703313116154560583]
+
 # https://dictionaryapi.com/api/v3/references/thesaurus/json/{word}?key={key}
 
 
@@ -318,7 +320,7 @@ async def on_message(message):
     if message.content.startswith('okay'):
         channel = message.channel
         await channel.send('ok>okay')
-    if message.channel.id == 697102775959552052 or message.channel.id == 702882611256754289 or message.channel.id == 702882635365613662:
+    if message.channel.id in suggestions:
         channel = message.channel
         catagory = channel.category
         if catagory.id == 702882329332285471 and message.author.id != 681886537046163506 and message.author.id != 253290704384557057:
@@ -340,7 +342,7 @@ async def on_message(message):
 async def close(ctx):
     channel = ctx.channel
     category = bot.get_channel(702882329332285471)
-    if channel.id == 697102775959552052 or channel.id == 702882611256754289 or channel.id == 70288263536561366:
+    if channel.id in suggestions:
         if channel.category_id == 702882449159618663:
             embed = discord.Embed(title='finished', description='this channel is now open for suggestions', color=0x00ff00)
             await channel.edit(name='{}-✅'.format((ctx.channel.name).replace('⌛', '')), category=category, sync_permissions=True)
