@@ -3,7 +3,7 @@
 
 Two discord bots for the french fortress discord server
 
-## Dependecies
+## Dependencies
 
 Requires discord.py rewrite, and python-dotenv
 
