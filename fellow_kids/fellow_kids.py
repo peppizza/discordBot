@@ -656,4 +656,8 @@ async def remindme(ctx, *args):
 async def remindme_on_error(ctx, error):
     await ctx.send(error)
 
+@bot.command()
+async def whygay(ctx):
+    await ctx.send('https://cdn.discordapp.com/attachments/697102775959552052/704357844572438598/images.jpg')
+
 bot.run(token)
