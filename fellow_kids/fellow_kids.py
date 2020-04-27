@@ -5,8 +5,9 @@ import requests
 import datetime
 import asyncio
 import secrets
+import datetime
 
-from discord.ext import commands
+from discord.ext import tasks, commands
 from discord import File
 from dotenv import load_dotenv
 from PIL import Image, ImageFont, ImageDraw
@@ -303,7 +304,7 @@ token = os.getenv('DISCORD_TOKEN')
 key = os.getenv('API_KEY')
 bday = datetime.datetime(2020, 10, 26)
 
-bot = commands.Bot(command_prefix=commands.when_mentioned_or('!'))
+bot = commands.Bot(command_prefix='!')
 
 def getapi(word):
     response = requests.get('https://dictionaryapi.com/api/v3/references/thesaurus/json/{0}?key={1}'.format(word, key))
@@ -314,6 +315,8 @@ def getapi(word):
     except TypeError or IndexError:
         return word
     
+
+#❌
 
 @bot.event
 async def on_message(message):
@@ -334,19 +337,31 @@ async def on_message(message):
             await channel.set_permissions(everyone, send_messages=False)
             await channel.set_permissions(dev, send_messages=True)
             await channel.send('<@!{}>'.format(253290704384557057), embed=embed)
+            category = bot.get_channel(702882329332285471)
+            print(len(category.channels))
+            await bot.process_commands(message)
+            if len(category.channels) <= 2:
+                while True:
+                    channel = bot.get_channel(random.choice(suggestions))
+                    await bot.process_commands(message)
+                    if channel.category_id == 703314675529416785:
+                        await channel.edit(name='{}-✅'.format(channel.name), category=bot.get_channel(702882329332285471), sync_permissions=True)
+            def check(m):
+                return m.channel == channel
+            while True:
+                await bot.process_commands(message)
+                try:
+                    if message.channel.category_id == 702882449159618663:
+                        await bot.process_commands(message)
+                        await bot.wait_for('message', timeout=600, check=check)
+                    else:
+                        break
+                except asyncio.TimeoutError:
+                    category = bot.get_channel(703314675529416785)
+                    await channel.edit(name='{}'.format((message.channel.name).replace('✅', '').replace('⌛', '')), category=category, sync_permissions=True)
+                    break
         
     await bot.process_commands(message)
-
-@bot.command()
-@commands.has_role('Bot Developer')
-async def close(ctx):
-    channel = ctx.channel
-    category = bot.get_channel(702882329332285471)
-    if channel.id in suggestions:
-        if channel.category_id == 702882449159618663:
-            embed = discord.Embed(title='finished', description='this channel is now open for suggestions', color=0x00ff00)
-            await channel.edit(name='{}-✅'.format((ctx.channel.name).replace('⌛', '')), category=category, sync_permissions=True)
-            await ctx.send(embed=embed)
 
 @bot.command(help='kill someone')
 async def die(ctx, arg):
