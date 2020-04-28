@@ -593,9 +593,10 @@ async def dio(ctx, *args):
     img = Image.open('dio.jpg')
     draw = ImageDraw.Draw(img)
     w = draw.textsize(msg, font=font)[0]
-    draw.text(((W-w)/2, 0), msg, (255, 255, 255), font=font)
-    img.save("final.png")
-    await ctx.send(file=File('final.png'))
+    async with ctx.typing():
+        draw.text(((W-w)/2, 0), msg, (255, 255, 255), font=font)
+        img.save("final.png")
+        await ctx.send(file=File('final.png'))
 
 @dio.error
 async def dio_on_error(error):
