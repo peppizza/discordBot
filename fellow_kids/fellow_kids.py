@@ -692,4 +692,21 @@ async def remindme_on_error(ctx, error):
 async def whygay(ctx):
     await ctx.send('https://cdn.discordapp.com/attachments/697102775959552052/704357844572438598/images.jpg')
 
+@bot.command()
+@commands.has_role(696773209495699547)
+async def warn(ctx, member: discord.Member, *args):
+    if ctx.message.channel.id != 685262422252191781:
+        await ctx.message.delete()
+    else:
+        user = bot.get_user(member.id)
+        embed = discord.Embed(title='WARNING')
+        embed.add_field(name='you have been warned by', value=ctx.message.author)
+        embed.add_field(name='reason', value=' '.join(args[0:]))
+        await user.send(embed=embed)
+
+@warn.error
+async def warn_on_error(ctx, error):
+    await ctx.message.delete()
+    print(error)
+
 bot.run(token)
