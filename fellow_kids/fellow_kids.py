@@ -709,4 +709,8 @@ async def warn_on_error(ctx, error):
     await ctx.message.delete()
     print(error)
 
+@bot.command()
+async def report(ctx):
+    await ctx.send('https://forms.gle/bwfdc1AyHJ5dL1ZN7')
+
 bot.run(token)
