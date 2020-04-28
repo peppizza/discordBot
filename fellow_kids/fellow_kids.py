@@ -336,7 +336,7 @@ async def after_inactivetoopen():
     chosen = bot.get_channel(chosen)
     category = bot.get_channel(702882329332285471)
     await chosen.edit(name='{}-✅'.format(chosen.name).replace('⌛', ''), category=category, sync_permissions=True)
-    embed = discord.Embed(title='finished', description='this channel is now open for suggestions', color=0x00ff00)
+    embed = discord.Embed(title='open', description='this channel is now open for suggestions', color=0x00ff00)
     await chosen.send(embed=embed)
 
 def getapi(word):
