@@ -5,8 +5,9 @@ import requests
 import datetime
 import asyncio
 import secrets
+import datetime
 
-from discord.ext import commands
+from discord.ext import tasks, commands
 from discord import File
 from dotenv import load_dotenv
 from PIL import Image, ImageFont, ImageDraw
@@ -294,6 +295,7 @@ smuganime = ['https://i.imgur.com/zZ86SqQ.jpg',
 'https://i.imgur.com/H9oKZXz.png']
 
 suggestions = [697102775959552052, 702882611256754289, 702882635365613662, 703312812096749599, 703312842715037766, 703312883055984730, 703312953637863515, 703313003889688696, 703313116154560583]
+inactivesuggestions = []
 
 # https://dictionaryapi.com/api/v3/references/thesaurus/json/{word}?key={key}
 
@@ -303,7 +305,39 @@ token = os.getenv('DISCORD_TOKEN')
 key = os.getenv('API_KEY')
 bday = datetime.datetime(2020, 10, 26)
 
-bot = commands.Bot(command_prefix=commands.when_mentioned_or('!'))
+bot = commands.Bot(command_prefix='!')
+
+@tasks.loop(count=1)
+async def inactivetoopen():
+    global inactivesuggestions
+    opencategory = bot.get_channel(702882329332285471)
+    if len(opencategory.channels) < 2:
+        inactivecategory = bot.get_channel(703314675529416785)
+        for channels in inactivecategory.channels:
+            print(channels.id)
+            inactivesuggestions.append(channels.id)
+
+# @tasks.loop()
+# async def workingtoinactive(channel):
+#     category = bot.get_channel(703314675529416785)
+#     def check(m):
+#         return m.channel == channel
+#     try:
+#         await bot.wait_for('message', timeout=10, check=check)
+#     except asyncio.TimeoutError:
+#         await channel.edit(name='{}'.format(channel.name).replace('⌛', ''), category=category, sync_permissions=True)
+#         embed = discord.Embed(title='inactive', description='this channel is now inactive', color=0x000000)
+#         await channel.send(embed=embed)
+#         workingtoinactive.cancel()
+
+@inactivetoopen.after_loop
+async def after_inactivetoopen():
+    chosen = random.choice(inactivesuggestions)
+    chosen = bot.get_channel(chosen)
+    category = bot.get_channel(702882329332285471)
+    await chosen.edit(name='{}-✅'.format(chosen.name).replace('⌛', ''), category=category, sync_permissions=True)
+    embed = discord.Embed(title='finished', description='this channel is now open for suggestions', color=0x00ff00)
+    await chosen.send(embed=embed)
 
 def getapi(word):
     response = requests.get('https://dictionaryapi.com/api/v3/references/thesaurus/json/{0}?key={1}'.format(word, key))
@@ -313,7 +347,6 @@ def getapi(word):
         return random.choice(syns)
     except TypeError or IndexError:
         return word
-    
 
 @bot.event
 async def on_message(message):
@@ -323,7 +356,7 @@ async def on_message(message):
     if message.channel.id in suggestions:
         channel = message.channel
         catagory = channel.category
-        if catagory.id == 702882329332285471 and message.author.id != 681886537046163506 and message.author.id != 253290704384557057:
+        if catagory.id == 702882329332285471 and message.author.id != 681886537046163506 and message.author.id != 253290704384557057 and message.author.id != 704350265590939649:
             embed = discord.Embed(title='working on..', description='Your request is now being worked on by the devs', color=0x00ff00)
             category = bot.get_channel(702882449159618663)
             guild = message.guild
@@ -334,19 +367,18 @@ async def on_message(message):
             await channel.set_permissions(everyone, send_messages=False)
             await channel.set_permissions(dev, send_messages=True)
             await channel.send('<@!{}>'.format(253290704384557057), embed=embed)
-        
+            inactivetoopen.start()
+#             workingtoinactive.start(message.channel)
+
     await bot.process_commands(message)
 
 @bot.command()
-@commands.has_role('Bot Developer')
 async def close(ctx):
-    channel = ctx.channel
-    category = bot.get_channel(702882329332285471)
-    if channel.id in suggestions:
-        if channel.category_id == 702882449159618663:
-            embed = discord.Embed(title='finished', description='this channel is now open for suggestions', color=0x00ff00)
-            await channel.edit(name='{}-✅'.format((ctx.channel.name).replace('⌛', '')), category=category, sync_permissions=True)
-            await ctx.send(embed=embed)
+    channel = ctx.message.channel
+    category = bot.get_channel(703314675529416785)
+    embed = discord.Embed(title='inactive', description='this channel is now inactive', color=0x000000)
+    await channel.edit(name=str(channel.name).replace('⌛', ''), category=category, sync_permissions=True)
+    await ctx.send(embed=embed)
 
 @bot.command(help='kill someone')
 async def die(ctx, arg):
