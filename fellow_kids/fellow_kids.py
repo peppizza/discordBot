@@ -629,7 +629,7 @@ async def mimic(ctx, member: discord.Member):
     msg = ()
 
     def check(m):
-        return m.content and m.author
+        return m.author == member
 
     msg = await bot.wait_for('message', check=check)
     content = str(msg.content)
