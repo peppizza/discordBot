@@ -1,7 +1,7 @@
 import os
 import random
 import discord
-import requests
+import aiohttp
 import datetime
 import asyncio
 import secrets
@@ -338,14 +338,9 @@ async def after_inactivetoopen():
     embed = discord.Embed(title='open', description='this channel is now open for suggestions', color=0x00ff00)
     await chosen.send(embed=embed)
 
-def getapi(word):
-    response = requests.get('https://dictionaryapi.com/api/v3/references/thesaurus/json/{0}?key={1}'.format(word, key))
-    parsed = response.json()
-    try:
-        syns = parsed[0]['meta']['syns'][0]
-        return random.choice(syns)
-    except TypeError or IndexError:
-        return word
+@bot.event
+async def on_ready():
+    await bot.change_presence(activity=discord.Game(name='dm me !report to report a user'))
 
 @bot.event
 async def on_message(message):
@@ -629,18 +624,14 @@ async def spycrab(ctx):
     await ctx.send('https://i.imgur.com/ufzaw81.png')
 
 @bot.command()
-async def mimic(ctx, member: discord.Member, word=''):
+async def mimic(ctx, member: discord.Member):
 
     msg = ()
 
     def check(m):
         return m.content and m.author
 
-    while (True):
-        msg = await bot.wait_for('message', check=check)
-        print(member == check(msg))
-        if member == check(msg):
-            break
+    msg = await bot.wait_for('message', check=check)
     content = str(msg.content)
     final = content
     if 'im' in content or 'i\'m' in content:
@@ -653,8 +644,14 @@ async def mimic(ctx, member: discord.Member, word=''):
     final = final.split()
     i = random.choice(range(len(final)))
     print(i)
-    api = getapi(final[i])
-    final[i] = api
+    async with aiohttp.ClientSession() as session:
+        async with session.get('https://dictionaryapi.com/api/v3/references/thesaurus/json/{}?key={}'.format(final[i], key)) as r:
+            if r.status == 200:
+                js = await r.json()
+                js = js[0]['meta']['syns'][0]
+                js = random.choice(js)
+
+    final[i] = js
     final = ' '.join(final)
     await ctx.send(final)
 
@@ -710,7 +707,13 @@ async def warn_on_error(ctx, error):
     print(error)
 
 @bot.command()
+@commands.dm_only()
 async def report(ctx):
     await ctx.send('https://forms.gle/bwfdc1AyHJ5dL1ZN7')
+
+@report.error
+async def report_on_error(ctx, error):
+    await ctx.message.delete()
+    await ctx.message.author.send('Please dm me the report command')
 
 bot.run(token)
