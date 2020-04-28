@@ -5,7 +5,6 @@ import requests
 import datetime
 import asyncio
 import secrets
-import datetime
 
 from discord.ext import tasks, commands
 from discord import File
