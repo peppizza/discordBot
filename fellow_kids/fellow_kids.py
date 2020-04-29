@@ -483,19 +483,21 @@ class argCommands(commands.Cog):
             final = content.replace('fuck', 'frick')
             final = final.replace('Fuck', 'Frick')
 
-        final = final.split()
-        i = random.choice(range(len(final)))
-        print(i)
-        async with aiohttp.ClientSession() as session:
-            async with session.get('https://dictionaryapi.com/api/v3/references/thesaurus/json/{}?key={}'.format(final[i], key)) as r:
-                if r.status == 200:
-                    js = await r.json()
-                    js = js[0]['meta']['syns'][0]
-                    js = random.choice(js)
+        wordlist = []
+        for word in final.split():
+            async with aiohttp.ClientSession() as session:
+                async with session.get('https://dictionaryapi.com/api/v3/references/thesaurus/json/{}?key={}'.format(word, key)) as r:
+                    if r.status == 200:
+                        js = await r.json()
+                        try:
+                            word = js[0]['meta']['syns'][0]
+                            word = random.choice(word)
+                            wordlist.append(word)
+                        except Exception:
+                            wordlist.append(word)
 
-        final[i] = js
-        final = ' '.join(final)
-        await ctx.send(final)
+        print(wordlist)
+        await ctx.send(' '.join(wordlist))
 
     @commands.command()
     async def remindme(self, ctx, *args):
