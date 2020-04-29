@@ -642,9 +642,35 @@ class dmCommands(commands.Cog):
         await ctx.message.delete()
         await ctx.message.author.send('Please dm me the report command')
 
+class voiceCommands(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+    
+    @commands.command()
+    async def running(self, ctx):
+        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio('Why are You Running.mp3'))
+        ctx.voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
+
+        await ctx.send('Now playing: {}'.format('Why are you running.mp3'))
+
+    @running.before_invoke
+    async def join(self, ctx):
+        if ctx.voice_client is None:
+            if ctx.author.voice:
+                await ctx.author.voice.channel.connect()
+            else:
+                await ctx.send("You are not connected to a voice channel.")
+        elif ctx.voice_client.is_playing():
+            ctx.voice_client.stop()
+
+    @commands.command()
+    async def leave(self, ctx):
+        await ctx.voice_client.disconnect()
+
 if __name__ == '__main__':
     bot.add_cog(SuggestionHandler(bot))
     bot.add_cog(argCommands(bot))
     bot.add_cog(simpleCommands(bot))
     bot.add_cog(dmCommands(bot))
+    bot.add_cog(voiceCommands(bot))
     bot.run(token)
