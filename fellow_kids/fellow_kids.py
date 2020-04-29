@@ -651,9 +651,13 @@ class voiceCommands(commands.Cog):
         source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio('Why are You Running.mp3'))
         ctx.voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
 
-        await ctx.send('Now playing: {}'.format('Why are you running.mp3'))
+    @commands.command()
+    async def dead(self, ctx):
+        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio('Heavy is Dead.mp3'))
+        ctx.voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
 
     @running.before_invoke
+    @dead.before_invoke
     async def join(self, ctx):
         if ctx.voice_client is None:
             if ctx.author.voice:
