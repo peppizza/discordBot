@@ -305,409 +305,346 @@ bday = datetime.datetime(2020, 10, 26)
 
 bot = commands.Bot(command_prefix='!')
 
-async def inactivetoopen():
-    inactivesuggestions = []
-    opencategory = bot.get_channel(702882329332285471)
-    if len(opencategory.channels) < 2:
-        inactivecategory = bot.get_channel(703314675529416785)
-        for channels in inactivecategory.channels:
-            print(channels.id)
-            inactivesuggestions.append(channels.id)
-    chosen = random.choice(inactivesuggestions)
-    chosen = bot.get_channel(chosen)
-    category = bot.get_channel(702882329332285471)
-    await chosen.edit(name='{}-✅'.format(chosen.name).replace('⌛', ''), category=category, sync_permissions=True)
-    embed = discord.Embed(title='open', description='this channel is now open for suggestions', color=0x00ff00)
-    await chosen.send(embed=embed)
-
-
-# @tasks.loop()
-# async def workingtoinactive(channel):
-#     category = bot.get_channel(703314675529416785)
-#     def check(m):
-#         return m.channel == channel
-#     try:
-#         await bot.wait_for('message', timeout=10, check=check)
-#     except asyncio.TimeoutError:
-#         await channel.edit(name='{}'.format(channel.name).replace('⌛', ''), category=category, sync_permissions=True)
-#         embed = discord.Embed(title='inactive', description='this channel is now inactive', color=0x000000)
-#         await channel.send(embed=embed)
-#         workingtoinactive.cancel()
-
 @bot.event
 async def on_ready():
     await bot.change_presence(activity=discord.Game(name='dm me !report to report a user'))
 
-@bot.event
-async def on_message(message):
-    if message.content.startswith('okay'):
-        channel = message.channel
-        await channel.send('ok>okay')
-    if message.channel.id in suggestions:
-        channel = message.channel
-        catagory = channel.category
-        if catagory.id == 702882329332285471 and message.author.id != 681886537046163506 and message.author.id != 253290704384557057 and message.author.id != 704350265590939649:
-            embed = discord.Embed(title='working on..', description='Your request is now being worked on by the devs', color=0x00ff00)
-            category = bot.get_channel(702882449159618663)
-            guild = message.guild
-            everyone = guild.get_role(684472795639447621)
-            dev = guild.get_role(697125812465565746)
-            await channel.edit(name='{}-⌛'.format((message.channel.name).replace('✅', '')), category=category)
-            await channel.set_permissions(message.author, send_messages=True)
-            await channel.set_permissions(everyone, send_messages=False)
-            await channel.set_permissions(dev, send_messages=True)
-            await channel.send('<@!{}>'.format(253290704384557057), embed=embed)
-            await inactivetoopen()
+class SuggestionHandler(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        self.inactivesuggestions = []
+
+    async def inactivetoopen(self):
+        opencategory = bot.get_channel(702882329332285471)
+        if len(opencategory.channels) < 2:
+            inactivecategory = bot.get_channel(703314675529416785)
+            for channels in inactivecategory.channels:
+                print(channels.id)
+                self.inactivesuggestions.append(channels.id)
+        chosen = random.choice(self.inactivesuggestions)
+        chosen = bot.get_channel(chosen)
+        category = bot.get_channel(702882329332285471)
+        await chosen.edit(name='{}-✅'.format(chosen.name).replace('⌛', ''), category=category, sync_permissions=True)
+        embed = discord.Embed(title='open', description='this channel is now open for suggestions', color=0x00ff00)
+        await chosen.send(embed=embed)
+
+
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if message.channel.id in suggestions:
+            channel = message.channel
+            catagory = channel.category
+            if catagory.id == 702882329332285471 and message.author.id != 681886537046163506 and message.author.id != 253290704384557057 and message.author.id != 704350265590939649:
+                embed = discord.Embed(title='working on..', description='Your request is now being worked on by the devs', color=0x00ff00)
+                category = bot.get_channel(702882449159618663)
+                guild = message.guild
+                everyone = guild.get_role(684472795639447621)
+                dev = guild.get_role(697125812465565746)
+                await channel.edit(name='{}-⌛'.format((message.channel.name).replace('✅', '')), category=category)
+                await channel.set_permissions(message.author, send_messages=True)
+                await channel.set_permissions(everyone, send_messages=False)
+                await channel.set_permissions(dev, send_messages=True)
+                await channel.send('<@!{}>'.format(253290704384557057), embed=embed)
+                await self.inactivetoopen()
 #             workingtoinactive.start(message.channel)
 
-    await bot.process_commands(message)
-
-@bot.command(aliases=['done'])
-async def close(ctx):
-    channel = ctx.message.channel
-    category = bot.get_channel(703314675529416785)
-    embed = discord.Embed(title='inactive', description='this channel is now inactive', color=0x000000)
-    await channel.edit(name=str(channel.name).replace('⌛', ''), category=category, sync_permissions=True)
-    await ctx.send(embed=embed)
-
-@bot.command(help='kill someone')
-async def die(ctx, arg):
-    if arg == '<@!681886537046163506>':
-        await bot.change_presence(status=discord.Status.invisible)
-        sleep(5)
-        await ctx.send('Like jesus I too have respawned')
-        await bot.change_presence(status=discord.Status.online)
-    else:
-        await ctx.send(f'{arg}, kys')
-
-@die.error
-async def die_on_error(ctx, error):
-    await ctx.send('you fucked up the command you peice of subhuman trash')
-
-@bot.command(help='rick roll')
-async def rr(ctx):
-    await ctx.send('https://www.youtube.com/watch?v=dQw4w9WgXcQ')
-
-@bot.command(help='say the n word')
-async def nword(ctx):
-    await ctx.send('im gonna say the n word\nnigeria')
-
-@bot.command(help='beanify')
-@commands.has_role('Moderators')
-async def bean(ctx, *args):
-    if (args == ()):
-        await bean_on_error(ctx, NotImplementedError)
-    elif (len(args) == 1):
-        embed = discord.Embed(title="bean", description="you have been beaned", color=0xff0000)
-        embed.set_author(name=ctx.message.author.name)
-        embed.add_field(name="person", value=args[0])
-        embed.set_image(url="https://images.immediate.co.uk/production/volatile/sites/4/2018/08/GettyImages-149069817-15d7368.jpg?webp=true&quality=45&resize=1880%2C799")
+    @commands.command(aliases=['done'])
+    async def close(self, ctx):
+        channel = ctx.message.channel
+        category = bot.get_channel(703314675529416785)
+        embed = discord.Embed(title='inactive', description='this channel is now inactive', color=0x000000)
+        await channel.edit(name=str(channel.name).replace('⌛', ''), category=category, sync_permissions=True)
         await ctx.send(embed=embed)
-    elif (len(args) >= 2):
-        embed = discord.Embed(title="bean", description="you have been beaned", color=0xff0000)
-        embed.set_author(name=ctx.message.author.name)
-        embed.add_field(name="person", value=args[0])
-        embed.add_field(name="reason", value=' '.join(args[1: len(args)]))
-        embed.set_image(url="https://images.immediate.co.uk/production/volatile/sites/4/2018/08/GettyImages-149069817-15d7368.jpg?webp=true&quality=45&resize=1880%2C799")
-        await ctx.send(embed=embed)
-    else:
-        bean_on_error
 
-@bean.error
-async def bean_on_error(ctx, error):
-    await ctx.send(error)
+class argCommands(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
 
-@bot.command(help='how do you do fellow kids')
-async def kids(ctx):
-    await ctx.send('https://www.youtube.com/watch?v=bI2PdskxE_s')
+    @commands.command(help='kill someone')
+    async def die(self, ctx, arg):
+        if arg == '<@!681886537046163506>':
+            await bot.change_presence(status=discord.Status.invisible)
+            await asyncio.sleep(5)
+            await ctx.send('Like jesus I too have respawned')
+            await bot.change_presence(status=discord.Status.online)
+        else:
+            await ctx.send(f'{arg}, kys')
 
-@bot.command(help='bonk')
-async def bonk(ctx, arg):
-    await ctx.send('{} has been bonked'.format(arg))
+    @die.error
+    async def die_on_error(self, ctx, error):
+        await ctx.send('you fucked up the command you peice of subhuman trash')
 
-@bonk.error
-async def bonk_on_error(ctx, error):
-    await ctx.send(error)
 
-@bot.command(help='pootis')
-async def pootis(ctx):
-    await ctx.send('pootis')
+    @commands.command(help='beanify')
+    @commands.has_role('Moderators')
+    async def bean(self, ctx, *args):
+        if (args == ()):
+            NotImplementedError
+        elif (len(args) == 1):
+            embed = discord.Embed(title="bean", description="you have been beaned", color=0xff0000)
+            embed.set_author(name=ctx.message.author.name)
+            embed.add_field(name="person", value=args[0])
+            embed.set_image(url="https://images.immediate.co.uk/production/volatile/sites/4/2018/08/GettyImages-149069817-15d7368.jpg?webp=true&quality=45&resize=1880%2C799")
+            await ctx.send(embed=embed)
+        elif (len(args) >= 2):
+            embed = discord.Embed(title="bean", description="you have been beaned", color=0xff0000)
+            embed.set_author(name=ctx.message.author.name)
+            embed.add_field(name="person", value=args[0])
+            embed.add_field(name="reason", value=' '.join(args[1: len(args)]))
+            embed.set_image(url="https://images.immediate.co.uk/production/volatile/sites/4/2018/08/GettyImages-149069817-15d7368.jpg?webp=true&quality=45&resize=1880%2C799")
+            await ctx.send(embed=embed)
+        else:
+            NotImplementedError
 
-@bot.command(name='youneedjesus', help='jesus')
-async def jesus(ctx):
-    await ctx.send('https://www.you-need-jesus.com/')
+    @bean.error
+    async def bean_on_error(self, ctx, error):
+        await ctx.send(error)
 
-@bot.command(name='momsahoe', help='your mom be a hoe')
-async def mom(ctx):
-    await ctx.send('https://www.youtube.com/watch?v=iYx_aGlmyc4')
+    @commands.command(help='bonk')
+    async def bonk(self, ctx, arg):
+        await ctx.send('{} has been bonked'.format(arg))
 
-@bot.command(help='heyayayaya')
-async def hey(ctx):
-    await ctx.send('https://www.youtube.com/watch?v=ZZ5LpwO-An4&t=13s')
+    @bonk.error
+    async def bonk_on_error(self, ctx, error):
+        await ctx.send(error)
 
-@bot.command(name='siegheil', help='hitler')
-async def hitler(ctx):
-    await ctx.send('https://www.youtube.com/watch?v=lLwguZnvguQ')
+    @commands.command(help='ping')
+    @commands.has_role('pinging rights')
+    async def ping(self, ctx, arg1, arg2):
+        times = int(arg2)
+        if (times <= 10):
+            for i in range(times):
+                await ctx.send(arg1)
+        else:
+            await ctx.send(ctx, OverflowError)
 
-@bot.command(help='shrek')
-async def shrek(ctx):
-    await ctx.send('https://www.youtube.com/watch?v=psFzJv8g6jc')
+    @ping.error
+    async def ping_on_error(self, ctx, error):
+        await ctx.send('ping limit is 10')
 
-@bot.command(name='hamburger10hours', help='hamburger')
-async def hamburger(ctx):
-    await ctx.send('https://www.youtube.com/watch?v=qIJ-lchwqVA')
+    @commands.command()
+    async def dio(self, ctx, *args):
+        W = 1280
+        msg = " ".join(args[:]).upper()
+        if len(msg) <= 18:
+            fontSize = 144
+        elif len(msg) <= 25:
+            fontSize = 100
+        elif len(msg) <= 30:
+            fontSize = 70
+        else:
+            fontSize = 50
 
-@bot.command(name='tf2image', help='selects random tf2 image')
-async def tf2(ctx):
-    await ctx.send(secrets.choice(tf2images))
+        font = ImageFont.truetype("/usr/share/fonts/truetype/msttcorefonts/Impact.ttf", fontSize)
+        img = Image.open('dio.jpg')
+        draw = ImageDraw.Draw(img)
+        w = draw.textsize(msg, font=font)[0]
+        async with ctx.typing():
+            draw.text(((W-w)/2, 0), msg, (255, 255, 255), font=font)
+            img.save("final.png")
+            await ctx.send(file=File('final.png'))
 
-@bot.command(help='ping')
-@commands.has_role('pinging rights')
-async def ping(ctx, arg1, arg2):
-    times = int(arg2)
-    if (times <= 10):
-    	for i in range(times):
-    	    await ctx.send(arg1)
-    else:
-        await ctx.send(ctx, OverflowError)
+    @dio.error
+    async def dio_on_error(self, ctx, error):
+        await ctx.send(error)
 
-@ping.error
-async def ping_on_error(ctx, error):
-    await ctx.send('ping limit is 10')
+    @commands.command()
+    @commands.has_role('Moderators')
+    async def mute(self, ctx, member: discord.Member):
+        role = discord.utils.get(ctx.guild.roles, name='Muted')
+        await member.add_roles(role)
+        await ctx.send('this american boot just muted your american ass back to american canada\nBECAUSE AMERICA')
 
-@bot.command(help='smite')
-@commands.has_role('LITTERALLY JESUS')
-async def smite(ctx, arg):
-    await ctx.send('{}, feel the wrath of jesus'.format(arg))
+    @mute.error
+    async def mute_on_error(self, ctx, error):
+        await ctx.send(error)
 
-@smite.error
-async def smite_on_error(ctx):
-    await ctx.send('you fool')
+    @commands.command()
+    @commands.has_role('Moderators')
+    async def unmute(self, ctx, member: discord.Member):
+        role = discord.utils.get(ctx.guild.roles, name='Muted')
+        await member.remove_roles(role)
 
-@bot.command(help='no u')
-async def nou(ctx, arg=None):
-    if (arg != None):
-        await ctx.send('{}, https://cdn.discordapp.com/attachments/684474004563689539/685130037585772552/deepfried_1583418116265.png'.format(arg))
-    else:
+    @commands.command()
+    async def mimic(self, ctx, member: discord.Member):
+
+        msg = ()
+
+        def check(m):
+            return m.author == member
+
+        msg = await bot.wait_for('message', check=check)
+        content = str(msg.content)
+        final = content
+        if 'im' in content or 'i\'m' in content:
+            final = content.replace('im', 'you\'re')
+            final = final.replace('i\'m', 'you\'re')
+        elif 'fuck' in content or 'Fuck' in content:
+            final = content.replace('fuck', 'frick')
+            final = final.replace('Fuck', 'Frick')
+
+        final = final.split()
+        i = random.choice(range(len(final)))
+        print(i)
+        async with aiohttp.ClientSession() as session:
+            async with session.get('https://dictionaryapi.com/api/v3/references/thesaurus/json/{}?key={}'.format(final[i], key)) as r:
+                if r.status == 200:
+                    js = await r.json()
+                    js = js[0]['meta']['syns'][0]
+                    js = random.choice(js)
+
+        final[i] = js
+        final = ' '.join(final)
+        await ctx.send(final)
+
+    @commands.command()
+    async def remindme(self, ctx, *args):
+        author = ctx.message.author.id
+        def convert(time):
+            indicators = ['hr', 'min', 'sec']
+            if any(substring in time for substring in indicators):
+                originaltime = time
+                time = time.replace('hr', '')
+                time = time.replace('min', '')
+                time = time.replace('sec', '')
+                time = int(time)
+                if 'hr' in originaltime:
+                    time = time * 3600
+                elif 'min' in originaltime:
+                    time = time * 60
+                return time
+        await ctx.send('set a reminder \"{0}\" for <@!{1}> for {2}'.format(' '.join(args[1:]), author, args[0]))
+        await asyncio.sleep(convert(args[0]))
+        await ctx.send('<@!{0}> {1}'.format(author, ' '.join(args[1:])))
+
+    @remindme.error
+    async def remindme_on_error(self, ctx, error):
+        await ctx.send(error)
+
+    @commands.command()
+    @commands.has_role(696773209495699547)
+    async def warn(self, ctx, member: discord.Member, *args):
+        await ctx.message.delete()
+        user = bot.get_user(member.id)
+        embed = discord.Embed(title='WARNING')
+        embed.add_field(name='you have been warned by', value=ctx.message.author)
+        embed.add_field(name='reason', value=' '.join(args[0:]))
+        await user.send(embed=embed)
+
+    @warn.error
+    async def warn_on_error(self, ctx, error):
+        await ctx.message.delete()
+        print(error)
+
+class simpleCommands(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @commands.command(help='how do you do fellow kids')
+    async def kids(self, ctx):
+        await ctx.send('https://www.youtube.com/watch?v=bI2PdskxE_s')
+
+    @commands.command(help='pootis')
+    async def pootis(self, ctx):
+        await ctx.send('pootis')
+
+    @commands.command(name='youneedjesus', help='jesus')
+    async def jesus(self, ctx):
+        await ctx.send('https://www.you-need-jesus.com/')
+
+    @commands.command(name='momsahoe', help='your mom be a hoe')
+    async def mom(self, ctx):
+        await ctx.send('https://www.youtube.com/watch?v=iYx_aGlmyc4')
+
+    @commands.command(help='heyayayaya')
+    async def hey(self, ctx):
+        await ctx.send('https://www.youtube.com/watch?v=ZZ5LpwO-An4&t=13s')
+
+    @commands.command(name='siegheil', help='hitler')
+    async def hitler(self, ctx):
+        await ctx.send('https://www.youtube.com/watch?v=lLwguZnvguQ')
+
+    @commands.command(help='shrek')
+    async def shrek(self, ctx):
+        await ctx.send('https://www.youtube.com/watch?v=psFzJv8g6jc')
+
+    @commands.command(name='hamburger10hours', help='hamburger')
+    async def hamburger(self, ctx):
+        await ctx.send('https://www.youtube.com/watch?v=qIJ-lchwqVA')
+
+    @commands.command(name='tf2image', help='selects random tf2 image')
+    async def tf2(self, ctx):
+        await ctx.send(secrets.choice(tf2images))
+
+    @commands.command(help='no u')
+    async def nou(self, ctx):
         await ctx.send('https://cdn.discordapp.com/attachments/684474004563689539/685130037585772552/deepfried_1583418116265.png')
 
-@nou.error
-async def nou_on_error(ctx, error):
-    await ctx.send(error)
+    @commands.command(help='gay')
+    async def gay(self, ctx):
+        await ctx.send('https://www.villagevoice.com/wp-content/uploads/2011/02/thatsgay.png')
 
-@bot.command(help='gay')
-async def gay(ctx):
-    await ctx.send('https://www.villagevoice.com/wp-content/uploads/2011/02/thatsgay.png')
+    @commands.command(name='ohyeah', help='kool aid man')
+    async def yeah(self, ctx):
+        await ctx.send('https://i.pinimg.com/736x/e2/d2/4a/e2d24a8338a81191c59b928c2cbeedcf.jpg')
 
-@bot.command(name='ohyeah', help='kool aid man')
-async def yeah(ctx):
-    await ctx.send('https://i.pinimg.com/736x/e2/d2/4a/e2d24a8338a81191c59b928c2cbeedcf.jpg')
+    @commands.command(help='deep')
+    async def deep(self, ctx):
+        await ctx.send('https://preview.redd.it/she0nt0g5b131.jpg?auto=webp&s=e77d77c2bf39d54d9cb89457eee61220d5700df4')
 
-@bot.command(help='sends an insult')
-async def insult(ctx, arg):
-    role = (str(ctx.message.author.roles[len(ctx.message.author.roles) - 1]))
-    if (role == 'Administrator'):
-        await ctx.send('{} is my favorite ~~Guinee pig~~ friend'.format(arg))
-    elif (role == 'LITTERALLY JESUS'):
-        await ctx.send('If god had wanted you to live he would not have created me')
-    elif (role == 'Gay Boys'):
-        await ctx.send('you fap to gay hentai')
-    elif (role == 'Over 13'):
-        await ctx.send('you fap to hentai')
-    elif (role == 'bot haters'):
-        await ctx.send('I will rape you')
+    @commands.command(help='demoman laughing')
+    async def laugh(self, ctx):
+        await ctx.send('https://i.redd.it/l32xlpu8vad31.jpg')
 
-@bot.command(help='deep')
-async def deep(ctx):
-    await ctx.send('https://preview.redd.it/she0nt0g5b131.jpg?auto=webp&s=e77d77c2bf39d54d9cb89457eee61220d5700df4')
+    @commands.command(help='bruh sound effect #2')
+    async def bruh(self, ctx):
+        await ctx.send('https://www.youtube.com/watch?v=2ZIpFytCSVc')
 
-@bot.command(help='demoman laughing')
-async def laugh(ctx):
-    await ctx.send('https://i.redd.it/l32xlpu8vad31.jpg')
+    @commands.command(help='get vectored')
+    async def vector(self, ctx):
+        await ctx.send('https://cdn.discordapp.com/attachments/685262422252191781/685591126442377266/download.jpg')
 
-@bot.command(help='fucking donkey')
-async def donkey(ctx, arg):
-    await ctx.send('{} is a fucking donkey'.format(arg))
+    @commands.command(help='gonk image')
+    async def gonk(self, ctx):
+        await ctx.send('https://cdn.discordapp.com/attachments/685262422252191781/685621651970326545/unknown.png')
 
-@donkey.error
-async def donkey_on_error(ctx, error):
-    await ctx.send(error)
+    @commands.command(help='prints smug anime girl')
+    async def smug(self, ctx):
+        johney = random.randrange(0, 10)
+        if johney <= 1:
+            await ctx.send('https://pm1.narvii.com/6445/e408777d009b89e2dc006a0ef0512f209a953501_hq.jpg')
+        else:
+            await ctx.send(secrets.choice(smuganime))
 
-@bot.command(help='you are gay')
-async def uaregay(ctx, arg):
-	await ctx.send('{} is gay'.format(arg))
+    @commands.command(help='demoman tf2')
+    async def didntseethat(self, ctx):
+        await ctx.send('https://cdn.discordapp.com/attachments/685262422252191781/689161554318721042/maxresdefault.jpg')
 
-@uaregay.error
-async def uaregay_on_error(ctx, error):
-    await ctx.send(error)
+    @commands.command()
+    async def spycrab(self, ctx):
+        await ctx.send('https://i.imgur.com/ufzaw81.png')
 
-@bot.command(help='bruh sound effect #2')
-async def bruh(ctx):
-    await ctx.send('https://www.youtube.com/watch?v=2ZIpFytCSVc')
+    @commands.command()
+    async def whygay(self, ctx):
+        await ctx.send('https://cdn.discordapp.com/attachments/697102775959552052/704357844572438598/images.jpg')
 
-@bot.command(help='get vectored')
-async def vector(ctx):
-    await ctx.send('https://cdn.discordapp.com/attachments/685262422252191781/685591126442377266/download.jpg')
+class dmCommands(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
 
-@bot.command(help='gonk image')
-async def gonk(ctx):
-    await ctx.send('https://cdn.discordapp.com/attachments/685262422252191781/685621651970326545/unknown.png')
+    @commands.command()
+    @commands.dm_only()
+    async def report(self, ctx):
+        await ctx.send('https://forms.gle/bwfdc1AyHJ5dL1ZN7')
 
-@bot.command(help='prints smug anime girl')
-async def smug(ctx):
-    johney = random.randrange(0, 10)
-    if johney <= 1:
-        await ctx.send('https://pm1.narvii.com/6445/e408777d009b89e2dc006a0ef0512f209a953501_hq.jpg')
-        print(johney)
-    else:
-        await ctx.send(secrets.choice(smuganime))
-        print(johney)
+    @report.error
+    async def report_on_error(self, ctx, error):
+        await ctx.message.delete()
+        await ctx.message.author.send('Please dm me the report command')
 
-@bot.command(help='demoman tf2')
-async def didntseethat(ctx):
-    await ctx.send('https://cdn.discordapp.com/attachments/685262422252191781/689161554318721042/maxresdefault.jpg')
-
-@bot.command()
-async def dio(ctx, *args):
-    W = 1280
-    msg = " ".join(args[:]).upper()
-    if len(msg) <= 18:
-        fontSize = 144
-    elif len(msg) <= 25:
-        fontSize = 100
-    elif len(msg) <= 30:
-        fontSize = 70
-    else:
-        fontSize = 50
-
-    font = ImageFont.truetype("/usr/share/fonts/truetype/msttcorefonts/Impact.ttf", fontSize)
-    img = Image.open('dio.jpg')
-    draw = ImageDraw.Draw(img)
-    w = draw.textsize(msg, font=font)[0]
-    async with ctx.typing():
-        draw.text(((W-w)/2, 0), msg, (255, 255, 255), font=font)
-        img.save("final.png")
-        await ctx.send(file=File('final.png'))
-
-@dio.error
-async def dio_on_error(error):
-    await print(error)
-
-@bot.command()
-@commands.has_role('Moderators')
-async def mute(ctx, member: discord.Member):
-     role = discord.utils.get(ctx.guild.roles, name='Muted')
-     await member.add_roles(role)
-     await ctx.send('this american boot just muted your american ass back to american canada\nBECAUSE AMERICA')
-
-@mute.error
-async def mute_on_error(ctx, error):
-    await ctx.send(error)
-
-@bot.command()
-@commands.has_role('Moderators')
-async def unmute(ctx, member: discord.Member):
-    role = discord.utils.get(ctx.guild.roles, name='Muted')
-    await member.remove_roles(role)
-
-@bot.command(name='is')
-async def dumb(ctx, arg):
-    if arg == "dumb":
-        await ctx.send('the fuck you say to me you little shit')
-
-@bot.command()
-async def spycrab(ctx):
-    await ctx.send('https://i.imgur.com/ufzaw81.png')
-
-@bot.command()
-async def mimic(ctx, member: discord.Member):
-
-    msg = ()
-
-    def check(m):
-        return m.author == member
-
-    msg = await bot.wait_for('message', check=check)
-    content = str(msg.content)
-    final = content
-    if 'im' in content or 'i\'m' in content:
-        final = content.replace('im', 'you\'re')
-        final = final.replace('i\'m', 'you\'re')
-    elif 'fuck' in content or 'Fuck' in content:
-        final = content.replace('fuck', 'frick')
-        final = final.replace('Fuck', 'Frick')
-
-    final = final.split()
-    i = random.choice(range(len(final)))
-    print(i)
-    async with aiohttp.ClientSession() as session:
-        async with session.get('https://dictionaryapi.com/api/v3/references/thesaurus/json/{}?key={}'.format(final[i], key)) as r:
-            if r.status == 200:
-                js = await r.json()
-                js = js[0]['meta']['syns'][0]
-                js = random.choice(js)
-
-    final[i] = js
-    final = ' '.join(final)
-    await ctx.send(final)
-
-@bot.command()
-async def ooopbday(ctx):
-    now = datetime.datetime.now()
-    days = bday - now
-    await ctx.send('there are {0} until ooop is no longer a gay boy'.format(days.days))
-
-@bot.command()
-async def remindme(ctx, *args):
-    author = ctx.message.author.id
-    def convert(time):
-        indicators = ['hr', 'min', 'sec']
-        if any(substring in time for substring in indicators):
-            originaltime = time
-            time = time.replace('hr', '')
-            time = time.replace('min', '')
-            time = time.replace('sec', '')
-            time = int(time)
-            if 'hr' in originaltime:
-                time = time * 3600
-            elif 'min' in originaltime:
-                time = time * 60
-            return time
-    await ctx.send('set a reminder \"{0}\" for <@!{1}> for {2}'.format(' '.join(args[1:]), author, args[0]))
-    await asyncio.sleep(convert(args[0]))
-    await ctx.send('<@!{0}> {1}'.format(author, ' '.join(args[1:])))
-
-@remindme.error
-async def remindme_on_error(ctx, error):
-    await ctx.send(error)
-
-@bot.command()
-async def whygay(ctx):
-    await ctx.send('https://cdn.discordapp.com/attachments/697102775959552052/704357844572438598/images.jpg')
-
-@bot.command()
-@commands.has_role(696773209495699547)
-async def warn(ctx, member: discord.Member, *args):
-    await ctx.message.delete()
-    user = bot.get_user(member.id)
-    embed = discord.Embed(title='WARNING')
-    embed.add_field(name='you have been warned by', value=ctx.message.author)
-    embed.add_field(name='reason', value=' '.join(args[0:]))
-    await user.send(embed=embed)
-
-@warn.error
-async def warn_on_error(ctx, error):
-    await ctx.message.delete()
-    print(error)
-
-@bot.command()
-@commands.dm_only()
-async def report(ctx):
-    await ctx.send('https://forms.gle/bwfdc1AyHJ5dL1ZN7')
-
-@report.error
-async def report_on_error(ctx, error):
-    await ctx.message.delete()
-    await ctx.message.author.send('Please dm me the report command')
-
-bot.run(token)
+if __name__ == '__main__':
+    bot.add_cog(SuggestionHandler(bot))
+    bot.add_cog(argCommands(bot))
+    bot.add_cog(simpleCommands(bot))
+    bot.add_cog(dmCommands(bot))
+    bot.run(token)
