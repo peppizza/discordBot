@@ -294,7 +294,6 @@ smuganime = ['https://i.imgur.com/zZ86SqQ.jpg',
 'https://i.imgur.com/H9oKZXz.png']
 
 suggestions = [697102775959552052, 702882611256754289, 702882635365613662, 703312812096749599, 703312842715037766, 703312883055984730, 703312953637863515, 703313003889688696, 703313116154560583]
-inactivesuggestions = []
 
 # https://dictionaryapi.com/api/v3/references/thesaurus/json/{word}?key={key}
 
@@ -306,15 +305,21 @@ bday = datetime.datetime(2020, 10, 26)
 
 bot = commands.Bot(command_prefix='!')
 
-@tasks.loop(count=1)
 async def inactivetoopen():
-    global inactivesuggestions
+    inactivesuggestions = []
     opencategory = bot.get_channel(702882329332285471)
     if len(opencategory.channels) < 2:
         inactivecategory = bot.get_channel(703314675529416785)
         for channels in inactivecategory.channels:
             print(channels.id)
             inactivesuggestions.append(channels.id)
+    chosen = random.choice(inactivesuggestions)
+    chosen = bot.get_channel(chosen)
+    category = bot.get_channel(702882329332285471)
+    await chosen.edit(name='{}-✅'.format(chosen.name).replace('⌛', ''), category=category, sync_permissions=True)
+    embed = discord.Embed(title='open', description='this channel is now open for suggestions', color=0x00ff00)
+    await chosen.send(embed=embed)
+
 
 # @tasks.loop()
 # async def workingtoinactive(channel):
@@ -328,15 +333,6 @@ async def inactivetoopen():
 #         embed = discord.Embed(title='inactive', description='this channel is now inactive', color=0x000000)
 #         await channel.send(embed=embed)
 #         workingtoinactive.cancel()
-
-@inactivetoopen.after_loop
-async def after_inactivetoopen():
-    chosen = random.choice(inactivesuggestions)
-    chosen = bot.get_channel(chosen)
-    category = bot.get_channel(702882329332285471)
-    await chosen.edit(name='{}-✅'.format(chosen.name).replace('⌛', ''), category=category, sync_permissions=True)
-    embed = discord.Embed(title='open', description='this channel is now open for suggestions', color=0x00ff00)
-    await chosen.send(embed=embed)
 
 @bot.event
 async def on_ready():
@@ -361,12 +357,12 @@ async def on_message(message):
             await channel.set_permissions(everyone, send_messages=False)
             await channel.set_permissions(dev, send_messages=True)
             await channel.send('<@!{}>'.format(253290704384557057), embed=embed)
-            inactivetoopen.start()
+            await inactivetoopen()
 #             workingtoinactive.start(message.channel)
 
     await bot.process_commands(message)
 
-@bot.command()
+@bot.command(aliases=['done'])
 async def close(ctx):
     channel = ctx.message.channel
     category = bot.get_channel(703314675529416785)
