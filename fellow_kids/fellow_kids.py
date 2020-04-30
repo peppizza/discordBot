@@ -691,11 +691,14 @@ class Moderation(commands.Cog):
     @commands.command()
     @commands.has_role(696773209495699547)
     async def warn(self, ctx, member: discord.Member, *args):
+        channel = bot.get_channel(685262422252191781)
         await ctx.message.delete()
         embed = discord.Embed(title='WARNING')
         embed.add_field(name='you have been warned by', value=ctx.message.author)
         embed.add_field(name='reason', value=' '.join(args[0:]))
         await member.send(embed=embed)
+        embed2 = discord.Embed(title='{} has been warned'.format(member), description='{} has been warned by {} for {}'.format(member, ctx.author, ' '.join(args[0:])))
+        await channel.send(embed=embed2)
 
     @warn.error
     async def warn_on_error(self, ctx, error):
