@@ -683,7 +683,7 @@ class Moderation(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         for word in message.content.split():
-            if word in bannedwords:
+            if word.lower() in bannedwords:
                 context = await bot.get_context(message=message)
                 await self.warn(context, context.author, ('Hate speech'))
 
