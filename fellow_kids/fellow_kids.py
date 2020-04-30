@@ -486,14 +486,7 @@ class argCommands(commands.Cog):
             return m.author == member
 
         msg = await bot.wait_for('message', check=check)
-        content = str(msg.content)
-        final = content
-        if 'im' in content or 'i\'m' in content:
-            final = content.replace('im', 'you\'re')
-            final = final.replace('i\'m', 'you\'re')
-        elif 'fuck' in content or 'Fuck' in content:
-            final = content.replace('fuck', 'frick')
-            final = final.replace('Fuck', 'Frick')
+        final = str(msg.content)
 
         wordlist = []
         async with ctx.typing():
@@ -509,7 +502,6 @@ class argCommands(commands.Cog):
                             except Exception:
                                 wordlist.append(word)
 
-        print(wordlist)
         await ctx.send(' '.join(wordlist))
 
     @commands.command()
