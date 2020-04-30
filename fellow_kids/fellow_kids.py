@@ -294,7 +294,7 @@ smuganime = ['https://i.imgur.com/zZ86SqQ.jpg',
 'https://i.imgur.com/H9oKZXz.png']
 
 suggestions = [697102775959552052, 702882611256754289, 702882635365613662, 703312812096749599, 703312842715037766, 703312883055984730, 703312953637863515, 703313003889688696, 703313116154560583]
-bannedwords = ['nigger', 'nigga', 'faggot', 'fag', 'dyke']
+bannedwords = ['nigger', 'nigga', 'faggot', 'fag', 'dyke', 'niggers', 'niggas', 'faggots', 'fags']
 
 # https://dictionaryapi.com/api/v3/references/thesaurus/json/{word}?key={key}
 
@@ -682,9 +682,10 @@ class Moderation(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.content in bannedwords:
-            context = await bot.get_context(message=message)
-            await self.warn(context, context.author, ('Hate speech'))
+        for word in message.content.split():
+            if word in bannedwords:
+                context = await bot.get_context(message=message)
+                await self.warn(context, context.author, ('Hate speech'))
 
     @commands.command()
     @commands.has_role(696773209495699547)
