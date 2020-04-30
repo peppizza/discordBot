@@ -601,11 +601,7 @@ class simpleCommands(commands.Cog):
 
     @commands.command(help='prints smug anime girl')
     async def smug(self, ctx):
-        johney = random.randrange(0, 10)
-        if johney <= 1:
-            await ctx.send('https://pm1.narvii.com/6445/e408777d009b89e2dc006a0ef0512f209a953501_hq.jpg')
-        else:
-            await ctx.send(secrets.choice(smuganime))
+        await ctx.send(secrets.choice(smuganime))
 
     @commands.command(help='demoman tf2')
     async def didntseethat(self, ctx):
