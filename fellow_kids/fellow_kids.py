@@ -496,17 +496,18 @@ class argCommands(commands.Cog):
             final = final.replace('Fuck', 'Frick')
 
         wordlist = []
-        for word in final.split():
-            async with aiohttp.ClientSession() as session:
-                async with session.get('https://dictionaryapi.com/api/v3/references/thesaurus/json/{}?key={}'.format(word, key)) as r:
-                    if r.status == 200:
-                        js = await r.json()
-                        try:
-                            word = js[0]['meta']['syns'][0]
-                            word = random.choice(word)
-                            wordlist.append(word)
-                        except Exception:
-                            wordlist.append(word)
+        async with ctx.typing():
+            for word in final.split():
+                async with aiohttp.ClientSession() as session:
+                    async with session.get('https://dictionaryapi.com/api/v3/references/thesaurus/json/{}?key={}'.format(word, key)) as r:
+                        if r.status == 200:
+                            js = await r.json()
+                            try:
+                                word = js[0]['meta']['syns'][0]
+                                word = random.choice(word)
+                                wordlist.append(word)
+                            except Exception:
+                                wordlist.append(word)
 
         print(wordlist)
         await ctx.send(' '.join(wordlist))
