@@ -10,7 +10,6 @@ from discord.ext import tasks, commands
 from discord import File
 from dotenv import load_dotenv
 from PIL import Image, ImageFont, ImageDraw
-from time import sleep
 
 tf2images = ['https://i.ytimg.com/vi/OMUurmalxdc/hqdefault.jpg',
 'https://i.redd.it/kyczj16ebgl01.jpg',
