@@ -347,7 +347,6 @@ class SuggestionHandler(commands.Cog):
                 await channel.set_permissions(dev, send_messages=True)
                 await channel.send('<@!{}>'.format(253290704384557057), embed=embed)
                 await self.inactivetoopen()
-#             workingtoinactive.start(message.channel)
 
     @commands.command(aliases=['done'])
     async def close(self, ctx):
