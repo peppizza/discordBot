@@ -314,6 +314,7 @@ class SuggestionHandler(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.inactivesuggestions = []
+        self.bannedusers = []
 
     async def inactivetoopen(self):
         opencategory = bot.get_channel(702882329332285471)
@@ -335,7 +336,7 @@ class SuggestionHandler(commands.Cog):
         if message.channel.id in suggestions:
             channel = message.channel
             catagory = channel.category
-            if catagory.id == 702882329332285471 and message.author.id != 681886537046163506 and message.author.id != 253290704384557057 and message.author.id != 704350265590939649:
+            if catagory.id == 702882329332285471 and message.author.id != 681886537046163506 and message.author.id != 253290704384557057 and message.author.id != 704350265590939649 and not message.author.id in self.bannedusers:
                 embed = discord.Embed(title='working on..', description='Your request is now being worked on by the devs', color=0x00ff00)
                 category = bot.get_channel(702882449159618663)
                 guild = message.guild
@@ -356,6 +357,16 @@ class SuggestionHandler(commands.Cog):
         embed = discord.Embed(title='inactive', description='this channel is now inactive', color=0x000000)
         await channel.edit(name=str(channel.name).replace('⌛', ''), category=category, sync_permissions=True)
         await ctx.send(embed=embed)
+    
+    @commands.command()
+    @commands.has_role(696773209495699547)
+    async def nosuggest(self, ctx, member: discord.Member):
+        self.bannedusers.append(member.id)
+    
+    @commands.command()
+    @commands.has_role(696773209495699547)
+    async def suggest(self, ctx, member: discord.Member):
+        self.bannedusers.remove(member.id)
 
 class argCommands(commands.Cog):
     def __init__(self, bot):
