@@ -294,6 +294,7 @@ smuganime = ['https://i.imgur.com/zZ86SqQ.jpg',
 'https://i.imgur.com/H9oKZXz.png']
 
 suggestions = [697102775959552052, 702882611256754289, 702882635365613662, 703312812096749599, 703312842715037766, 703312883055984730, 703312953637863515, 703313003889688696, 703313116154560583]
+bannedwords = ['nigger', 'nigga', 'faggot', 'fag', 'dyke']
 
 # https://dictionaryapi.com/api/v3/references/thesaurus/json/{word}?key={key}
 
@@ -523,21 +524,6 @@ class argCommands(commands.Cog):
     async def remindme_on_error(self, ctx, error):
         await ctx.send(error)
 
-    @commands.command()
-    @commands.has_role(696773209495699547)
-    async def warn(self, ctx, member: discord.Member, *args):
-        await ctx.message.delete()
-        user = bot.get_user(member.id)
-        embed = discord.Embed(title='WARNING')
-        embed.add_field(name='you have been warned by', value=ctx.message.author)
-        embed.add_field(name='reason', value=' '.join(args[0:]))
-        await user.send(embed=embed)
-
-    @warn.error
-    async def warn_on_error(self, ctx, error):
-        await ctx.message.delete()
-        print(error)
-
 class simpleCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -678,6 +664,31 @@ class voiceCommands(commands.Cog):
     @commands.command()
     async def leave(self, ctx):
         await ctx.voice_client.disconnect()
+    
+class Moderation(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if message.content in bannedwords:
+            context = await bot.get_context(message=message)
+            await self.warn(context, context.author, ('Hate speech'))
+
+    @commands.command()
+    @commands.has_role(696773209495699547)
+    async def warn(self, ctx, member: discord.Member, *args):
+        await ctx.message.delete()
+        embed = discord.Embed(title='WARNING')
+        embed.add_field(name='you have been warned by', value=ctx.message.author)
+        embed.add_field(name='reason', value=' '.join(args[0:]))
+        await member.send(embed=embed)
+
+    @warn.error
+    async def warn_on_error(self, ctx, error):
+        await ctx.message.delete()
+        print(error)
+    
 
 if __name__ == '__main__':
     bot.add_cog(SuggestionHandler(bot))
@@ -685,4 +696,5 @@ if __name__ == '__main__':
     bot.add_cog(simpleCommands(bot))
     bot.add_cog(dmCommands(bot))
     bot.add_cog(voiceCommands(bot))
+    bot.add_cog(Moderation(bot))
     bot.run(token)
