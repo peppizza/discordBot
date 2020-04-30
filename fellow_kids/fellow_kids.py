@@ -657,9 +657,15 @@ class voiceCommands(commands.Cog):
     async def dead(self, ctx):
         source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio('Heavy is Dead.mp3'))
         ctx.voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
+    
+    @commands.command()
+    async def yankee(self, ctx):
+        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio('YANKEE WITH NO BRIM.mp3'))
+        ctx.voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
 
     @running.before_invoke
     @dead.before_invoke
+    @yankee.before_invoke
     async def join(self, ctx):
         if ctx.voice_client is None:
             if ctx.author.voice:
