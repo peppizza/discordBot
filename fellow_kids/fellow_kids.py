@@ -367,7 +367,7 @@ class SuggestionHandler(commands.Cog):
     async def suggest(self, ctx, member: discord.Member):
         self.bannedusers.remove(member.id)
 
-class argCommands(commands.Cog):
+class ArgCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -527,7 +527,7 @@ class argCommands(commands.Cog):
     async def remindme_on_error(self, ctx, error):
         await ctx.send(error)
 
-class simpleCommands(commands.Cog):
+class SimpleCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -615,7 +615,7 @@ class simpleCommands(commands.Cog):
     async def whygay(self, ctx):
         await ctx.send('https://cdn.discordapp.com/attachments/697102775959552052/704357844572438598/images.jpg')
 
-class dmCommands(commands.Cog):
+class DmCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -629,7 +629,7 @@ class dmCommands(commands.Cog):
         await ctx.message.delete()
         await ctx.message.author.send('Please dm me the report command')
 
-class voiceCommands(commands.Cog):
+class VoiceCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
@@ -698,9 +698,9 @@ class Moderation(commands.Cog):
 
 if __name__ == '__main__':
     bot.add_cog(SuggestionHandler(bot))
-    bot.add_cog(argCommands(bot))
-    bot.add_cog(simpleCommands(bot))
-    bot.add_cog(dmCommands(bot))
-    bot.add_cog(voiceCommands(bot))
+    bot.add_cog(ArgCommands(bot))
+    bot.add_cog(SimpleCommands(bot))
+    bot.add_cog(DmCommands(bot))
+    bot.add_cog(VoiceCommands(bot))
     bot.add_cog(Moderation(bot))
     bot.run(token)
