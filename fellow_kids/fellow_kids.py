@@ -647,7 +647,7 @@ class VoiceCommands(commands.Cog):
         source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio('assets/YANKEE WITH NO BRIM.mp3'))
         ctx.voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
 
-    @commands.commnad()
+    @commands.command()
     async def jojo(self, ctx):
         source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio('assets/Goodbye Jojo.mp3'))
         ctx.voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
