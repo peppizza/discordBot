@@ -634,22 +634,28 @@ class VoiceCommands(commands.Cog):
     
     @commands.command()
     async def running(self, ctx):
-        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio('Why are You Running.mp3'))
+        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio('assets/Why are You Running.mp3'))
         ctx.voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
 
     @commands.command()
     async def dead(self, ctx):
-        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio('Heavy is Dead.mp3'))
+        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio('assets/Heavy is Dead.mp3'))
         ctx.voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
     
     @commands.command()
     async def yankee(self, ctx):
-        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio('YANKEE WITH NO BRIM.mp3'))
+        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio('assets/YANKEE WITH NO BRIM.mp3'))
+        ctx.voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
+
+    @commands.commnad()
+    async def jojo(self, ctx):
+        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio('assets/Goodbye Jojo.mp3'))
         ctx.voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
 
     @running.before_invoke
     @dead.before_invoke
     @yankee.before_invoke
+    @jojo.before_invoke
     async def join(self, ctx):
         if ctx.voice_client is None:
             if ctx.author.voice:
