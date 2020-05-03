@@ -6,6 +6,7 @@ import datetime
 import asyncio
 import secrets
 import json
+import logging
 
 from discord.ext import tasks, commands
 from discord import File
@@ -302,8 +303,8 @@ bannedwords = ['nigger', 'nigga', 'faggot', 'fag', 'dyke', 'niggers', 'niggas', 
 load_dotenv()
 token = os.getenv('DISCORD_TOKEN')
 key = os.getenv('API_KEY')
-bday = datetime.datetime(2020, 10, 26)
 
+logging.basicConfig(level=logging.INFO)
 bot = commands.Bot(command_prefix='!')
 
 @bot.event
@@ -727,29 +728,81 @@ class Leveling(commands.Cog):
             "7616": "Australian",
             "8500": "Hale's Own"
         }
+        self.erase = False
 
     @commands.Cog.listener()
     async def on_message(self, message):
+        if message.author.bot:
+            return
+        currentlevel = ''
         user = str(message.author.id)
         channel = message.channel
         with open('level.json', 'r') as read_file:
             data = json.load(read_file)
         if user in data:
-            data[user] += 1
+            if currentlevel == '':
+                data[user] = [data[user][0] + 1, data[user][1]]
+            else:
+                data[user] = [data[user][0] + 1, currentlevel]
         else:
-            data[user] = 1
+            data[user] = [1, '']
         
-        print(data[user])
-
-        if data[user] in self.stages:
+        if data[user][0] in self.stages:
+            currentlevel = self.levels.get(str(data[user][0]))
+            data[user][1] = currentlevel
+            print(currentlevel)
             embed = discord.Embed(title="{} has leveled up".format(message.author), color=0x00ff00)
             embed.set_image(url='https://france-amerique.com/wp-content/uploads/2018/01/flute-e1516288055295.jpg')
-            embed.add_field(name='messages sent:', value=data[user])
-            embed.add_field(name='level reached:', value=self.levels.get(str(data[user])))
+            embed.add_field(name='messages sent:', value=data[user][0])
+            embed.add_field(name='level reached:', value=currentlevel)
             await channel.send(embed=embed)
 
         with open('level.json', 'w') as write_file:
             json.dump(data, write_file)
+
+    @commands.command()
+    async def level(self, ctx):
+
+        user = str(ctx.author.id)
+        
+        with open('level.json', 'r') as read_file:
+            data = json.load(read_file)
+        
+        messages = data[user][0]
+        level = data[user][1]
+
+        if user in data:
+            if data[user][1] == '':
+                level = 'None'
+            else:
+                level = data[user][1]
+            embed = discord.Embed(title='Level')
+            embed.add_field(name='messages sent:', value=data[user][0])
+            embed.add_field(name='current level:', value=level)
+            await ctx.send(embed=embed)
+        else:
+            await ctx.send('<@!{}> has not sent any messages yet'.format(user))
+
+    @commands.command()
+    @commands.has_role(684473159956824143)
+    async def reset(self, ctx):
+        self.erase = True
+        await ctx.send('YOU\'VE LAUNCHED THE ROCKET')
+        for x in range(5, 0, -1):
+            await asyncio.sleep(1)
+            if self.erase == False:
+                return
+            await ctx.send(x)
+        if self.erase == True:
+            await asyncio.sleep(1)
+            open('level.json', 'w').write('{}')
+            await ctx.send('Erased levels')
+        
+    @commands.command()
+    @commands.has_role(684473159956824143)
+    async def cancel(self, ctx):
+        self.erase = False
+        await ctx.send('Rocket launch canceled')
 
 if __name__ == '__main__':
     bot.add_cog(SuggestionHandler(bot))
