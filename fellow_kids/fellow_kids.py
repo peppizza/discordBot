@@ -5,6 +5,7 @@ import aiohttp
 import datetime
 import asyncio
 import secrets
+import json
 
 from discord.ext import tasks, commands
 from discord import File
@@ -699,7 +700,56 @@ class Moderation(commands.Cog):
     async def warn_on_error(self, ctx, error):
         await ctx.message.delete()
         print(error)
-    
+
+class Leveling(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        self.stages = [10, 25, 45, 70, 100, 135, 175, 225, 275, 350, 500, 750, 999, 1000, 1500, 2500, 5000, 7500, 7616, 8500]
+        self.levels = {
+            "10": "Unremarkable",
+            "25": "Scarcely Lethal",
+            "45": "Mildly Menacing",
+            "70": "Somewhat Threatening",
+            "100": "Uncharitable",
+            "135": "Notably Dangerous",
+            "175": "Sufficiently Lethal",
+            "225": "Truly Feared",
+            "275": "Spectacularly Lethal",
+            "350": "Gore-Spattered",
+            "500": "Wicked Nasty",
+            "750": "Positively Inhumane",
+            "999": "Totally Ordinary",
+            "1000": "Face-Melting",
+            "1500": "Rage-Inducing",
+            "2500": "Server-Clearing",
+            "5000": "Epic",
+            "7500": "Legendary",
+            "7616": "Australian",
+            "8500": "Hale's Own"
+        }
+
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        user = str(message.author.id)
+        channel = message.channel
+        with open('level.json', 'r') as read_file:
+            data = json.load(read_file)
+        if user in data:
+            data[user] += 1
+        else:
+            data[user] = 1
+        
+        print(data[user])
+
+        if data[user] in self.stages:
+            embed = discord.Embed(title="{} has leveled up".format(message.author), color=0x00ff00)
+            embed.set_image(url='https://france-amerique.com/wp-content/uploads/2018/01/flute-e1516288055295.jpg')
+            embed.add_field(name='messages sent:', value=data[user])
+            embed.add_field(name='level reached:', value=self.levels.get(str(data[user])))
+            await channel.send(embed=embed)
+
+        with open('level.json', 'w') as write_file:
+            json.dump(data, write_file)
 
 if __name__ == '__main__':
     bot.add_cog(SuggestionHandler(bot))
@@ -708,4 +758,5 @@ if __name__ == '__main__':
     bot.add_cog(DmCommands(bot))
     bot.add_cog(VoiceCommands(bot))
     bot.add_cog(Moderation(bot))
+    bot.add_cog(Leveling(bot))
     bot.run(token)
