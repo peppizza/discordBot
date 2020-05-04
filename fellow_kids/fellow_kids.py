@@ -436,6 +436,9 @@ class ArgCommands(commands.Cog):
 
     @commands.command()
     async def dio(self, ctx, *args):
+        for word in str(ctx.message.content).split():
+            if word.lower() in bannedwords:
+                return
         W = 1280
         msg = " ".join(args[:]).upper()
         if len(msg) <= 18:
@@ -551,10 +554,6 @@ class SimpleCommands(commands.Cog):
     @commands.command(help='heyayayaya')
     async def hey(self, ctx):
         await ctx.send('https://www.youtube.com/watch?v=ZZ5LpwO-An4&t=13s')
-
-    @commands.command(name='siegheil', help='hitler')
-    async def hitler(self, ctx):
-        await ctx.send('https://www.youtube.com/watch?v=lLwguZnvguQ')
 
     @commands.command(help='shrek')
     async def shrek(self, ctx):
@@ -698,7 +697,10 @@ class Moderation(commands.Cog):
         embed = discord.Embed(title='WARNING')
         embed.add_field(name='you have been warned by', value=ctx.message.author)
         embed.add_field(name='reason', value=' '.join(args[0:]))
-        await member.send(embed=embed)
+        try:
+            await member.send(embed=embed)
+        except AttributeError:
+            pass
         if auto == False:
             embed2 = discord.Embed(title='{} has been warned'.format(member), description='**{}** has been warned by **{}** for **{}**'.format(member, ctx.author, ' '.join(args[0:])))
         else:
