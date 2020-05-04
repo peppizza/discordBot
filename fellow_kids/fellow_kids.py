@@ -697,10 +697,8 @@ class Moderation(commands.Cog):
         embed = discord.Embed(title='WARNING')
         embed.add_field(name='you have been warned by', value=ctx.message.author)
         embed.add_field(name='reason', value=' '.join(args[0:]))
-        try:
+        if not ctx.author.bot:
             await member.send(embed=embed)
-        except AttributeError:
-            pass
         if auto == False:
             embed2 = discord.Embed(title='{} has been warned'.format(member), description='**{}** has been warned by **{}** for **{}**'.format(member, ctx.author, ' '.join(args[0:])))
         else:
