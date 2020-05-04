@@ -673,6 +673,7 @@ class VoiceCommands(commands.Cog):
 class Moderation(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.orginalmessage = ''
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -686,6 +687,7 @@ class Moderation(commands.Cog):
     async def on_message(self, message):
         for word in message.content.split():
             if word.lower() in bannedwords:
+                self.orginalmessage = message.content
                 context = await bot.get_context(message=message)
                 await self.warn(context, context.author, ('Hate speech'), auto=True)
 
@@ -700,10 +702,11 @@ class Moderation(commands.Cog):
         if not ctx.author.bot:
             await member.send(embed=embed)
         if auto == False:
-            embed2 = discord.Embed(title='{} has been warned'.format(member), description='**{}** has been warned by **{}** for **{}**'.format(member, ctx.author, ' '.join(args[0:])))
+            embed = discord.Embed(title='{} has been warned'.format(member), description='**{}** has been warned by **{}** for **{}**'.format(member, ctx.author, ' '.join(args[0:])))
         else:
-            embed2 = discord.Embed(title='{} has been warned'.format(member), description='**{}** has been automatically warned for hate speech'.format(member))
-        await channel.send(embed=embed2)
+            embed = discord.Embed(title='{} has been warned'.format(member), description='**{}** has been automatically warned for hate speech'.format(member))
+            embed.add_field(name='original message', value=self.orginalmessage)
+        await channel.send(embed=embed)
 
     @warn.error
     async def warn_on_error(self, ctx, error):
