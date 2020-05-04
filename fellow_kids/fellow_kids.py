@@ -676,6 +676,14 @@ class Moderation(commands.Cog):
         self.bot = bot
 
     @commands.Cog.listener()
+    async def on_member_join(self, member):
+        new_people = bot.get_channel(704404601327321149)
+        rules = bot.get_channel(704737000078704710)
+        promotion = bot.get_channel(704775810199846973)
+        embed = discord.Embed(title='Welcome {}!'.format(member.name), description='Head to {} for the rules,\n{} for self-promotion,\nand feel free to make a suggestion!'.format(rules.mention, promotion.mention))
+        await new_people.send(embed=embed)
+
+    @commands.Cog.listener()
     async def on_message(self, message):
         for word in message.content.split():
             if word.lower() in bannedwords:
