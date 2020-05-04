@@ -705,7 +705,6 @@ class Moderation(commands.Cog):
 class Leveling(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.stages = [10, 25, 45, 70, 100, 135, 175, 225, 275, 350, 500, 750, 999, 1000, 1500, 2500, 5000, 7500, 7616, 8500]
         self.levels = {
             "10": "Unremarkable",
             "25": "Scarcely Lethal",
@@ -747,7 +746,7 @@ class Leveling(commands.Cog):
         else:
             data[user] = [1, '']
         
-        if data[user][0] in self.stages:
+        if str(data[user][0]) in self.levels:
             currentlevel = self.levels.get(str(data[user][0]))
             data[user][1] = currentlevel
             print(currentlevel)
@@ -803,6 +802,25 @@ class Leveling(commands.Cog):
     async def cancel(self, ctx):
         self.erase = False
         await ctx.send('Rocket launch canceled')
+
+    @commands.command()
+    @commands.has_role(684473159956824143)
+    async def count(self, ctx, member: discord.Member, level: int, custom=''):
+        with open('level.json', 'r') as in_file:
+            data = json.load(in_file)
+
+        user = str(member.id)
+        if user in data:
+            data[user][0] = level
+            if custom != '':
+                data[user][1] = custom
+
+        with open('level.json', 'w') as out_file:
+            json.dump(data, out_file)
+
+    @count.error
+    async def count_on_error(self, ctx, error):
+        await ctx.send(error)
 
 if __name__ == '__main__':
     bot.add_cog(SuggestionHandler(bot))
