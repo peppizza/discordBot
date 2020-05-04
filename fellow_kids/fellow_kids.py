@@ -314,17 +314,17 @@ async def on_ready():
 class SuggestionHandler(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.inactivesuggestions = []
         self.bannedusers = []
 
     async def inactivetoopen(self):
+        inactivesuggestions = []
         opencategory = bot.get_channel(702882329332285471)
         if len(opencategory.channels) < 2:
             inactivecategory = bot.get_channel(703314675529416785)
             for channels in inactivecategory.channels:
                 print(channels.id)
-                self.inactivesuggestions.append(channels.id)
-        chosen = random.choice(self.inactivesuggestions)
+                inactivesuggestions.append(channels.id)
+        chosen = random.choice(inactivesuggestions)
         chosen = bot.get_channel(chosen)
         category = bot.get_channel(702882329332285471)
         await chosen.edit(name='{}-✅'.format(chosen.name).replace('⌛', ''), category=category, sync_permissions=True)
