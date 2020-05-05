@@ -253,9 +253,6 @@ class ArgCommands(commands.Cog):
 class SimpleCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
-    @commands.Cog.listener()
-    async def on_ready(self):
         with open('assets/images.json', 'r') as in_file:
             data = json.load(in_file)
             self.tf2images = data['tf2images']
