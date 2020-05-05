@@ -39,12 +39,10 @@ class SuggestionHandler(commands.Cog):
         if len(opencategory.channels) < 2:
             inactivecategory = bot.get_channel(703314675529416785)
             for channels in inactivecategory.channels:
-                print(channels.id)
                 inactivesuggestions.append(channels.id)
         chosen = secrets.choice(inactivesuggestions)
         chosen = bot.get_channel(chosen)
-        category = bot.get_channel(702882329332285471)
-        await chosen.edit(name='{}-✅'.format(chosen.name).replace('⌛', ''), category=category, sync_permissions=True)
+        await chosen.edit(name='{}-✅'.format(chosen.name).replace('⌛', ''), category=opencategory, sync_permissions=True)
         embed = discord.Embed(title='open', description='this channel is now open for suggestions', color=0x00ff00)
         await chosen.send(embed=embed)
 
@@ -485,7 +483,6 @@ class Leveling(commands.Cog):
         if str(data[user][0]) in self.levels:
             currentlevel = self.levels.get(str(data[user][0]))
             data[user][1] = currentlevel
-            print(currentlevel)
             embed = discord.Embed(title="{} has leveled up".format(message.author), color=0x00ff00)
             embed.set_image(url='https://france-amerique.com/wp-content/uploads/2018/01/flute-e1516288055295.jpg')
             embed.add_field(name='messages sent:', value=data[user][0])
