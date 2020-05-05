@@ -1,8 +1,6 @@
 import os
-import random
 import discord
 import aiohttp
-import datetime
 import asyncio
 import secrets
 import json
@@ -324,7 +322,7 @@ class SuggestionHandler(commands.Cog):
             for channels in inactivecategory.channels:
                 print(channels.id)
                 inactivesuggestions.append(channels.id)
-        chosen = random.choice(inactivesuggestions)
+        chosen = secrets.choice(inactivesuggestions)
         chosen = bot.get_channel(chosen)
         category = bot.get_channel(702882329332285471)
         await chosen.edit(name='{}-✅'.format(chosen.name).replace('⌛', ''), category=category, sync_permissions=True)
@@ -391,7 +389,7 @@ class ArgCommands(commands.Cog):
     @commands.has_role('Moderators')
     async def bean(self, ctx, *args):
         if (args == ()):
-            NotImplementedError
+            await ctx.send('Please provide an argument for beaning')
         elif (len(args) == 1):
             embed = discord.Embed(title="bean", description="you have been beaned", color=0xff0000)
             embed.set_author(name=ctx.message.author.name)
@@ -405,8 +403,6 @@ class ArgCommands(commands.Cog):
             embed.add_field(name="reason", value=' '.join(args[1: len(args)]))
             embed.set_image(url="https://images.immediate.co.uk/production/volatile/sites/4/2018/08/GettyImages-149069817-15d7368.jpg?webp=true&quality=45&resize=1880%2C799")
             await ctx.send(embed=embed)
-        else:
-            NotImplementedError
 
     @bean.error
     async def bean_on_error(self, ctx, error):
@@ -504,7 +500,7 @@ class ArgCommands(commands.Cog):
                             js = await r.json()
                             try:
                                 word = js[0]['meta']['syns'][0]
-                                word = random.choice(word)
+                                word = secrets.choice(word)
                                 wordlist.append(word)
                             except Exception:
                                 wordlist.append(word)
@@ -784,9 +780,6 @@ class Leveling(commands.Cog):
         with open('level.json', 'r') as read_file:
             data = json.load(read_file)
         
-        messages = data[user][0]
-        level = data[user][1]
-
         if user in data:
             if data[user][1] == '':
                 level = 'None'
