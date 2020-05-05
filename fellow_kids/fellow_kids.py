@@ -437,6 +437,10 @@ class ArgCommands(commands.Cog):
     @commands.command()
     async def dio(self, ctx, *args):
         for word in str(ctx.message.content).split():
+            word = word.replace('_', '')
+            word = word.replace('*', '')
+            word = word.replace('~', '')
+            word = word.replace('`', '')
             if word.lower() in bannedwords:
                 return
         W = 1280
@@ -685,6 +689,10 @@ class Moderation(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         for word in message.content.split():
+            word = word.replace('_', '')
+            word = word.replace('*', '')
+            word = word.replace('~', '')
+            word = word.replace('`', '')
             if word.lower() in bannedwords:
                 context = await bot.get_context(message=message)
                 await self.warn(context, context.author, ('Hate speech'), auto=True)
