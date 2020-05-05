@@ -523,9 +523,9 @@ class ArgCommands(commands.Cog):
                 elif 'min' in originaltime:
                     time = time * 60
                 return time
-        await ctx.send('set a reminder \"{0}\" for <@!{1}> for {2}'.format(' '.join(args[1:]), author, args[0]))
+        await ctx.send('set a reminder \"{}\" for {} for {}'.format(' '.join(args[1:]), author.mention, args[0]))
         await asyncio.sleep(convert(args[0]))
-        await ctx.send('<@!{0}> {1}'.format(author, ' '.join(args[1:])))
+        await ctx.send('} {}'.format(author.mention, ' '.join(args[1:])))
 
     @remindme.error
     async def remindme_on_error(self, ctx, error):
@@ -790,7 +790,7 @@ class Leveling(commands.Cog):
             embed.add_field(name='current level:', value=level)
             await ctx.send(embed=embed)
         else:
-            await ctx.send('<@!{}> has not sent any messages yet'.format(user))
+            await ctx.send('{} has not sent any messages yet'.format(user.mention))
 
     @commands.command()
     @commands.has_role(684473159956824143)
