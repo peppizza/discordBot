@@ -8,7 +8,7 @@ import secrets
 import json
 import logging
 
-from discord.ext import tasks, commands
+from discord.ext import commands
 from discord import File
 from dotenv import load_dotenv
 from PIL import Image, ImageFont, ImageDraw
