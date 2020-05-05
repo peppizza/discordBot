@@ -790,7 +790,7 @@ class Leveling(commands.Cog):
             embed.add_field(name='current level:', value=level)
             await ctx.send(embed=embed)
         else:
-            await ctx.send('{} has not sent any messages yet'.format(user.mention))
+            await ctx.send('{} has not sent any messages yet'.format(ctx.author.mention))
 
     @commands.command()
     @commands.has_role(684473159956824143)
