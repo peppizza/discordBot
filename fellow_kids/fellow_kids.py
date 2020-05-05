@@ -525,7 +525,7 @@ class ArgCommands(commands.Cog):
                 return time
         await ctx.send('set a reminder \"{}\" for {} for {}'.format(' '.join(args[1:]), author.mention, args[0]))
         await asyncio.sleep(convert(args[0]))
-        await ctx.send('} {}'.format(author.mention, ' '.join(args[1:])))
+        await ctx.send('{} {}'.format(author.mention, ' '.join(args[1:])))
 
     @remindme.error
     async def remindme_on_error(self, ctx, error):
