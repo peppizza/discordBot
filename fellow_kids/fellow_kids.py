@@ -336,6 +336,10 @@ class SimpleCommands(commands.Cog):
     async def whygay(self, ctx):
         await ctx.send('https://cdn.discordapp.com/attachments/697102775959552052/704357844572438598/images.jpg')
 
+    @commands.command()
+    async def monke(self, ctx):
+        await ctx.send('https://i.redd.it/97vk2gz7zvl41.jpg')
+
 class DmCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
