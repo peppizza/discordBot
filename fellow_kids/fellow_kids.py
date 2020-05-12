@@ -429,7 +429,8 @@ class Moderation(commands.Cog):
         if not ctx.author.bot:
             await member.send(embed=embed)
         if auto == False:
-            embed = discord.Embed(title='{} has been warned'.format(member), description='**{}** has been warned by **{}** for **{}**'.format(member, ctx.author, ' '.join(args[0:])))
+            embed = discord.Embed(title='{} has been warned'.format(member), description='**{}** has been warned by **{}**'.format(member, ctx.author))
+            embed.add_field(name='Reason', value=' '.join(args[0:]))
         else:
             embed = discord.Embed(title='{} has been warned'.format(member), description='**{}** has been automatically warned for hate speech'.format(member))
             embed.add_field(name='original message', value=ctx.message.content)
