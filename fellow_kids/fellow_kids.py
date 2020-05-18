@@ -147,36 +147,6 @@ class ArgCommands(commands.Cog):
     async def ping_on_error(self, ctx, error):
         await ctx.send('ping limit is 10')
 
-    @commands.command()
-    async def dio(self, ctx, *args):
-        for word in str(ctx.message.content).split():
-            word = word.replace('_', '')
-            word = word.replace('*', '')
-            word = word.replace('~', '')
-            word = word.replace('`', '')
-            if word.lower() in bannedwords:
-                return
-        W = 1280
-        msg = " ".join(args[:]).upper()
-        if len(msg) <= 18:
-            fontSize = 144
-        elif len(msg) <= 25:
-            fontSize = 100
-        elif len(msg) <= 30:
-            fontSize = 70
-        else:
-            fontSize = 50
-
-        font = ImageFont.truetype("/usr/share/fonts/truetype/msttcorefonts/Impact.ttf", fontSize)
-        img = Image.open('dio.jpg')
-        draw = ImageDraw.Draw(img)
-        w = draw.textsize(msg, font=font)[0]
-        async with ctx.typing():
-            draw.text(((W-w)/2, 0), msg, (255, 255, 255), font=font)
-            img.save("final.png")
-            await ctx.send(file=File('final.png'))
-
-    @dio.error
     async def dio_on_error(self, ctx, error):
         await ctx.send(error)
 
@@ -557,6 +527,53 @@ class Leveling(commands.Cog):
     async def count_on_error(self, ctx, error):
         await ctx.send(error)
 
+class imageDraw(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @commands.command()
+    async def dio(self, ctx, *args):
+        if self.filter(' '.join(args[:])):
+            return
+        W = 1280
+        msg = ' '.join(args[:]).upper()
+        if len(msg) <= 18:
+            fontSize = 144
+        elif len(msg) <= 25:
+            fontSize = 100
+        elif len(msg) <= 30:
+            fontSize = 70
+        else:
+            fontSize = 50
+
+        font = ImageFont.truetype("/usr/share/fonts/truetype/msttcorefonts/Impact.ttf", fontSize)
+        await self.drawText(ctx, msg, font, W, 'dio.jpg')
+
+    # @commands.command()
+    # async def line(self, ctx, *args):
+    #     if self.filter(' '.join(args[:]))
+
+    async def drawText(self, ctx, text, font, W, image):
+        img = Image.open(image)
+        draw = ImageDraw.Draw(img)
+        w = draw.textsize(text, font=font)[0]
+        async with ctx.typing():
+            draw.text(((W-w)/2, 0), text, (255, 255, 255), font=font)
+            img.save('final.png')
+            await ctx.send(file=File('final.png'))
+
+    def filter(self, text):
+        text = text.replace('_', '')
+        text = text.replace('*', '')
+        text = text.replace('~', '')
+        text = text.replace('`', '')
+        for word in text.split():
+            if word.lower() in bannedwords:
+                return True
+
+        return False
+
+
 if __name__ == '__main__':
     bot.add_cog(SuggestionHandler(bot))
     bot.add_cog(ArgCommands(bot))
@@ -565,4 +582,5 @@ if __name__ == '__main__':
     bot.add_cog(VoiceCommands(bot))
     bot.add_cog(Moderation(bot))
     bot.add_cog(Leveling(bot))
+    bot.add_cog(imageDraw(bot))
     bot.run(token)
