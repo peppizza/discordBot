@@ -228,7 +228,7 @@ class SimpleCommands(commands.Cog):
 
     @commands.command()
     async def server(self, ctx):
-        await ctx.send('https://cache.gametracker.com/server_info/168.62.169.84:27015/banner_560x95.png?random=945122')
+        await ctx.send('https://cache.gametracker.com/server_info/168.62.169.84:27015/b_350_20_692108_381007_ffffff_000000.png')
 
     @commands.command(help='how do you do fellow kids')
     async def kids(self, ctx):
