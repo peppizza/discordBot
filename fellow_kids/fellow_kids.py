@@ -226,6 +226,10 @@ class SimpleCommands(commands.Cog):
             self.tf2images = data['tf2images']
             self.smuganime = data['smuganime']
 
+    @commands.command()
+    async def server(self, ctx):
+        await ctx.send('https://cache.gametracker.com/server_info/168.62.169.84:27015/banner_560x95.png?random=945122')
+
     @commands.command(help='how do you do fellow kids')
     async def kids(self, ctx):
         await ctx.send('https://www.youtube.com/watch?v=bI2PdskxE_s')
