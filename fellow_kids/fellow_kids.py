@@ -136,16 +136,12 @@ class ArgCommands(commands.Cog):
     @commands.command(help='ping')
     @commands.has_role('pinging rights')
     async def ping(self, ctx, arg1, arg2):
-        times = int(arg2)
-        if (times <= 10):
-            for i in range(times):
-                await ctx.send(arg1)
-        else:
-            await ctx.send(ctx, OverflowError)
+        final = int(arg2) * (arg1 + '\n')
+        await ctx.send(final)
 
     @ping.error
     async def ping_on_error(self, ctx, error):
-        await ctx.send('ping limit is 10')
+        await ctx.send(error)
 
     async def dio_on_error(self, ctx, error):
         await ctx.send(error)
