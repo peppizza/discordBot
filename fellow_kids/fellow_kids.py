@@ -136,6 +136,9 @@ class ArgCommands(commands.Cog):
     @commands.command(help='ping')
     @commands.has_role('pinging rights')
     async def ping(self, ctx, arg1, arg2):
+        if int(arg2) > 10:
+            await ctx.send("ping limit is ten")
+            return
         final = int(arg2) * (arg1 + '\n')
         await ctx.send(final)
 
