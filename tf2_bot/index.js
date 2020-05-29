@@ -1,6 +1,6 @@
 const fs = require('fs')
 const Discord = require('discord.js');
-const {prefix, token}= require('../config.json')
+const {prefix, token}= require('./config.json')
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
@@ -23,9 +23,10 @@ client.on('message', message => {
     const args = message.content.slice(prefix.length).split(/ +/);
     const commandName = args.shift().toLowerCase();
 
-    if (!client.commands.has(commandName)) return;
+    const command = client.commands.get(commandName)
+        || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
-    const command = client.commands.get(commandName);
+    if (!command) return;
 
     if (command.guildOnly && message.channel.type !== 'text') {
         return message.reply('I can\'t execute this command inside a DM');
