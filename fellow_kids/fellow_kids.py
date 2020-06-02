@@ -146,9 +146,6 @@ class ArgCommands(commands.Cog):
     async def ping_on_error(self, ctx, error):
         await ctx.send(error)
 
-    async def dio_on_error(self, ctx, error):
-        await ctx.send(error)
-
     @commands.command()
     @commands.has_role('Moderators')
     async def mute(self, ctx, member: discord.Member):
@@ -216,6 +213,10 @@ class ArgCommands(commands.Cog):
     @remindme.error
     async def remindme_on_error(self, ctx, error):
         await ctx.send(error)
+
+    @commands.command()
+    async def emote(self, ctx, emoji: discord.Emoji):
+        await ctx.send(emoji.url)
 
 class SimpleCommands(commands.Cog):
     def __init__(self, bot):
