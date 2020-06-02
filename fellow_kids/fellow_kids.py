@@ -320,6 +320,10 @@ class SimpleCommands(commands.Cog):
         emoji = reaction.emoji
         await message.add_reaction(emoji)
 
+    @commands.command()
+    async def money(self, ctx):
+        await ctx.send('https://cdn.discordapp.com/attachments/696786725053399092/717430238941937764/1480273770_spy1.gif')
+
 class DmCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
