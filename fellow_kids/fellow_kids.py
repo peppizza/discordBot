@@ -214,7 +214,7 @@ class ArgCommands(commands.Cog):
     async def remindme_on_error(self, ctx, error):
         await ctx.send(error)
 
-    @commands.command()
+    @commands.command(aliases=['emoji'])
     async def emote(self, ctx, emoji: discord.Emoji):
         await ctx.send(emoji.url)
 
