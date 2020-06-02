@@ -314,6 +314,12 @@ class SimpleCommands(commands.Cog):
     async def monke(self, ctx):
         await ctx.send('https://i.redd.it/97vk2gz7zvl41.jpg')
 
+    @commands.Cog.listener()
+    async def on_reaction_add(self, reaction, user):
+        message = reaction.message
+        emoji = reaction.emoji
+        await message.add_reaction(emoji)
+
 class DmCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
