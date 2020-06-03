@@ -2,7 +2,6 @@ import os
 import discord
 import aiohttp
 import asyncio
-import secrets
 import random
 import json
 import logging
@@ -41,7 +40,7 @@ class SuggestionHandler(commands.Cog):
             inactivecategory = bot.get_channel(703314675529416785)
             for channels in inactivecategory.channels:
                 inactivesuggestions.append(channels.id)
-        chosen = secrets.choice(inactivesuggestions)
+        chosen = random.choice(inactivesuggestions)
         chosen = bot.get_channel(chosen)
         await chosen.edit(name='{}-✅'.format(chosen.name).replace('⌛', ''), category=opencategory, sync_permissions=True)
         embed = discord.Embed(title='open', description='this channel is now open for suggestions', color=0x00ff00)
@@ -183,7 +182,7 @@ class ArgCommands(commands.Cog):
                             js = await r.json()
                             try:
                                 word = js[0]['meta']['syns'][0]
-                                word = secrets.choice(word)
+                                word = random.choice(word)
                                 wordlist.append(word)
                             except Exception:
                                 wordlist.append(word)
@@ -260,7 +259,7 @@ class SimpleCommands(commands.Cog):
 
     @commands.command(name='tf2image', help='selects random tf2 image')
     async def tf2(self, ctx):
-        await ctx.send(secrets.choice(self.tf2images))
+        await ctx.send(random.choice(self.tf2images))
 
     @commands.command(help='no u')
     async def nou(self, ctx):
@@ -296,7 +295,7 @@ class SimpleCommands(commands.Cog):
 
     @commands.command(help='prints smug anime girl')
     async def smug(self, ctx):
-        await ctx.send(secrets.choice(self.smuganime))
+        await ctx.send(random.choice(self.smuganime))
 
     @commands.command(help='demoman tf2')
     async def didntseethat(self, ctx):
@@ -319,7 +318,7 @@ class SimpleCommands(commands.Cog):
         if reaction.count != 1: return
         message = reaction.message
         emoji = reaction.emoji
-        await asyncio.sleep(random.randint(1, 10))
+        await asyncio.sleep(random.randint(1, 3))
         await message.add_reaction(emoji)
 
     @commands.command()
