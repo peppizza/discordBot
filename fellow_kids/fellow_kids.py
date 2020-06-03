@@ -6,7 +6,7 @@ import random
 import json
 import logging
 
-from discord.ext import commands
+from discord.ext import tasks, commands
 from discord import File
 from dotenv import load_dotenv
 from PIL import Image, ImageFont, ImageDraw
@@ -375,10 +375,22 @@ class VoiceCommands(commands.Cog):
                 await ctx.send("You are not connected to a voice channel.")
         elif ctx.voice_client.is_playing():
             ctx.voice_client.stop()
+        self.vc = ctx.voice_client
+        self.leaver.start()
+
+    @tasks.loop(minutes=1.0)
+    async def leaver(self):
+        if self.vc is not None:
+            channel = self.vc.channel
+            if len(channel.members) == 1:
+                await self.vc.disconnect()
+                self.leaver.cancel()
 
     @commands.command()
     async def leave(self, ctx):
-        await ctx.voice_client.disconnect()
+        if self.vc is not None: 
+            await self.vc.disconnect()
+        self.leaver.cancel()
     
 class Moderation(commands.Cog):
     def __init__(self, bot):
@@ -386,6 +398,8 @@ class Moderation(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
+        guild = member.guild
+        if guild.id != 684472795639447621: return
         new_people = bot.get_channel(704404601327321149)
         rules = bot.get_channel(704737000078704710)
         promotion = bot.get_channel(704775810199846973)
