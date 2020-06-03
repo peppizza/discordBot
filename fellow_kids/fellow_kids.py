@@ -316,6 +316,7 @@ class SimpleCommands(commands.Cog):
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
+        if reaction.count != 1: return
         message = reaction.message
         emoji = reaction.emoji
         await message.add_reaction(emoji)
