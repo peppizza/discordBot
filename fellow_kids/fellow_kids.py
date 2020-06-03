@@ -144,8 +144,7 @@ class ArgCommands(commands.Cog):
         if i > 10 or i <= 0:
             await ctx.send("Number must be between 1 and 10")
             return
-        final = i * (arg1 + '\n')
-        await ctx.send(final)
+        await ctx.send(i * (arg1 + '\n'))
 
     @ping.error
     async def ping_on_error(self, ctx, error):
