@@ -3,6 +3,7 @@ import discord
 import aiohttp
 import asyncio
 import secrets
+import random
 import json
 import logging
 
@@ -99,7 +100,7 @@ class ArgCommands(commands.Cog):
 
     @die.error
     async def die_on_error(self, ctx, error):
-        await ctx.send('you fucked up the command you peice of subhuman trash')
+        await ctx.send('you fucked up the command you piece of subhuman trash')
 
 
     @commands.command(help='beanify')
@@ -107,19 +108,14 @@ class ArgCommands(commands.Cog):
     async def bean(self, ctx, *args):
         if (args == ()):
             await ctx.send('Please provide an argument for beaning')
-        elif (len(args) == 1):
-            embed = discord.Embed(title="bean", description="you have been beaned", color=0xff0000)
-            embed.set_author(name=ctx.message.author.name)
-            embed.add_field(name="person", value=args[0])
-            embed.set_image(url="https://images.immediate.co.uk/production/volatile/sites/4/2018/08/GettyImages-149069817-15d7368.jpg?webp=true&quality=45&resize=1880%2C799")
-            await ctx.send(embed=embed)
-        elif (len(args) >= 2):
-            embed = discord.Embed(title="bean", description="you have been beaned", color=0xff0000)
-            embed.set_author(name=ctx.message.author.name)
-            embed.add_field(name="person", value=args[0])
+            return
+        embed = discord.Embed(title="bean", description="you have been beaned", color=0xff0000)
+        embed.set_author(name=ctx.message.author.name)
+        embed.add_field(name="person", value=args[0])
+        if(len(args) >= 2):
             embed.add_field(name="reason", value=' '.join(args[1: len(args)]))
-            embed.set_image(url="https://images.immediate.co.uk/production/volatile/sites/4/2018/08/GettyImages-149069817-15d7368.jpg?webp=true&quality=45&resize=1880%2C799")
-            await ctx.send(embed=embed)
+        embed.set_image(url="https://images.immediate.co.uk/production/volatile/sites/4/2018/08/GettyImages-149069817-15d7368.jpg?webp=true&quality=45&resize=1880%2C799")
+        await ctx.send(embed=embed)
 
     @bean.error
     async def bean_on_error(self, ctx, error):
@@ -323,6 +319,7 @@ class SimpleCommands(commands.Cog):
         if reaction.count != 1: return
         message = reaction.message
         emoji = reaction.emoji
+        await asyncio.sleep(random.randint(1, 10))
         await message.add_reaction(emoji)
 
     @commands.command()
