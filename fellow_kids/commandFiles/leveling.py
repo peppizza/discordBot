@@ -1,6 +1,14 @@
+import os
 import json
 import discord
 import asyncio
+
+from discord.ext import commands
+THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+const = os.path.join(THIS_FOLDER, 'discord_ids.json')
+with open(const, 'r') as fp:
+    const = json.load(fp)
+level = os.path.join(THIS_FOLDER, 'level.json')
 
 class Leveling(commands.Cog):
     def __init__(self, bot):
@@ -36,7 +44,7 @@ class Leveling(commands.Cog):
         currentlevel = ''
         user = str(message.author.id)
         channel = message.channel
-        with open('level.json', 'r') as read_file:
+        with open(level, 'r') as read_file:
             data = json.load(read_file)
         if user in data:
             if currentlevel == '':
@@ -55,7 +63,7 @@ class Leveling(commands.Cog):
             embed.add_field(name='level reached:', value=currentlevel)
             await channel.send(embed=embed)
 
-        with open('level.json', 'w') as write_file:
+        with open(level, 'w') as write_file:
             json.dump(data, write_file)
 
     @commands.command()
@@ -63,7 +71,7 @@ class Leveling(commands.Cog):
 
         user = str(ctx.author.id)
         
-        with open('level.json', 'r') as read_file:
+        with open(level, 'r') as read_file:
             data = json.load(read_file)
         
         if user in data:
@@ -79,7 +87,7 @@ class Leveling(commands.Cog):
             await ctx.send('{} has not sent any messages yet'.format(ctx.author.mention))
 
     @commands.command()
-    @commands.has_role(ROLE_ADMINISTRATOR)
+    @commands.has_role(const['ROLE_ADMINISTRATOR'])
     async def reset(self, ctx):
         self.erase = True
         await ctx.send('YOU\'VE LAUNCHED THE ROCKET')
@@ -90,19 +98,19 @@ class Leveling(commands.Cog):
             await ctx.send(x)
         if self.erase == True:
             await asyncio.sleep(1)
-            open('level.json', 'w').write('{}')
+            open(level, 'w').write('{}')
             await ctx.send('Erased levels')
         
     @commands.command()
-    @commands.has_role(ROLE_ADMINISTRATOR)
+    @commands.has_role(const['ROLE_ADMINISTRATOR'])
     async def cancel(self, ctx):
         self.erase = False
         await ctx.send('Rocket launch canceled')
 
     @commands.command()
-    @commands.has_role(ROLE_ADMINISTRATOR)
+    @commands.has_role(const['ROLE_ADMINISTRATOR'])
     async def count(self, ctx, member: discord.Member, level: int, custom=''):
-        with open('level.json', 'r') as in_file:
+        with open(level, 'r') as in_file:
             data = json.load(in_file)
 
         user = str(member.id)
@@ -111,7 +119,7 @@ class Leveling(commands.Cog):
             if custom != '':
                 data[user][1] = custom
 
-        with open('level.json', 'w') as out_file:
+        with open(level, 'w') as out_file:
             json.dump(data, out_file)
 
     @count.error

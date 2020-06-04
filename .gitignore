@@ -6,3 +6,5 @@ fellow_kids/final.png
 fellow_kids/level.json
 tf2_bot/config.json
 tf2_bot/node_modules/
+fellow_kids/__pycache__/
+fellow_kids/commandFiles/__pycache__/

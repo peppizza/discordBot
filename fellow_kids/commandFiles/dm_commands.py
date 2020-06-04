@@ -1,3 +1,5 @@
+from discord.ext import commands
+
 class DmCommands(commands.Cog):
     
     def __init__(self, bot):

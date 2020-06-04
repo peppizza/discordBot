@@ -1,4 +1,7 @@
 import discord
+import os
+from discord.ext import commands, tasks
+CURRENT_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
 class VoiceCommands(commands.Cog):
 
@@ -7,22 +10,22 @@ class VoiceCommands(commands.Cog):
     
     @commands.command()
     async def running(self, ctx):
-        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio('../assets/Why are You Running.mp3'))
+        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio('{}/assets/Why are You Running.mp3'.format(CURRENT_FOLDER)))
         ctx.voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
 
     @commands.command()
     async def dead(self, ctx):
-        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio('../assets/Heavy is Dead.mp3'))
+        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio('{}/assets/Heavy is Dead.mp3'.format(CURRENT_FOLDER)))
         ctx.voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
     
     @commands.command()
     async def yankee(self, ctx):
-        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio('../assets/YANKEE WITH NO BRIM.mp3'))
+        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio('{}/assets/YANKEE WITH NO BRIM.mp3'.format(CURRENT_FOLDER)))
         ctx.voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
 
     @commands.command()
     async def jojo(self, ctx):
-        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio('../assets/Goodbye Jojo.mp3'))
+        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio('{}/assets/Goodbye Jojo.mp3'.format(CURRENT_FOLDER)))
         ctx.voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
 
     @running.before_invoke
@@ -38,15 +41,6 @@ class VoiceCommands(commands.Cog):
         elif ctx.voice_client.is_playing():
             ctx.voice_client.stop()
         self.vc = ctx.voice_client
-        self.leaver.start()
-
-    @tasks.loop(minutes=1.0)
-    async def leaver(self):
-        if self.vc is not None:
-            channel = self.vc.channel
-            if len(channel.members) == 1:
-                await self.vc.disconnect()
-                self.leaver.cancel()
 
     @commands.command()
     async def leave(self, ctx):

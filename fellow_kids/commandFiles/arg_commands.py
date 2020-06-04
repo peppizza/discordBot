@@ -2,13 +2,15 @@ import discord
 import asyncio
 import aiohttp
 import random
+import os
 
-from fellow_kids.fellow_kids import API_KEY
+from discord.ext import commands
 
 class ArgCommands(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        API_KEY = os.getenv('API_KEY')
 
     @commands.command(help='kill someone')
     async def die(self, ctx, arg):

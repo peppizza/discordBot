@@ -1,9 +1,15 @@
+import os
+import json
 from PIL import Image, ImageFont, ImageDraw
 from discord import File
+from discord.ext import commands
 
-import fellow_kids.discord_ids as const
+THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+const = os.path.join(THIS_FOLDER, 'discord_ids.json')
+with open(const, 'r') as fp:
+    const = json.load(fp)
 
-class ImageDraw(commands.Cog):
+class DrawImage(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -44,7 +50,7 @@ class ImageDraw(commands.Cog):
         text = text.replace('~', '')
         text = text.replace('`', '')
         for word in text.split():
-            if word.lower() in const.BANNED_WORDS:
+            if word.lower() in const['BANNED_WORDS']:
                 return True
 
         return False

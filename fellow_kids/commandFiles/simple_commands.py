@@ -3,6 +3,8 @@ import discord
 import random
 import asyncio
 
+from discord.ext import commands
+
 class SimpleCommands(commands.Cog):
 
     def __init__(self, bot):
