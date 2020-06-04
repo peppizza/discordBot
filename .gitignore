@@ -3,7 +3,7 @@ fellow_kids/.env
 navi/.env
 navi/nohup.out
 fellow_kids/final.png
-fellow_kids/level.json
+fellow_kids/commandFiles/level.json
 tf2_bot/config.json
 tf2_bot/node_modules/
 fellow_kids/__pycache__/

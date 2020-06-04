@@ -26,4 +26,5 @@ if __name__ == '__main__':
     bot.add_cog(leveling.Leveling(bot))
     bot.add_cog(suggestion_handler.SuggestionHandler(bot))
     bot.add_cog(voice_commands.VoiceCommands(bot))
+    bot.add_cog(simple_commands.SimpleCommands(bot))
     bot.run(API_TOKEN)

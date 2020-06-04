@@ -2,14 +2,16 @@ import json
 import discord
 import random
 import asyncio
+import os
 
 from discord.ext import commands
+THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
 class SimpleCommands(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        with open("../assets/images.json", 'r') as in_file:
+        with open("{}/assets/images.json".format(THIS_FOLDER), 'r') as in_file:
             data = json.load(in_file)
             self.tf2images = data['tf2images']
             self.smuganime = data['smuganime']
@@ -26,12 +28,12 @@ class SimpleCommands(commands.Cog):
     async def pootis(self, ctx):
         await ctx.send('pootis')
 
-    @commands.command(name='youneedjesus', help='jesus')
+    @commands.command(help='jesus')
     async def jesus(self, ctx):
         await ctx.send('https://www.you-need-jesus.com/')
 
-    @commands.command(name='momsahoe', help='your mom be a hoe')
-    async def mom(self, ctx):
+    @commands.command(help='your mom be a hoe')
+    async def momsahoe(self, ctx):
         await ctx.send('https://www.youtube.com/watch?v=iYx_aGlmyc4')
 
     @commands.command(help='heyayayaya')
@@ -42,12 +44,12 @@ class SimpleCommands(commands.Cog):
     async def shrek(self, ctx):
         await ctx.send('https://www.youtube.com/watch?v=psFzJv8g6jc')
 
-    @commands.command(name='hamburger10hours', help='hamburger')
+    @commands.command(help='hamburger')
     async def hamburger(self, ctx):
         await ctx.send('https://www.youtube.com/watch?v=qIJ-lchwqVA')
 
-    @commands.command(name='tf2image', help='selects random tf2 image')
-    async def tf2(self, ctx):
+    @commands.command(help='selects random tf2 image')
+    async def tf2image(self, ctx):
         await ctx.send(random.choice(self.tf2images))
 
     @commands.command(help='no u')
@@ -58,8 +60,8 @@ class SimpleCommands(commands.Cog):
     async def gay(self, ctx):
         await ctx.send('https://www.villagevoice.com/wp-content/uploads/2011/02/thatsgay.png')
 
-    @commands.command(name='ohyeah', help='kool aid man')
-    async def yeah(self, ctx):
+    @commands.command(help='kool aid man')
+    async def ohyeah(self, ctx):
         await ctx.send('https://i.pinimg.com/736x/e2/d2/4a/e2d24a8338a81191c59b928c2cbeedcf.jpg')
 
     @commands.command(help='deep')
