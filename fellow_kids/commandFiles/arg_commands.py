@@ -14,13 +14,7 @@ class ArgCommands(commands.Cog):
 
     @commands.command(help='kill someone')
     async def die(self, ctx, arg):
-        if arg == '<@!681886537046163506>':
-            await self.bot.change_presence(status=discord.Status.invisible)
-            await asyncio.sleep(5)
-            await ctx.send('Like jesus I too have respawned')
-            await self.bot.change_presence(status=discord.Status.online)
-        else:
-            await ctx.send(f'{arg}, kys')
+        await ctx.send(f'{arg}, kys')
 
     @die.error
     async def die_on_error(self, ctx, error):
