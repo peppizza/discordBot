@@ -4,10 +4,7 @@ import discord
 import asyncio
 
 from discord.ext import commands
-THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
-const = os.path.join(THIS_FOLDER, 'discord_ids.json')
-with open(const, 'r') as fp:
-    const = json.load(fp)
+from commandFiles import THIS_FOLDER, ROLE_ADMINISTRATOR
 level = os.path.join(THIS_FOLDER, 'level.json')
 
 class Leveling(commands.Cog):
@@ -87,7 +84,7 @@ class Leveling(commands.Cog):
             await ctx.send('{} has not sent any messages yet'.format(ctx.author.mention))
 
     @commands.command()
-    @commands.has_role(const['ROLE_ADMINISTRATOR'])
+    @commands.has_role(ROLE_ADMINISTRATOR)
     async def reset(self, ctx):
         self.erase = True
         await ctx.send('YOU\'VE LAUNCHED THE ROCKET')
@@ -102,13 +99,13 @@ class Leveling(commands.Cog):
             await ctx.send('Erased levels')
         
     @commands.command()
-    @commands.has_role(const['ROLE_ADMINISTRATOR'])
+    @commands.has_role(ROLE_ADMINISTRATOR)
     async def cancel(self, ctx):
         self.erase = False
         await ctx.send('Rocket launch canceled')
 
     @commands.command()
-    @commands.has_role(const['ROLE_ADMINISTRATOR'])
+    @commands.has_role(ROLE_ADMINISTRATOR)
     async def count(self, ctx, member: discord.Member, level: int, custom=''):
         with open(level, 'r') as in_file:
             data = json.load(in_file)

@@ -1,11 +1,6 @@
 import discord
-import json
-import os
 from discord.ext import commands
-THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
-const = os.path.join(THIS_FOLDER, 'discord_ids.json')
-with open(const, 'r') as fp:
-    const = json.load(fp)
+from commandFiles import ROLE_MODERATOR, CHANNEL_NEWPEOPLE, CHANNEL_RULES, CHANNEL_PROMOTIONS, CHANNEL_MODERATION, BANNED_WORDS
 
 class Moderation(commands.Cog):
 
@@ -16,9 +11,9 @@ class Moderation(commands.Cog):
     async def on_member_join(self, member):
         guild = member.guild
         if guild.id != 684472795639447621: return
-        new_people = self.bot.get_channel(const['CHANNEL_NEWPEOPLE'])
-        rules = self.bot.get_channel(const['CHANNEL_RULES'])
-        promotion = self.bot.get_channel(const['CHANNEL_PROMOTIONS'])
+        new_people = self.bot.get_channel(CHANNEL_NEWPEOPLE)
+        rules = self.bot.get_channel(CHANNEL_RULES)
+        promotion = self.bot.get_channel(CHANNEL_PROMOTIONS)
         embed = discord.Embed(title='Welcome {}!'.format(member.name), description='Head to {} for the rules,\n{} for self-promotion,\nand feel free to make a suggestion!'.format(rules.mention, promotion.mention))
         await new_people.send(embed=embed)
 
@@ -29,14 +24,14 @@ class Moderation(commands.Cog):
             word = word.replace('*', '')
             word = word.replace('~', '')
             word = word.replace('`', '')
-            if word.lower() in const['BANNED_WORDS']:
+            if word.lower() in BANNED_WORDS:
                 context = await self.bot.get_context(message=message)
                 await self.warn(context, context.author, ('Hate speech'), auto=True)
 
     @commands.command()
-    @commands.has_role(const['ROLE_MODERATOR'])
+    @commands.has_role(ROLE_MODERATOR)
     async def warn(self, ctx, member: discord.Member, *args, auto=False):
-        channel = self.bot.get_channel(const['CHANNEL_MODERATION'])
+        channel = self.bot.get_channel(CHANNEL_MODERATION)
         await ctx.message.delete()
         embed = discord.Embed(title='WARNING')
         embed.add_field(name='you have been warned by', value=ctx.message.author)

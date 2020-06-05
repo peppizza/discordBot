@@ -5,7 +5,7 @@ import asyncio
 import os
 
 from discord.ext import commands
-THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+from commandFiles import THIS_FOLDER
 
 class SimpleCommands(commands.Cog):
 
