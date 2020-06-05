@@ -42,8 +42,7 @@ class SuggestionHandler(commands.Cog):
                 await channel.set_permissions(everyone, send_messages=False)
                 await channel.set_permissions(dev, send_messages=True)    
 
-                developers = self.bot.get_role(ROLE_BOTDEVELOPER)
-                await channel.send(developers.mention, embed=embed)
+                await channel.send(dev.mention, embed=embed)
                 #await channel.send('<@!{}>'.format(253290704384557057), embed=embed)
                 await self.inactivetoopen()
 
