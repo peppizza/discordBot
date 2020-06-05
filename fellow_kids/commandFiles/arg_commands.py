@@ -10,15 +10,15 @@ class ArgCommands(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        API_KEY = os.getenv('API_KEY')
+        self.API_KEY = os.getenv('API_KEY')
 
     @commands.command(help='kill someone')
     async def die(self, ctx, arg):
         if arg == '<@!681886537046163506>':
-            await bot.change_presence(status=discord.Status.invisible)
+            await self.bot.change_presence(status=discord.Status.invisible)
             await asyncio.sleep(5)
             await ctx.send('Like jesus I too have respawned')
-            await bot.change_presence(status=discord.Status.online)
+            await self.bot.change_presence(status=discord.Status.online)
         else:
             await ctx.send(f'{arg}, kys')
 
@@ -95,14 +95,14 @@ class ArgCommands(commands.Cog):
         def check(m):
             return m.author == member
 
-        msg = await bot.wait_for('message', check=check)
+        msg = await self.bot.wait_for('message', check=check)
         final = str(msg.content)
 
         wordlist = []
         async with ctx.typing():
             for word in final.split():
                 async with aiohttp.ClientSession() as session:
-                    async with session.get('https://dictionaryapi.com/api/v3/references/thesaurus/json/{}?key={}'.format(word, API_KEY)) as r:
+                    async with session.get('https://dictionaryapi.com/api/v3/references/thesaurus/json/{}?key={}'.format(word, self.API_KEY)) as r:
                         if r.status == 200:
                             js = await r.json()
                             try:
