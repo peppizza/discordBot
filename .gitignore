@@ -8,3 +8,4 @@ tf2_bot/config.json
 tf2_bot/node_modules/
 fellow_kids/__pycache__/
 fellow_kids/commandFiles/__pycache__/
+.vscode/settings.json
