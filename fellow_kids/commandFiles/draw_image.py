@@ -1,5 +1,4 @@
 import os
-import json
 from PIL import Image, ImageFont, ImageDraw
 from discord import File
 from discord.ext import commands
