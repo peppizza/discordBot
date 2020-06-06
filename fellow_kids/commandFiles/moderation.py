@@ -5,6 +5,9 @@ from .constants import ROLE_MODERATOR, CHANNEL_NEWPEOPLE, CHANNEL_RULES, CHANNEL
 class Moderation(commands.Cog):
 
     def __init__(self, bot):
+        """
+        Commands meant for moderators
+        """
         self.bot = bot
 
     @commands.Cog.listener()

@@ -5,6 +5,9 @@ from .constants import THIS_FOLDER
 class VoiceCommands(commands.Cog):
 
     def __init__(self, bot):
+        """
+        Any command that uses voice
+        """
         self.bot = bot
 
     @commands.command()

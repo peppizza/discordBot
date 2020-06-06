@@ -8,6 +8,9 @@ from .constants import THIS_FOLDER, ROLE_ADMINISTRATOR
 
 class Leveling(commands.Cog):
     def __init__(self, bot):
+        """
+        The leveling system
+        """
         self.bot = bot
         self.levels = {
             "10": "Unremarkable",

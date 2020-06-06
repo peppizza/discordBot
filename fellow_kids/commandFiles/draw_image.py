@@ -5,6 +5,9 @@ from .constants import THIS_FOLDER, BANNED_WORDS
 
 class DrawImage(commands.Cog):
     def __init__(self, bot):
+        """
+        Commands that need to draw on images
+        """
         self.bot = bot
 
     @commands.command()
