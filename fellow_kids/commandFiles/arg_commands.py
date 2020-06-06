@@ -110,3 +110,6 @@ class ArgCommands(commands.Cog):
     @commands.command(aliases=['emoji'])
     async def emote(self, ctx, emoji: discord.Emoji):
         await ctx.send(emoji.url)
+
+def setup(bot):
+    bot.add_cog(ArgCommands(bot))
