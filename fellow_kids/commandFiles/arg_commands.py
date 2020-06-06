@@ -24,7 +24,7 @@ class ArgCommands(commands.Cog):
     @commands.command(help='beanify')
     @commands.has_role('Moderators')
     async def bean(self, ctx, *args):
-        if args == ():
+        if not args:
             await ctx.send('Please provide an argument for beaning')
             return
         embed = discord.Embed(title="bean", description="you have been beaned", color=0xff0000)
