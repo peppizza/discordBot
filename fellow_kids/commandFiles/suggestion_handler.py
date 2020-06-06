@@ -3,7 +3,7 @@ import random
 
 from discord.ext import commands
 
-from commandFiles import THIS_FOLDER, ROLE_MODERATOR, CATEGORY_OPENSUGGESTIONS, CATEGORY_CLOSEDSUGGESTIONS, ROLE_EVERYONE, ROLE_BOTDEVELOPER, ROLE_ADMINISTRATOR, ROLE_BOTS
+from commandFiles import ROLE_MODERATOR, CATEGORY_OPENSUGGESTIONS, CATEGORY_CLOSEDSUGGESTIONS, ROLE_EVERYONE, ROLE_BOTDEVELOPER, ROLE_ADMINISTRATOR, ROLE_BOTS
 
 suggestions = [697102775959552052, 702882611256754289, 702882635365613662, 703312812096749599, 703312842715037766, 703312883055984730, 703312953637863515, 703313003889688696, 703313116154560583]
 
@@ -15,7 +15,7 @@ class SuggestionHandler(commands.Cog):
 
     async def inactivetoopen(self):
         inactivesuggestions = []
-        opencategory = self.bot.get_channel(CATEGORY_OPENSUGGESTIONS) 
+        opencategory = self.bot.get_channel(CATEGORY_OPENSUGGESTIONS)
         if len(opencategory.channels) < 2:
             inactivecategory = self.bot.get_channel(703314675529416785)
             for channels in inactivecategory.channels:
@@ -24,7 +24,7 @@ class SuggestionHandler(commands.Cog):
         chosen = self.bot.get_channel(chosen)
         await chosen.edit(name='{}-✅'.format(chosen.name).replace('⌛', ''), category=opencategory, sync_permissions=True)
         embed = discord.Embed(title='open', description='This channel is now open for suggestions', color=0x00ff00)
-        await chosen.send(embed=embed) 
+        await chosen.send(embed=embed)
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -53,7 +53,7 @@ class SuggestionHandler(commands.Cog):
         embed = discord.Embed(title='inactive', description='This channel is now inactive', color=0x000000)
         await channel.edit(name=str(channel.name).replace('⌛', ''), category=category, sync_permissions=True)
         await ctx.send(embed=embed)
-    
+
     @commands.command()
     @commands.has_role(ROLE_MODERATOR)
     async def nosuggest(self, ctx, member: discord.Member):

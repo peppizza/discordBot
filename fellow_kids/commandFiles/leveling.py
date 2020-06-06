@@ -50,7 +50,7 @@ class Leveling(commands.Cog):
                 data[user] = [data[user][0] + 1, currentlevel]
         else:
             data[user] = [1, '']
-        
+
         if str(data[user][0]) in self.levels:
             currentlevel = self.levels.get(str(data[user][0]))
             data[user][1] = currentlevel

@@ -1,8 +1,6 @@
 import json
-import discord
 import random
 import asyncio
-import os
 
 from discord.ext import commands
 from commandFiles import THIS_FOLDER

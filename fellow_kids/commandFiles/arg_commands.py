@@ -1,5 +1,4 @@
 import discord
-import asyncio
 import aiohttp
 import random
 import os

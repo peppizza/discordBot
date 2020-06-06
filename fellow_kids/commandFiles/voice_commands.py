@@ -1,13 +1,12 @@
 import discord
-import os
-from discord.ext import commands, tasks
+from discord.ext import commands
 from commandFiles import THIS_FOLDER
 
 class VoiceCommands(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-    
+
     @commands.command()
     async def running(self, ctx):
         source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio('{}/assets/Why are You Running.mp3'.format(THIS_FOLDER)))
@@ -44,5 +43,5 @@ class VoiceCommands(commands.Cog):
 
     @commands.command()
     async def leave(self, ctx):
-        if self.vc is not None: 
+        if self.vc is not None:
             await self.vc.disconnect()
