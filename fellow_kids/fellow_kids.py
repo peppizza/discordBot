@@ -18,9 +18,9 @@ async def on_ready():
     await bot.change_presence(activity=discord.Game(name='DM me !report to report a user'))
 
 if __name__ == '__main__':
-    for file in os.listdir('commandFiles'):
+    for file in os.listdir('commands'):
         if file.endswith('.py'):
             name = file[:-3]
             if name == 'constants': continue
-            bot.load_extension('commandFiles.{}'.format(name))
+            bot.load_extension('commands.{}'.format(name))
     bot.run(API_TOKEN)

@@ -7,25 +7,25 @@ class Admin(commands.Cog):
 
     @commands.command()
     @commands.is_owner()
-    async def reloadExtension(self, ctx, arg: str):
-        self.bot.reload_extension('commandFiles.{}'.format(arg))
-        await ctx.send('Reloaded extension: commandFiles.{}'.format(arg))
+    async def reloadextension(self, ctx, arg: str):
+        self.bot.reload_extension('commands.{}'.format(arg))
+        await ctx.send('Reloaded extension: commands.{}'.format(arg))
 
-    @reloadExtension.error
+    @reloadextension.error
     async def reload_extension_on_error(self, ctx, error):
         await ctx.send(error)
 
     @commands.command()
     @commands.is_owner()
-    async def listExtensions(self, ctx):
+    async def listextensions(self, ctx):
         await ctx.send(self.bot.extensions)
 
     @commands.command()
     @commands.is_owner()
-    async def loadExtension(self, ctx, arg: str):
-        self.bot.load_extension('commandFiles.{}'.format(arg))
+    async def loadextension(self, ctx, arg: str):
+        self.bot.load_extension('commands.{}'.format(arg))
 
-    @loadExtension.error
+    @loadextension.error
     async def load_extension_on_error(self, ctx, error):
         await ctx.send(error)
 
