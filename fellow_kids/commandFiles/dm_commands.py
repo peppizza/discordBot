@@ -3,7 +3,7 @@ from discord.ext import commands
 class DmCommands(commands.Cog):
 
     def __init__(self, bot):
-        """Commands that can only be triggered in a DM"""
+        """Commands that can only be triggered in a DM."""
         self.bot = bot
 
     @commands.command()

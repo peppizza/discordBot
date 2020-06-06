@@ -8,7 +8,7 @@ from .constants import THIS_FOLDER, ROLE_ADMINISTRATOR
 
 class Leveling(commands.Cog):
     def __init__(self, bot):
-        """The leveling system"""
+        """The leveling system."""
         self.bot = bot
         self.levels = {
             "10": "Unremarkable",
@@ -68,7 +68,7 @@ class Leveling(commands.Cog):
     async def level(self, ctx):
 
         user = str(ctx.author.id)
-        
+
         with open(self.levelFile, 'r') as read_file:
             data = json.load(read_file)
         
