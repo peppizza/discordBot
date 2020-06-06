@@ -24,13 +24,13 @@ class ArgCommands(commands.Cog):
     @commands.command(help='beanify')
     @commands.has_role('Moderators')
     async def bean(self, ctx, *args):
-        if (args == ()):
+        if args == ():
             await ctx.send('Please provide an argument for beaning')
             return
         embed = discord.Embed(title="bean", description="you have been beaned", color=0xff0000)
         embed.set_author(name=ctx.message.author.name)
         embed.add_field(name="person", value=args[0])
-        if(len(args) >= 2):
+        if len(args) >= 2:
             embed.add_field(name="reason", value=' '.join(args[1: len(args)]))
         embed.set_image(url="https://images.immediate.co.uk/production/volatile/sites/4/2018/08/GettyImages-149069817-15d7368.jpg?webp=true&quality=45&resize=1880%2C799")
         await ctx.send(embed=embed)
