@@ -4,7 +4,7 @@ import discord
 import asyncio
 
 from discord.ext import commands
-from commandFiles import THIS_FOLDER, ROLE_ADMINISTRATOR
+from .constants import THIS_FOLDER, ROLE_ADMINISTRATOR
 
 class Leveling(commands.Cog):
     def __init__(self, bot):
@@ -103,3 +103,6 @@ class Leveling(commands.Cog):
     async def cancel(self, ctx):
         self.erase = False
         await ctx.send('Rocket launch canceled')
+
+def setup(bot):
+    bot.add_cog(Leveling(bot))

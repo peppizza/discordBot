@@ -3,7 +3,7 @@ import random
 import asyncio
 
 from discord.ext import commands
-from commandFiles import THIS_FOLDER
+from .constants import THIS_FOLDER
 
 class SimpleCommands(commands.Cog):
 
@@ -109,3 +109,6 @@ class SimpleCommands(commands.Cog):
     @commands.command()
     async def money(self, ctx):
         await ctx.send('https://cdn.discordapp.com/attachments/696786725053399092/717430238941937764/1480273770_spy1.gif')
+
+def setup(bot):
+    bot.add_cog(SimpleCommands(bot))

@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from commandFiles import THIS_FOLDER
+from .constants import THIS_FOLDER
 
 class VoiceCommands(commands.Cog):
 
@@ -45,3 +45,6 @@ class VoiceCommands(commands.Cog):
     async def leave(self, ctx):
         if self.vc is not None:
             await self.vc.disconnect()
+
+def setup(bot):
+    bot.add_cog(VoiceCommands(bot))

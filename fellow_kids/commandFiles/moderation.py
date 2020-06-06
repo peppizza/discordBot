@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from commandFiles import ROLE_MODERATOR, CHANNEL_NEWPEOPLE, CHANNEL_RULES, CHANNEL_PROMOTIONS, CHANNEL_MODERATION, BANNED_WORDS
+from .constants import ROLE_MODERATOR, CHANNEL_NEWPEOPLE, CHANNEL_RULES, CHANNEL_PROMOTIONS, CHANNEL_MODERATION, BANNED_WORDS
 
 class Moderation(commands.Cog):
 
@@ -50,3 +50,6 @@ class Moderation(commands.Cog):
     async def warn_on_error(self, ctx, error):
         await ctx.message.delete()
         print(error)
+
+def setup(bot):
+    bot.add_cog(Moderation(bot))

@@ -1,7 +1,7 @@
 from PIL import Image, ImageFont, ImageDraw
 from discord import File
 from discord.ext import commands
-from commandFiles import THIS_FOLDER, BANNED_WORDS
+from .constants import THIS_FOLDER, BANNED_WORDS
 
 class DrawImage(commands.Cog):
     def __init__(self, bot):
@@ -48,3 +48,6 @@ class DrawImage(commands.Cog):
                 return True
 
         return False
+
+def setup(bot):
+    bot.add_cog(DrawImage(bot))

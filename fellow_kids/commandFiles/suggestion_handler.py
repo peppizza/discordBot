@@ -3,7 +3,7 @@ import random
 
 from discord.ext import commands
 
-from commandFiles import ROLE_MODERATOR, CATEGORY_OPENSUGGESTIONS, CATEGORY_CLOSEDSUGGESTIONS, ROLE_EVERYONE, ROLE_BOTDEVELOPER, ROLE_ADMINISTRATOR
+from .constants import ROLE_MODERATOR, CATEGORY_OPENSUGGESTIONS, CATEGORY_CLOSEDSUGGESTIONS, ROLE_EVERYONE, ROLE_BOTDEVELOPER, ROLE_ADMINISTRATOR
 
 suggestions = [697102775959552052, 702882611256754289, 702882635365613662, 703312812096749599, 703312842715037766, 703312883055984730, 703312953637863515, 703313003889688696, 703313116154560583]
 
@@ -63,3 +63,6 @@ class SuggestionHandler(commands.Cog):
     @commands.has_role(ROLE_MODERATOR)
     async def suggest(self, ctx, member: discord.Member):
         self.bannedusers.remove(member.id)
+
+def setup(bot):
+    bot.add_cog(SuggestionHandler(bot))

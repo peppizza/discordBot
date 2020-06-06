@@ -14,3 +14,6 @@ class DmCommands(commands.Cog):
     async def report_on_error(self, ctx, error):
         await ctx.message.delete()
         await ctx.message.author.send('Please dm me the report command')
+
+def setup(bot):
+    bot.add_cog(DmCommands(bot))
