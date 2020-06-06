@@ -16,7 +16,7 @@ class VoiceCommands(commands.Cog):
     async def dead(self, ctx):
         source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio('{}/assets/Heavy is Dead.mp3'.format(THIS_FOLDER)))
         ctx.voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
-    
+
     @commands.command()
     async def yankee(self, ctx):
         source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio('{}/assets/YANKEE WITH NO BRIM.mp3'.format(THIS_FOLDER)))

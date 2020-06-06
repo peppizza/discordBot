@@ -3,7 +3,7 @@ import random
 
 from discord.ext import commands
 
-from commandFiles import ROLE_MODERATOR, CATEGORY_OPENSUGGESTIONS, CATEGORY_CLOSEDSUGGESTIONS, ROLE_EVERYONE, ROLE_BOTDEVELOPER, ROLE_ADMINISTRATOR, ROLE_BOTS
+from commandFiles import ROLE_MODERATOR, CATEGORY_OPENSUGGESTIONS, CATEGORY_CLOSEDSUGGESTIONS, ROLE_EVERYONE, ROLE_BOTDEVELOPER, ROLE_ADMINISTRATOR
 
 suggestions = [697102775959552052, 702882611256754289, 702882635365613662, 703312812096749599, 703312842715037766, 703312883055984730, 703312953637863515, 703313003889688696, 703313116154560583]
 
@@ -41,7 +41,7 @@ class SuggestionHandler(commands.Cog):
                 await channel.edit(name='{}-⌛'.format((message.channel.name).replace('✅', '')), category=category)
                 await channel.set_permissions(message.author, send_messages=True)
                 await channel.set_permissions(everyone, send_messages=False)
-                await channel.set_permissions(dev, send_messages=True)    
+                await channel.set_permissions(dev, send_messages=True)
 
                 await channel.send(dev.mention, embed=embed)
                 await self.inactivetoopen()
@@ -58,7 +58,7 @@ class SuggestionHandler(commands.Cog):
     @commands.has_role(ROLE_MODERATOR)
     async def nosuggest(self, ctx, member: discord.Member):
         self.bannedusers.append(member.id)
-    
+
     @commands.command()
     @commands.has_role(ROLE_MODERATOR)
     async def suggest(self, ctx, member: discord.Member):
