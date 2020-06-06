@@ -2,9 +2,7 @@ from discord.ext import commands
 
 class Admin(commands.Cog):
     def __init__(self, bot):
-        """
-        Commands meant for reloading/loading extensions due to any changes
-        """
+        """Commands meant for reloading/loading extensions due to any changes"""
         self.bot = bot
 
     @commands.command()

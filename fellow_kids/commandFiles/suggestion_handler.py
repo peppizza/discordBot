@@ -10,9 +10,7 @@ suggestions = [697102775959552052, 702882611256754289, 702882635365613662, 70331
 class SuggestionHandler(commands.Cog):
 
     def __init__(self, bot):
-        """
-        The powerhouse behind the suggestions feature
-        """
+        """The powerhouse behind the suggestions feature"""
         self.bot = bot
         self.bannedusers = []
 

@@ -10,9 +10,7 @@ class ArgCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.API_KEY = os.getenv('API_KEY')
-        """
-        Simple commands that contain arguments
-        """
+        """Simple commands that contain arguments"""
 
     @commands.command(help='kill someone')
     async def die(self, ctx, arg):
