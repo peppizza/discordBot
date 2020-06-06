@@ -5,7 +5,6 @@ import asyncio
 
 from discord.ext import commands
 from commandFiles import THIS_FOLDER, ROLE_ADMINISTRATOR
-level = os.path.join(THIS_FOLDER, 'level.json')
 
 class Leveling(commands.Cog):
     def __init__(self, bot):
@@ -33,6 +32,7 @@ class Leveling(commands.Cog):
             "8500": "Hale's Own"
         }
         self.erase = False
+        self.levelFile = os.path.join(THIS_FOLDER, 'level.json')
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -41,7 +41,7 @@ class Leveling(commands.Cog):
         currentlevel = ''
         user = str(message.author.id)
         channel = message.channel
-        with open(level, 'r') as read_file:
+        with open(self.levelFile, 'r') as read_file:
             data = json.load(read_file)
         if user in data:
             if currentlevel == '':
@@ -60,7 +60,7 @@ class Leveling(commands.Cog):
             embed.add_field(name='level reached:', value=currentlevel)
             await channel.send(embed=embed)
 
-        with open(level, 'w') as write_file:
+        with open(self.levelFile, 'w') as write_file:
             json.dump(data, write_file)
 
     @commands.command()
@@ -68,7 +68,7 @@ class Leveling(commands.Cog):
 
         user = str(ctx.author.id)
         
-        with open(level, 'r') as read_file:
+        with open(self.levelFile, 'r') as read_file:
             data = json.load(read_file)
         
         if user in data:
@@ -95,7 +95,7 @@ class Leveling(commands.Cog):
             await ctx.send(x)
         if self.erase == True:
             await asyncio.sleep(1)
-            open(level, 'w').write('{}')
+            open(self.levelFile, 'w').write('{}')
             await ctx.send('Erased levels')
         
     @commands.command()
@@ -103,22 +103,3 @@ class Leveling(commands.Cog):
     async def cancel(self, ctx):
         self.erase = False
         await ctx.send('Rocket launch canceled')
-
-    @commands.command()
-    @commands.has_role(ROLE_ADMINISTRATOR)
-    async def count(self, ctx, member: discord.Member, level: int, custom=''):
-        with open(level, 'r') as in_file:
-            data = json.load(in_file)
-
-        user = str(member.id)
-        if user in data:
-            data[user][0] = level
-            if custom != '':
-                data[user][1] = custom
-
-        with open(level, 'w') as out_file:
-            json.dump(data, out_file)
-
-    @count.error
-    async def count_on_error(self, ctx, error):
-        await ctx.send(error)

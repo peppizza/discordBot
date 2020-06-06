@@ -16,10 +16,6 @@ class SimpleCommands(commands.Cog):
             self.tf2images = data['tf2images']
             self.smuganime = data['smuganime']
 
-    @commands.command()
-    async def server(self, ctx):
-        await ctx.send('https://cache.gametracker.com/server_info/168.62.169.84:27015/b_350_20_692108_381007_ffffff_000000.png')
-
     @commands.command(help='how do you do fellow kids')
     async def kids(self, ctx):
         await ctx.send('https://www.youtube.com/watch?v=bI2PdskxE_s')
@@ -82,11 +78,6 @@ class SimpleCommands(commands.Cog):
 
     @commands.command(help='gonk image')
     async def gonk(self, ctx):
-
-
-        discord.Embed().set_image(url = 'https://cdn.discordapp.com/attachments/685262422252191781/685621651970326545/unknown.png')
-
-        await ctx.send(embed = discord.Embed().set_image(url = 'https://cdn.discordapp.com/attachments/685262422252191781/685621651970326545/unknown.png'))
         await ctx.send('https://cdn.discordapp.com/attachments/685262422252191781/685621651970326545/unknown.png')
 
     @commands.command(help='prints smug anime girl')

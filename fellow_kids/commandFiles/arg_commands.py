@@ -108,30 +108,6 @@ class ArgCommands(commands.Cog):
 
         await ctx.send(' '.join(wordlist))
 
-    @commands.command()
-    async def remindme(self, ctx, *args):
-        author = ctx.message.author.id
-        def convert(time):
-            indicators = ['hr', 'min', 'sec']
-            if any(substring in time for substring in indicators):
-                originaltime = time
-                time = time.replace('hr', '')
-                time = time.replace('min', '')
-                time = time.replace('sec', '')
-                time = int(time)
-                if 'hr' in originaltime:
-                    time = time * 3600
-                elif 'min' in originaltime:
-                    time = time * 60
-                return time
-        await ctx.send('set a reminder \"{}\" for {} for {}'.format(' '.join(args[1:]), author.mention, args[0]))
-        await asyncio.sleep(convert(args[0]))
-        await ctx.send('{} {}'.format(author.mention, ' '.join(args[1:])))
-
-    @remindme.error
-    async def remindme_on_error(self, ctx, error):
-        await ctx.send(error)
-
     @commands.command(aliases=['emoji'])
     async def emote(self, ctx, emoji: discord.Emoji):
         await ctx.send(emoji.url)

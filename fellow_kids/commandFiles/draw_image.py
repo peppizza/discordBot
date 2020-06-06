@@ -24,7 +24,7 @@ class DrawImage(commands.Cog):
             fontSize = 50
 
         font = ImageFont.truetype("/usr/share/fonts/truetype/msttcorefonts/Impact.ttf", fontSize)
-        await self.drawText(ctx, msg, font, W, '../assets/dio.jpg')
+        await self.drawText(ctx, msg, font, W, '{}/assets/dio.jpg'.format(THIS_FOLDER))
 
     # @commands.command()
     # async def line(self, ctx, *args):
@@ -36,8 +36,8 @@ class DrawImage(commands.Cog):
         w = draw.textsize(text, font=font)[0]
         async with ctx.typing():
             draw.text(((W-w)/2, 0), text, (255, 255, 255), font=font)
-            img.save('final.png')
-            await ctx.send(file=File('../assets/final.png'))
+            img.save('{}/assets/final.png'.format(THIS_FOLDER))
+            await ctx.send(file=File('{}/assets/final.png'.format(THIS_FOLDER)))
 
     def filter(self, text):
         text = text.replace('_', '')
