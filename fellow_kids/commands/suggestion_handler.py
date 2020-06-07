@@ -33,7 +33,7 @@ class SuggestionHandler(commands.Cog):
             channel = message.channel
             catagory = channel.category
             sender = message.author
-            if catagory.id == CATEGORY_OPENSUGGESTIONS and not sender.has_role(ROLE_ADMINISTRATOR) and not sender.bot and not sender.id in self.bannedusers:
+            if catagory.id == CATEGORY_OPENSUGGESTIONS and not ROLE_ADMINISTRATOR in sender.roles and not sender.bot and not sender.id in self.bannedusers:
                 embed = discord.Embed(title='working on..', description='Your request is now being worked on by the devs', color=0x00ff00)
                 category = self.bot.get_channel(CATEGORY_CLOSEDSUGGESTIONS)
                 guild = message.guild
