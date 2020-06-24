@@ -111,5 +111,9 @@ class SimpleCommands(commands.Cog):
     async def money(self, ctx):
         await ctx.send('https://cdn.discordapp.com/attachments/696786725053399092/717430238941937764/1480273770_spy1.gif')
 
+    @commands.command()
+    async def dumbfuck(self, ctx):
+        await ctx.send('https://cdn.discordapp.com/attachments/696786725053399092/725474264941330482/vIPF3oY.mp4')
+
 def setup(bot):
     bot.add_cog(SimpleCommands(bot))
