@@ -9,3 +9,4 @@ tf2_bot/node_modules/
 fellow_kids/__pycache__/
 fellow_kids/commands/__pycache__/
 .vscode/settings.json
+*node_modules/
