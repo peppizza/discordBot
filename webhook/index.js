@@ -9,7 +9,6 @@ const PORT = 4567;
 app.use(bodyParser());
 
 app.post('/payload', async (req, res) => {
-	console.log(req.body);
 	res.send('Got data!');
 	await git.pull(() => console.log('pulling data'));
 });

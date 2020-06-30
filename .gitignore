@@ -10,3 +10,4 @@ fellow_kids/__pycache__/
 fellow_kids/commands/__pycache__/
 .vscode/settings.json
 *node_modules/
+webhook/.env
