@@ -8,10 +8,10 @@ const PORT = 4567;
 
 app.use(bodyParser());
 
-app.post('/payload', (req, res) => {
+app.post('/payload', async (req, res) => {
 	console.log(req.body);
 	res.send('Got data!');
-	git.pull(() => console.log('pulling data'));
+	await git.pull(() => console.log('pulling data'));
 });
 
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
