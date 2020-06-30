@@ -1,16 +1,17 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const simpleGit = require('simple-git');
 
 const app = express();
 const git = simpleGit();
 const PORT = 4567;
 
-app.use(bodyParser());
+app.use(express.json());
 
 app.post('/payload', async (req, res) => {
-	res.send('Got data!');
-	await git.pull(() => console.log('pulling data'));
+	res.send();
+	if (req.body.ref === 'refs/heads/master') {
+		await git.pull(() => console.log('pulling data'));
+	}
 });
 
 app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
