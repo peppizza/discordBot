@@ -1,9 +1,8 @@
-import os
-import json
 import discord
 import asyncio
+import sqlite3
 
-from discord.ext import commands
+from discord.ext import commands, tasks
 from .constants import THIS_FOLDER, ROLE_ADMINISTRATOR
 
 class Leveling(commands.Cog):
@@ -33,56 +32,47 @@ class Leveling(commands.Cog):
             "8500": "Hale's Own"
         }
         self.erase = False
-        self.levelFile = os.path.join(THIS_FOLDER, 'level.json')
+        self.cachedLevels = {}
+        self.db = sqlite3.connect('levels.db')
+        self.cursor = self.db.cursor()
+        self.cursor.execute("""
+            CREATE TABLE IF NOT EXISTS levels(
+                id INTEGER,
+                level INTEGER
+            )
+        """)
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.author.bot:
-            return
-        currentlevel = ''
-        user = str(message.author.id)
-        channel = message.channel
-        with open(self.levelFile, 'r') as read_file:
-            data = json.load(read_file)
-        if user in data:
-            if currentlevel == '':
-                data[user] = [data[user][0] + 1, data[user][1]]
-            else:
-                data[user] = [data[user][0] + 1, currentlevel]
-        else:
-            data[user] = [1, '']
-
-        if str(data[user][0]) in self.levels:
-            currentlevel = self.levels.get(str(data[user][0]))
-            data[user][1] = currentlevel
-            embed = discord.Embed(title="{} has leveled up".format(message.author), color=0x00ff00)
-            embed.set_image(url='https://france-amerique.com/wp-content/uploads/2018/01/flute-e1516288055295.jpg')
-            embed.add_field(name='messages sent:', value=data[user][0])
-            embed.add_field(name='level reached:', value=currentlevel)
-            await channel.send(embed=embed)
-
-        with open(self.levelFile, 'w') as write_file:
-            json.dump(data, write_file)
+        if message.author.bot: return
+        if self.cachedLevels.get(message.author.id) is None:
+            self.cachedLevels[message.author.id] = 0
+        self.cachedLevels[message.author.id] = self.cachedLevels.get(message.author.id) + 1
 
     @commands.command()
     async def level(self, ctx):
+        embed = discord.Embed(title="Level")
+        embed.add_field(name="current level", value=self.cachedLevels.get(ctx.author.id))
+        await ctx.send(embed=embed)
 
-        user = str(ctx.author.id)
+    @tasks.loop(minutes=5.0)
+    async def saveLoop(self):
+        self.cursor.execute('INSERT INTO levels VALUES(?,?)', (self.cachedLevels.keys(), self.cachedLevels.values()))
 
-        with open(self.levelFile, 'r') as read_file:
-            data = json.load(read_file)
-        
-        if user in data:
-            if data[user][1] == '':
-                level = 'None'
-            else:
-                level = data[user][1]
-            embed = discord.Embed(title='Level')
-            embed.add_field(name='messages sent:', value=data[user][0])
-            embed.add_field(name='current level:', value=level)
-            await ctx.send(embed=embed)
-        else:
-            await ctx.send('{} has not sent any messages yet'.format(ctx.author.mention))
+    @commands.command()
+    @commands.is_owner()
+    async def save(self, ctx):
+        levels = [
+            list(self.cachedLevels.keys()),
+            list(self.cachedLevels.values())
+        ]
+        print(levels)
+        try:
+            self.cursor.executemany('INSERT OR REPLACE INTO levels VALUES(?, ?)', levels)
+        except sqlite3.ProgrammingError:
+            pass
+
+        self.db.commit()
 
     @commands.command()
     @commands.has_role(ROLE_ADMINISTRATOR)
@@ -96,8 +86,7 @@ class Leveling(commands.Cog):
             await ctx.send(x)
         if self.erase == True:
             await asyncio.sleep(1)
-            open(self.levelFile, 'w').write('{}')
-            await ctx.send('Erased levels')
+            # TODO: erase all data with sql
         
     @commands.command()
     @commands.has_role(ROLE_ADMINISTRATOR)
