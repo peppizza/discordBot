@@ -17,11 +17,6 @@ class FellowKids(commands.AutoShardedBot):
     def __init__(self):
         super().__init__(command_prefix='!', owner_id=253290704384557057, reconnect=True, case_insensitive=False)
 
-        self.db = sqlite3.connect('settings.db')
-        self.cursor = self.db.cursor()
-
-        self.remove_command('help')
-
     async def on_ready(self):
         await self.change_presence(activity=discord.Game(name='DM me !report to report a user'))
 

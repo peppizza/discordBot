@@ -29,7 +29,10 @@ class SuggestionHandler(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         channel = message.channel
-        catagory = channel.category
+        try:
+            catagory = channel.category
+        except:
+            return
         sender = message.author
         if catagory.id == CATEGORY_OPENSUGGESTIONS and not ROLE_ADMINISTRATOR == sender.top_role.id and not sender.bot and not sender.id in self.bannedusers:
             embed = discord.Embed(title='working on..', description='Your request is now being worked on by the devs', color=0x00ff00)

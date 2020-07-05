@@ -10,5 +10,6 @@ fellow_kids/commands/__pycache__/
 .vscode/settings.json
 *node_modules/
 webhook/.env
+fellow_kids/levels.db
+fellow_kids/levels.db-journal
 tf2_bot/settings.sqlite3
-fellow_kids/settings.db
