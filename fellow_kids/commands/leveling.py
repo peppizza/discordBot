@@ -37,7 +37,7 @@ class Leveling(commands.Cog):
         self.cursor = self.db.cursor()
         self.cursor.execute("""
             CREATE TABLE IF NOT EXISTS levels(
-                id INTEGER,
+                id INTEGER PRIMARY KEY,
                 level INTEGER
             )
         """)
@@ -57,21 +57,21 @@ class Leveling(commands.Cog):
 
     @tasks.loop(minutes=5.0)
     async def saveLoop(self):
-        self.cursor.execute('INSERT INTO levels VALUES(?,?)', (self.cachedLevels.keys(), self.cachedLevels.values()))
+        data = []
+        for key in list(self.cachedLevels.keys()):
+            data.append((key, self.cachedLevels[key]))
+        self.cursor.executemany('INSERT OR REPLACE INTO levels VALUES(?,?)', data)
+        self.db.commit()
 
     @commands.command()
     @commands.is_owner()
     async def save(self, ctx):
-        levels = [
-            list(self.cachedLevels.keys()),
-            list(self.cachedLevels.values())
-        ]
-        print(levels)
-        try:
-            self.cursor.executemany('INSERT OR REPLACE INTO levels VALUES(?, ?)', levels)
-        except sqlite3.ProgrammingError:
-            pass
+        data = []
+        for key in list(self.cachedLevels.keys()):
+            data.append((key, self.cachedLevels[key]))
+        print(data)
 
+        self.cursor.executemany('INSERT OR REPLACE INTO levels VALUES(?,?)', data)
         self.db.commit()
 
     @commands.command()
