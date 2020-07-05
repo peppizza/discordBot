@@ -11,3 +11,4 @@ fellow_kids/commands/__pycache__/
 *node_modules/
 webhook/.env
 tf2_bot/settings.sqlite3
+fellow_kids/settings.db
