@@ -11,7 +11,7 @@ load_dotenv()
 API_TOKEN = os.getenv('DISCORD_TOKEN')
 
 logging.basicConfig(level=logging.INFO)
-bot = commands.Bot(command_prefix='!')
+bot = commands.AutoShardedBot(command_prefix='!')
 
 @bot.event
 async def on_ready():
