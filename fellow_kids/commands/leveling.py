@@ -77,16 +77,21 @@ class Leveling(commands.Cog):
     @commands.command()
     @commands.has_role(ROLE_ADMINISTRATOR)
     async def reset(self, ctx):
+        self.cursor.execute('DELETE FROM levels')
         self.erase = True
         await ctx.send('YOU\'VE LAUNCHED THE ROCKET')
         for x in range(5, 0, -1):
             await asyncio.sleep(1)
             if self.erase == False:
+                self.db.rollback()
                 return
             await ctx.send(x)
         if self.erase == True:
-            await asyncio.sleep(1)
-            # TODO: erase all data with sql
+            self.cachedLevels = {}
+            self.db.commit()
+            await ctx.send('levels erased')
+        else:
+            self.db.rollback()
         
     @commands.command()
     @commands.has_role(ROLE_ADMINISTRATOR)
