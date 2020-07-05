@@ -5,10 +5,10 @@ navi/nohup.out
 fellow_kids/final.png
 fellow_kids/commands/level.json
 tf2_bot/config.json
-tf2_bot/node_modules/
 fellow_kids/__pycache__/
 fellow_kids/commands/__pycache__/
 .vscode/settings.json
 *node_modules/
 webhook/.env
+tf2_bot/settings.sqlite3
 fellow_kids/settings.db
