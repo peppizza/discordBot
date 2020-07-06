@@ -71,9 +71,18 @@ class Leveling(commands.Cog):
             self.cachedLevels[message.author.id][1] = currentlevel
 
     @commands.command()
-    async def level(self, ctx):
+    async def level(self, ctx, member: discord.Member = None):
         embed = discord.Embed(title="Level")
-        embed.add_field(name="current level", value=self.cachedLevels[ctx.author.id][0])
+        if member is None and self.cachedLevels.get(ctx.author.id, None) is not None:
+            embed.add_field(name="messages sent", value=self.cachedLevels[ctx.author.id][0])
+            embed.add_field(name="current level", value=self.cachedLevels[ctx.author.id][1])
+        else:
+            if self.cachedLevels.get(member.id, None) is not None:
+                embed.add_field(name="messages sent", value=self.cachedLevels[member.id][0])
+                embed.add_field(name="current level", value=self.cachedLevels[member.id][1])
+            else:
+                embed.description = "this user has not sent any messages yet"
+                embed.color = 0xff0000
         await ctx.send(embed=embed)
 
     @tasks.loop(minutes=5.0)
