@@ -10,6 +10,7 @@ class Leveling(commands.Cog):
         """The leveling system."""
         self.bot = bot
         self.levels = {
+            0: "None",
             10: "Unremarkable",
             25: "Scarcely Lethal",
             45: "Mildly Menacing",
