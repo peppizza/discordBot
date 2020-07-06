@@ -57,7 +57,7 @@ class Leveling(commands.Cog):
             embed.add_field(name='messages sent:', value=self.cachedLevels[message.author.id])
             embed.add_field(name='level reached:', value=currentlevel)
             await message.channel.send(embed=embed)
-            self.cursor.execute('INSERT OR REPLACE INTO levels(id,level) VALUES(?,?)', [message.author.id, currentlevel])
+            self.cursor.execute('REPLACE INTO levels(id,level) VALUES(?,?)', [message.author.id, currentlevel])
             self.db.commit()
 
     @commands.command()
@@ -69,7 +69,7 @@ class Leveling(commands.Cog):
     @tasks.loop(minutes=5.0)
     async def saveLoop(self):
         data = self.saveDB()
-        self.cursor.executemany('INSERT OR REPLACE INTO levels(id,messages) VALUES(?,?)', data)
+        self.cursor.executemany('REPLACE INTO levels(id,messages) VALUES(?,?)', data)
         self.db.commit()
 
     @commands.command()
@@ -77,7 +77,7 @@ class Leveling(commands.Cog):
     async def save(self, ctx):
         data = self.saveDB()
 
-        self.cursor.executemany('INSERT OR REPLACE INTO levels(id,messages) VALUES(?,?)', data)
+        self.cursor.executemany('REPLACE INTO levels(id,messages) VALUES(?,?)', data)
         self.db.commit()
 
     @commands.command()
@@ -114,7 +114,7 @@ class Leveling(commands.Cog):
 
     def cog_unload(self):
         data = self.saveDB()
-        self.cursor.executemany('INSERT OR REPLACE INTO levels(id,messages) VALUES(?,?)', data)
+        self.cursor.executemany('REPLACE INTO levels(id,messages) VALUES(?,?)', data)
         self.db.commit()
 
 def setup(bot):
