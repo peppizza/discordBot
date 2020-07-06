@@ -38,32 +38,41 @@ class Leveling(commands.Cog):
         self.cursor.execute("""
             CREATE TABLE IF NOT EXISTS levels(
                 id INTEGER PRIMARY KEY,
-                messages INTEGER,
-                level TEXT NOT NULL
+                messages INTEGER
             )
         """)
+        
+        self.cursor.execute('SELECT * FROM levels')
+        rows = self.cursor.fetchall()
+        self.cachedLevels = dict(rows)
+        self.calculateLevels()
+
+    def calculateLevels(self):
+        for memberId in self.cachedLevels.keys():
+            level = self.cachedLevels[memberId]
+            levelName = self.levels.get(level, self.levels[min(self.levels.keys(), key=lambda k: abs(k-level))])
+            self.cachedLevels[memberId] = [level, levelName]
 
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.author.bot: return
         if self.cachedLevels.get(message.author.id) is None:
-            self.cachedLevels[message.author.id] = 0
-        self.cachedLevels[message.author.id] = self.cachedLevels.get(message.author.id) + 1
-        
-        if self.cachedLevels[message.author.id] in self.levels:
-            currentlevel = self.levels.get(self.cachedLevels[message.author.id])
+            self.cachedLevels[message.author.id] = [0, 'None']
+        self.cachedLevels[message.author.id] = [self.cachedLevels[message.author.id][0] + 1, self.cachedLevels[message.author.id][1]]
+
+        if self.cachedLevels[message.author.id][0] in self.levels:
+            currentlevel = self.levels.get(self.cachedLevels[message.author.id][0])
             embed = discord.Embed(title=f'{message.author} has leveled up', color=0x00ff00)
             embed.set_image(url='https://france-amerique.com/wp-content/uploads/2018/01/flute-e1516288055295.jpg')
-            embed.add_field(name='messages sent:', value=self.cachedLevels[message.author.id])
+            embed.add_field(name='messages sent:', value=self.cachedLevels[message.author.id][0])
             embed.add_field(name='level reached:', value=currentlevel)
             await message.channel.send(embed=embed)
-            self.cursor.execute('REPLACE INTO levels(id,level) VALUES(?,?)', [message.author.id, currentlevel])
-            self.db.commit()
+            self.cachedLevels[message.author.id][1] = currentlevel
 
     @commands.command()
     async def level(self, ctx):
         embed = discord.Embed(title="Level")
-        embed.add_field(name="current level", value=self.cachedLevels.get(ctx.author.id))
+        embed.add_field(name="current level", value=self.cachedLevels[ctx.author.id][0])
         await ctx.send(embed=embed)
 
     @tasks.loop(minutes=5.0)
@@ -93,6 +102,7 @@ class Leveling(commands.Cog):
                 return
             await ctx.send(x)
         if self.erase == True:
+            await asyncio.sleep(1)
             self.cachedLevels = {}
             self.db.commit()
             await ctx.send('levels erased')
@@ -108,7 +118,7 @@ class Leveling(commands.Cog):
     def saveDB(self):
         data = []
         for key in list(self.cachedLevels.keys()):
-            data.append((key, self.cachedLevels[key]))
+            data.append((key, self.cachedLevels[key][0]))
 
         return data
 
