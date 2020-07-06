@@ -11,7 +11,11 @@ from dotenv import load_dotenv
 load_dotenv()
 API_TOKEN = os.getenv('DISCORD_TOKEN')
 
-logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger('discord')
+logger.setLevel(logging.DEBUG)
+handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(messages)s'))
+logger.addHandler(handler)
 
 class FellowKids(commands.AutoShardedBot):
     def __init__(self):
