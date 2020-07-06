@@ -46,6 +46,7 @@ class Leveling(commands.Cog):
         rows = self.cursor.fetchall()
         self.cachedLevels = dict(rows)
         self.calculateLevels()
+        self.saveLoop.start()
 
     def calculateLevels(self):
         for memberId in self.cachedLevels.keys():
@@ -123,6 +124,7 @@ class Leveling(commands.Cog):
         return data
 
     def cog_unload(self):
+        self.saveLoop.cancel()
         data = self.saveDB()
         self.cursor.executemany('REPLACE INTO levels(id,messages) VALUES(?,?)', data)
         self.db.commit()
