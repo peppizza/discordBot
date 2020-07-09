@@ -4,7 +4,7 @@ from .constants import THIS_FOLDER
 
 class VoiceCommands(commands.Cog):
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.AutoShardedBot):
         """Any command that uses voice."""
         self.bot = bot
 

@@ -8,7 +8,7 @@ from .constants import ROLE_MODERATOR, CATEGORY_OPENSUGGESTIONS, CATEGORY_CLOSED
 
 class SuggestionHandler(commands.Cog):
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.AutoShardedBot):
         """The powerhouse behind the suggestions feature."""
         self.bot = bot
         self.bannedusers = []

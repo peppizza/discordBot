@@ -7,7 +7,7 @@ from .constants import THIS_FOLDER
 
 class SimpleCommands(commands.Cog):
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.AutoShardedBot):
         """Simple commands that take in no arguments."""
         self.bot = bot
         with open("{}/assets/images.json".format(THIS_FOLDER), 'r') as in_file:

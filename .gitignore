@@ -11,3 +11,4 @@ fellow_kids/levels.db
 fellow_kids/levels.db-journal
 tf2_bot/settings.sqlite3
 *discord.log
+*env
