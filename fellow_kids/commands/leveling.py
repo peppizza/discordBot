@@ -1,12 +1,12 @@
 import discord
 import asyncio
-import sqlite3
+import aiosqlite3
 
 from discord.ext import commands, tasks
 from .constants import THIS_FOLDER, ROLE_ADMINISTRATOR
 
 class Leveling(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.AutoShardedBot):
         """The leveling system."""
         self.bot = bot
         self.levels = {
@@ -35,16 +35,18 @@ class Leveling(commands.Cog):
         self.erase = False
         self.cachedLevels = {}
         self.db = bot.db
-        self.cursor = bot.cursor
-        self.cursor.execute("""
+        self.cursor: aiosqlite3.Cursor = bot.cursor
+        self.bot.loop.create_task(self.async_init())
+
+    async def async_init(self):
+        await self.cursor.execute("""
             CREATE TABLE IF NOT EXISTS levels(
                 id INTEGER PRIMARY KEY,
                 messages INTEGER
             )
         """)
-        
-        self.cursor.execute('SELECT * FROM levels')
-        rows = self.cursor.fetchall()
+        await self.cursor.execute('SELECT * FROM levels')
+        rows = await self.cursor.fetchall()
         self.cachedLevels = dict(rows)
         self.calculateLevels()
         self.saveLoop.start()
@@ -93,36 +95,36 @@ class Leveling(commands.Cog):
     @tasks.loop(minutes=5.0)
     async def saveLoop(self):
         data = self.saveDB()
-        self.cursor.executemany('REPLACE INTO levels(id,messages) VALUES(?,?)', data)
-        self.db.commit()
+        await self.cursor.executemany('REPLACE INTO levels(id,messages) VALUES(?,?)', data)
+        await self.db.commit()
 
     @commands.command()
     @commands.is_owner()
     async def save(self, ctx):
         data = self.saveDB()
 
-        self.cursor.executemany('REPLACE INTO levels(id,messages) VALUES(?,?)', data)
-        self.db.commit()
+        await self.cursor.executemany('REPLACE INTO levels(id,messages) VALUES(?,?)', data)
+        await self.db.commit()
 
     @commands.command()
     @commands.has_role(ROLE_ADMINISTRATOR)
     async def reset(self, ctx):
-        self.cursor.execute('DELETE FROM levels')
+        await self.cursor.execute('DELETE FROM levels')
         self.erase = True
         await ctx.send('YOU\'VE LAUNCHED THE ROCKET')
         for x in range(5, 0, -1):
             await asyncio.sleep(1)
             if self.erase == False:
-                self.db.rollback()
+                await self.db.rollback()
                 return
             await ctx.send(x)
         if self.erase == True:
             await asyncio.sleep(1)
             self.cachedLevels = {}
-            self.db.commit()
+            await self.db.commit()
             await ctx.send('levels erased')
         else:
-            self.db.rollback()
+            await self.db.rollback()
         
     @commands.command()
     @commands.has_role(ROLE_ADMINISTRATOR)
@@ -140,8 +142,11 @@ class Leveling(commands.Cog):
     def cog_unload(self):
         self.saveLoop.cancel()
         data = self.saveDB()
-        self.cursor.executemany('REPLACE INTO levels(id,messages) VALUES(?,?)', data)
-        self.db.commit()
+        self.bot.loop.create_task(self.save_to_db(data))
+
+    async def save_to_db(self, data):
+        await self.cursor.executemany('REPLACE INTO levels(id,messages) VALUES(?,?)', data)
+        await self.db.commit()
 
 def setup(bot):
     bot.add_cog(Leveling(bot))

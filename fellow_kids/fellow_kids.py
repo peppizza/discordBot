@@ -1,7 +1,7 @@
 import os
 import discord
 import logging
-import sqlite3
+import aiosqlite3
 
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -20,9 +20,12 @@ logger.addHandler(handler)
 class FellowKids(commands.AutoShardedBot):
     def __init__(self):
         super().__init__(command_prefix='!', owner_id=253290704384557057, reconnect=True, case_insensitive=False)
+        self.loop.create_task(self.async_init())
         self.loop.create_task(self.load_extensions())
-        self.db = sqlite3.connect('levels.db')
-        self.cursor = self.db.cursor()
+
+    async def async_init(self):
+        self.db = await aiosqlite3.connect('levels.db')
+        self.cursor = await self.db.cursor()
 
     async def on_ready(self):
         await self.change_presence(activity=discord.Game(name='DM me !report to report a user'))
