@@ -21,6 +21,8 @@ class FellowKids(commands.AutoShardedBot):
     def __init__(self):
         super().__init__(command_prefix='!', owner_id=253290704384557057, reconnect=True, case_insensitive=False)
         self.loop.create_task(self.load_extensions())
+        self.db = sqlite3.connect('levels.db')
+        self.cursor = self.db.cursor()
 
     async def on_ready(self):
         await self.change_presence(activity=discord.Game(name='DM me !report to report a user'))
@@ -32,6 +34,10 @@ class FellowKids(commands.AutoShardedBot):
                 name = file[:-3]
                 if name == 'constants': continue
                 self.load_extension(f'commands.{name}')
+
+    async def close(self):
+        self.db.close()
+        await super().close()
 
 
 FellowKids().run(API_TOKEN)

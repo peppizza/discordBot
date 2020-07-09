@@ -34,8 +34,8 @@ class Leveling(commands.Cog):
         }
         self.erase = False
         self.cachedLevels = {}
-        self.db = sqlite3.connect('levels.db')
-        self.cursor = self.db.cursor()
+        self.db = bot.db
+        self.cursor = bot.cursor
         self.cursor.execute("""
             CREATE TABLE IF NOT EXISTS levels(
                 id INTEGER PRIMARY KEY,
