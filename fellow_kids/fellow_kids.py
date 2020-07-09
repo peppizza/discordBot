@@ -39,8 +39,8 @@ class FellowKids(commands.AutoShardedBot):
                 self.load_extension(f'commands.{name}')
 
     async def close(self):
-        await self.db.close()
         await super().close()
+        await self.db.close()
 
 
 FellowKids().run(API_TOKEN)
