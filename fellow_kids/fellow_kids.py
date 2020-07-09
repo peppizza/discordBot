@@ -39,7 +39,7 @@ class FellowKids(commands.AutoShardedBot):
                 self.load_extension(f'commands.{name}')
 
     async def close(self):
-        self.db.close()
+        await self.db.close()
         await super().close()
 
 
