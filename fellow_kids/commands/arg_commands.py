@@ -7,7 +7,7 @@ from discord.ext import commands
 
 class ArgCommands(commands.Cog):
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.AutoShardedBot):
         """Simple commands that contain arguments."""
         self.bot = bot
         self.API_KEY = os.getenv('API_KEY')

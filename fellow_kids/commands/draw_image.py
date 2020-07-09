@@ -4,7 +4,7 @@ from discord.ext import commands
 from .constants import THIS_FOLDER, BANNED_WORDS
 
 class DrawImage(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.AutoShardedBot):
         """Commands that need to draw on images."""
         self.bot = bot
 

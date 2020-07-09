@@ -1,7 +1,7 @@
 from discord.ext import commands
 
 class Admin(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot: commands.AutoShardedBot):
         """Commands meant for reloading/loading extensions due to any changes."""
         self.bot = bot
 
