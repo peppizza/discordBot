@@ -4,13 +4,7 @@
 
 Two discord bots for the french fortress discord server
 
-## Dependencies
-
-Requires discord.py rewrite, and python-dotenv
-
-`python3 -m pip install -U discord.py`
-
-`pip install -U python-dotenv`
+# `Place Lavalink.jar in the fellow_kids folder`
 
 ## Compilation
 
