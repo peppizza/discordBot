@@ -8,7 +8,7 @@ class DrawImage(commands.Cog):
         """Commands that need to draw on images."""
         self.bot = bot
 
-    @commands.command()
+    @commands.command(help="Puts a custom caption under the \"But it was me dio!\" meme")
     async def dio(self, ctx, *args):
         if self.filter(' '.join(args[:])):
             return
