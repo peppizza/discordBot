@@ -29,7 +29,7 @@ class Moderation(commands.Cog):
                 context = await self.bot.get_context(message=message)
                 await self.warn(context, context.author, ('Hate speech'), auto=True)
 
-    @commands.command()
+    @commands.command(help="Warn someone")
     @commands.has_role(ROLE_MODERATOR)
     async def warn(self, ctx, member: discord.Member, *args, auto=False):
         channel = self.bot.get_channel(CHANNEL_MODERATION)
@@ -51,6 +51,23 @@ class Moderation(commands.Cog):
     async def warn_on_error(self, ctx, error):
         await ctx.message.delete()
         print(error)
+
+    @commands.command(help="Mute a user")
+    @commands.has_role(ROLE_MODERATOR)
+    async def mute(self, ctx, member: discord.Member):
+        role = discord.utils.get(ctx.guild.roles, name='Muted')
+        await member.add_roles(role)
+        await ctx.send('this american boot just muted your american ass back to american canada\nBECAUSE AMERICA')
+
+    @mute.error
+    async def mute_on_error(self, ctx, error):
+        await ctx.send(error)
+
+    @commands.command(help="Unmute a user")
+    @commands.has_role(ROLE_MODERATOR)
+    async def unmute(self, ctx, member: discord.Member):
+        role = discord.utils.get(ctx.guild.roles, name='Muted')
+        await member.remove_roles(role)
 
 def setup(bot):
     bot.add_cog(Moderation(bot))
