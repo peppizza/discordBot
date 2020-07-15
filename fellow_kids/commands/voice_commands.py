@@ -168,5 +168,17 @@ class VoiceCommands(commands.Cog):
         await self.connect_to(ctx.guild.id, None)
         await ctx.send('*⃣ | Disconnected.')
 
+    @commands.command(aliases=['c'])
+    async def clear(self, ctx):
+        player = self.bot.lavalink.player_manager.get(ctx.guild.id)
+
+        if not player.is_connected:
+            return await ctx.send('Not connected.')
+
+        if not ctx.author.voice or (player.is_connected and ctx.author.voice.channel.id != int(player.channel_id)):
+            return await ctx.send('You\'re not in my voicechannel!')
+
+        player.queue.clear()
+
 def setup(bot):
     bot.add_cog(VoiceCommands(bot))
