@@ -179,6 +179,8 @@ class VoiceCommands(commands.Cog):
             return await ctx.send('You\'re not in my voicechannel!')
 
         player.queue.clear()
+        await player.stop()
+        await ctx.send('Cleared queue')
 
 def setup(bot):
     bot.add_cog(VoiceCommands(bot))
