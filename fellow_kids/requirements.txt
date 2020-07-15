@@ -16,3 +16,4 @@ pycparser==2.20
 python-dotenv==0.14.0
 websockets==8.1
 yarl==1.4.2
+-e git+https://github.com/Rapptz/discord-ext-menus#egg=discord.ext.menus
