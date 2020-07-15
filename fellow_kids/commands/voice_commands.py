@@ -90,7 +90,7 @@ class VoiceCommands(commands.Cog):
         # The above looks dirty, we could alternatively use `bot.shards[shard_id].ws` but that assumes
         # the bot instance is an AutoShardedBot.
 
-    @commands.command(aliases=['p'])
+    @commands.command(aliases=['p'], help="Searches and plays a song from a given query.")
     async def play(self, ctx, *, query: str):
         """ Searches and plays a song from a given query. """
         # Get the player for this guild from cache.
@@ -145,7 +145,7 @@ class VoiceCommands(commands.Cog):
         if not player.is_playing:
             await player.play()
 
-    @commands.command(aliases=['dc'])
+    @commands.command(aliases=['dc'], help="Disconnects the player from the voice channel and clears its queue.")
     async def disconnect(self, ctx):
         """ Disconnects the player from the voice channel and clears its queue. """
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
@@ -168,8 +168,9 @@ class VoiceCommands(commands.Cog):
         await self.connect_to(ctx.guild.id, None)
         await ctx.send('*⃣ | Disconnected.')
 
-    @commands.command(aliases=['c'])
+    @commands.command(aliases=['c'], help="Clears the current song queue.")
     async def clear(self, ctx):
+        """ Clears the current song queue """
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
 
         if not player.is_connected:
@@ -181,6 +182,12 @@ class VoiceCommands(commands.Cog):
         player.queue.clear()
         await player.stop()
         await ctx.send('Cleared queue')
+
+    @commands.command(aliases=['np'], help="Gets the name of the current song")
+    async def playing(self, ctx):
+        player: lavalink.DefaultPlayer = self.bot.lavalink.player_manager.get(ctx.guild.id)
+        embed = discord.Embed(title='Now playing:', description=f'Currently playing {player.current.title}')
+        await ctx.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(VoiceCommands(bot))
