@@ -21,7 +21,7 @@ class FellowKids(commands.AutoShardedBot):
     def __init__(self):
         super().__init__(command_prefix='!', owner_id=253290704384557057, reconnect=True, case_insensitive=False)
         self.loop.create_task(self.async_init())
-        self.loop.create_task(self.load_extensions())
+        self.load_extensions()
 
     async def async_init(self):
         self.db = await aiosqlite3.connect('levels.db')
@@ -30,8 +30,7 @@ class FellowKids(commands.AutoShardedBot):
     async def on_ready(self):
         await self.change_presence(activity=discord.Game(name='DM me !report to report a user'))
 
-    async def load_extensions(self):
-        await self.wait_until_ready()
+    def load_extensions(self):
         for file in os.listdir('commands'):
             if  file.endswith('.py'):
                 name = file[:-3]
