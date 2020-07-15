@@ -73,7 +73,7 @@ class Leveling(commands.Cog):
             await message.channel.send(embed=embed)
             self.cachedLevels[message.author.id][1] = currentlevel
 
-    @commands.command()
+    @commands.command(help="Shows current level or another members level if passed through as the argument")
     async def level(self, ctx, member: discord.Member = None):
         embed = discord.Embed(title="Level")
         if member is None:
@@ -98,7 +98,7 @@ class Leveling(commands.Cog):
         await self.cursor.executemany('REPLACE INTO levels(id,messages) VALUES(?,?)', data)
         await self.db.commit()
 
-    @commands.command()
+    @commands.command(help="Save levels to database")
     @commands.is_owner()
     async def save(self, ctx):
         data = self.saveDB()
@@ -106,7 +106,7 @@ class Leveling(commands.Cog):
         await self.cursor.executemany('REPLACE INTO levels(id,messages) VALUES(?,?)', data)
         await self.db.commit()
 
-    @commands.command()
+    @commands.command(help="Reset levels")
     @commands.has_role(ROLE_ADMINISTRATOR)
     async def reset(self, ctx):
         await self.cursor.execute('DELETE FROM levels')
@@ -126,7 +126,7 @@ class Leveling(commands.Cog):
         else:
             await self.db.rollback()
         
-    @commands.command()
+    @commands.command(help="Cancels the level reset")
     @commands.has_role(ROLE_ADMINISTRATOR)
     async def cancel(self, ctx):
         self.erase = False
