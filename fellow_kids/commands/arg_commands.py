@@ -12,7 +12,7 @@ class ArgCommands(commands.Cog):
         self.bot = bot
         self.API_KEY = os.getenv('API_KEY')
 
-    @commands.command(help='kill someone')
+    @commands.command(help='Kill someone')
     async def die(self, ctx, arg):
         await ctx.send(f'{arg}, kys')
 
@@ -20,8 +20,7 @@ class ArgCommands(commands.Cog):
     async def die_on_error(self, ctx, error):
         await ctx.send('you fucked up the command you piece of subhuman trash')
 
-
-    @commands.command(help='beanify')
+    @commands.command(help='Bean someone')
     @commands.has_role('Moderators')
     async def bean(self, ctx, *args):
         if not args:
@@ -39,7 +38,7 @@ class ArgCommands(commands.Cog):
     async def bean_on_error(self, ctx, error):
         await ctx.send(error)
 
-    @commands.command(help='bonk')
+    @commands.command(help='Bonk someone')
     async def bonk(self, ctx, arg):
         await ctx.send('{} has been bonked'.format(arg))
 
@@ -47,7 +46,7 @@ class ArgCommands(commands.Cog):
     async def bonk_on_error(self, ctx, error):
         await ctx.send(error)
 
-    @commands.command(help='ping')
+    @commands.command(help='Loop a string of text by the given amount of times')
     @commands.has_role('pinging rights')
     async def ping(self, ctx, arg1, arg2):
         try:
@@ -64,24 +63,7 @@ class ArgCommands(commands.Cog):
     async def ping_on_error(self, ctx, error):
         await ctx.send(error)
 
-    @commands.command()
-    @commands.has_role('Moderators')
-    async def mute(self, ctx, member: discord.Member):
-        role = discord.utils.get(ctx.guild.roles, name='Muted')
-        await member.add_roles(role)
-        await ctx.send('this american boot just muted your american ass back to american canada\nBECAUSE AMERICA')
-
-    @mute.error
-    async def mute_on_error(self, ctx, error):
-        await ctx.send(error)
-
-    @commands.command()
-    @commands.has_role('Moderators')
-    async def unmute(self, ctx, member: discord.Member):
-        role = discord.utils.get(ctx.guild.roles, name='Muted')
-        await member.remove_roles(role)
-
-    @commands.command()
+    @commands.command(help="Mimic someone")
     async def mimic(self, ctx, member: discord.Member):
 
         user = self.bot.get_user(681886537046163506)
@@ -111,7 +93,7 @@ class ArgCommands(commands.Cog):
 
         await ctx.send(' '.join(wordlist))
 
-    @commands.command(aliases=['emoji'])
+    @commands.command(aliases=['emoji'], help="Shows big picture of an emote")
     async def emote(self, ctx, emoji: discord.Emoji):
         await ctx.send(emoji.url)
 
