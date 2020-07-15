@@ -6,7 +6,7 @@ class DmCommands(commands.Cog):
         """Commands that can only be triggered in a DM."""
         self.bot = bot
 
-    @commands.command()
+    @commands.command(help="Report a user")
     @commands.dm_only()
     async def report(self, ctx):
         await ctx.send('https://forms.gle/bwfdc1AyHJ5dL1ZN7')
