@@ -7,16 +7,16 @@ class CustomHelpCommand(commands.HelpCommand):
         return f'{self.clean_prefix}{command.qualified_name} {command.signature}'
 
     async def send_bot_help(self, mapping):
-        menu = HelpMenu()
-        await menu.start(self.context)
+        pages = menus.MenuPages(source=HelpMenuPageOne(range(1, 100)), clear_reactions_after=True)
+        await pages.start(self.context)
 
-class HelpMenu(menus.Menu):
-    async def send_initial_message(self, ctx: commands.Context, channel: discord.TextChannel):
-        return await channel.send(f'Hello {ctx.author}')
+class HelpMenuPageOne(menus.ListPageSource):
+    def __init__(self, data):
+        super().__init__(data, per_page=4)
 
-    @menus.button('\N{THUMBS UP SIGN}')
-    async def on_thumbs_up(self, payload):
-        await self.message.edit(content=f'Got thumbs up from {self.ctx.author}')
+    async def format_page(self, menu, entries):
+        offset = menu.current_page * self.per_page
+        return '\n'.join(f'{i}. {v}' for i, v in enumerate(entries, start=offset))
 
 class HelpCommandCog(commands.Cog):
     def __init__(self, bot: commands.AutoShardedBot):
