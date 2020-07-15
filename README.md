@@ -4,7 +4,7 @@
 
 Two discord bots for the french fortress discord server
 
-# `Place Lavalink.jar in the fellow_kids folder`
+## `Place Lavalink.jar in the fellow_kids folder`
 
 ## Compilation
 
