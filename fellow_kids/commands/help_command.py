@@ -7,10 +7,10 @@ class CustomHelpCommand(commands.HelpCommand):
         return f'{self.clean_prefix}{command.qualified_name} {command.signature}'
 
     async def send_bot_help(self, mapping):
-        pages = menus.MenuPages(source=HelpMenuPageOne(range(1, 100)), clear_reactions_after=True)
+        pages = menus.MenuPages(source=HelpMenuPages(range(1, 100)), clear_reactions_after=True)
         await pages.start(self.context)
 
-class HelpMenuPageOne(menus.ListPageSource):
+class HelpMenuPages(menus.ListPageSource):
     def __init__(self, data):
         super().__init__(data, per_page=4)
 
