@@ -11,13 +11,10 @@ class VoiceCommands(commands.Cog):
         self.bot = bot
 
         if not hasattr(bot, 'lavalink'):  # This ensures the client isn't overwritten during cog reloads.
-            self.bot.loop.create_task(self.setup_lavalink())
+            bot.lavalink = lavalink.Client(self.bot.user.id)
+            bot.lavalink.add_node('172.0.0.1', 2333, 'youshallnotpass', 'us', 'default-node')
+            bot.add_listener(self.bot.lavalink.voice_update_handler, 'on_socket_response')
 
-    async def setup_lavalink(self):
-        await self.bot.wait_until_ready()
-        self.bot.lavalink = lavalink.Client(self.bot.user.id)
-        self.bot.lavalink.add_node('172.0.0.1', 2333, 'youshallnotpass', 'us', 'default-node')
-        self.bot.add_listener(self.bot.lavalink.voice_update_handler, 'on_socket_response')
         lavalink.add_event_hook(self.track_hook)
 
     def cog_unload(self):
