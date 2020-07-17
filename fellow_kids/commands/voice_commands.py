@@ -59,5 +59,45 @@ class Music(commands.Cog):
         await player.stop()
         await player.disconnect()
 
+    @commands.command(aliases=['c'])
+    async def clear(self, ctx):
+        player: wavelink.Player = self.bot.wavelink.get_player(ctx.guild.id)
+
+        await player.stop()
+
+    @commands.command()
+    async def pause(self, ctx):
+        player: wavelink.Player = self.bot.wavelink.get_player(ctx.guild.id)
+
+        if player.is_paused:
+            await ctx.send('The player is already paused')
+        else:
+            await player.set_pause(True)
+
+    @commands.command()
+    async def unpause(self, ctx):
+        player: wavelink.Player = self.bot.wavelink.get_player(ctx.guild.id)
+
+        if not player.is_paused:
+            await ctx.send('The player is already playing')
+        else:
+            await player.set_pause(False)
+
+    @commands.command()
+    async def volume(self, ctx, *, level: int):
+        if level < 0 or level > 100:
+            return await ctx.send('Please select a value from 1 to 100')
+        player: wavelink.Player = self.bot.wavelink.get_player(ctx.guild.id)
+
+        await player.set_volume(level)
+    
+    @commands.command()
+    async def np(self, ctx):
+        player: wavelink.Player = self.bot.wavelink.get_player(ctx.guild.id)
+
+        embed = discord.Embed(title='Now playing', description=player.current.title)
+
+        await ctx.send(embed=embed)
+
 def setup(bot):
     bot.add_cog(Music(bot))

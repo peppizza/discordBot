@@ -34,11 +34,12 @@ class Leveling(commands.Cog):
         }
         self.erase = False
         self.cachedLevels = {}
-        self.db = bot.db
-        self.cursor: aiosqlite3.Cursor = bot.cursor
         self.bot.loop.create_task(self.async_init())
 
     async def async_init(self):
+        await self.bot.wait_until_ready()
+        self.db = self.bot.db
+        self.cursor: aiosqlite3.Cursor = self.bot.cursor
         await self.cursor.execute("""
             CREATE TABLE IF NOT EXISTS levels(
                 id INTEGER PRIMARY KEY,
