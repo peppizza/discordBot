@@ -67,7 +67,7 @@ class Leveling(commands.Cog):
         if self.cachedLevels[message.author.id][0] in self.levels:
             currentlevel = self.levels.get(self.cachedLevels[message.author.id][0])
             embed = discord.Embed(title=f'{message.author} has leveled up', color=0x00ff00)
-            embed.set_image(url='https://france-amerique.com/wp-content/uploads/2018/01/flute-e1516288055295.jpg')
+            embed.set_thumbnail(url='https://france-amerique.com/wp-content/uploads/2018/01/flute-e1516288055295.jpg')
             embed.add_field(name='messages sent:', value=self.cachedLevels[message.author.id][0])
             embed.add_field(name='level reached:', value=currentlevel)
             await message.channel.send(embed=embed)
