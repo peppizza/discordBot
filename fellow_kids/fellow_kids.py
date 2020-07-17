@@ -32,6 +32,7 @@ class FellowKids(commands.AutoShardedBot):
 
     async def load_extensions(self):
         await self.wait_until_ready()
+        print(self.user.id)
         for file in os.listdir('commands'):
             if  file.endswith('.py'):
                 name = file[:-3]

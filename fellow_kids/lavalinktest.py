@@ -1,6 +1,11 @@
 import discord
 import wavelink
+
+from os import getenv
+from dotenv import load_dotenv
 from discord.ext import commands
+
+bot = commands.Bot(command_prefix='!')
 
 class Music(commands.Cog):
 
@@ -36,7 +41,7 @@ class Music(commands.Cog):
         await ctx.send(f'Connecting to **`{channel.name}`**')
         await player.connect(channel.id)
 
-    @commands.command(aliases=['p'])
+    @commands.command()
     async def play(self, ctx, *, query: str):
         tracks = await self.bot.wavelink.get_tracks(f'ytsearch:{query}')
 
@@ -50,14 +55,9 @@ class Music(commands.Cog):
         await ctx.send(f'Added {str(tracks[0])} to the queue.')
         await player.play(tracks[0])
 
-    @commands.command(aliases=['dc'])
-    async def disconnect(self, ctx):
-        player: wavelink.Player = self.bot.wavelink.get_player(ctx.guild.id)
-        if not player.is_connected:
-            return await ctx.send('The bot is not in a voice channel')
+load_dotenv()
+DISCORD_TOKEN = getenv('DISCORD_TOKEN')
 
-        await player.stop()
-        await player.disconnect()
+bot.add_cog(Music(bot))
 
-def setup(bot):
-    bot.add_cog(Music(bot))
+bot.run(DISCORD_TOKEN)
