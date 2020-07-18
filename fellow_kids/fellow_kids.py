@@ -3,13 +3,10 @@ import discord
 import logging
 import aiosqlite3
 
+from json import load
 from discord.ext import commands
-from dotenv import load_dotenv
 
 # https://dictionaryapi.com/api/v3/references/thesaurus/json/{word}?key={key}
-
-load_dotenv()
-API_TOKEN = os.getenv('DISCORD_TOKEN')
 
 logger = logging.getLogger('discord')
 logger.setLevel(logging.DEBUG)
@@ -32,7 +29,7 @@ class FellowKids(commands.AutoShardedBot):
 
     def load_extensions(self):
         for file in os.listdir('commands'):
-            if  file.endswith('.py'):
+            if file.endswith('.py'):
                 name = file[:-3]
                 if name == 'constants': continue
                 self.load_extension(f'commands.{name}')
@@ -42,4 +39,8 @@ class FellowKids(commands.AutoShardedBot):
         await self.db.close()
 
 
-FellowKids().run(API_TOKEN)
+if __name__ == '__main__':
+    with open('config.json', 'r') as in_file:
+        API_TOKEN = load(in_file)
+        API_TOKEN = API_TOKEN['DISCORD_TOKEN']
+    FellowKids().run(API_TOKEN)
