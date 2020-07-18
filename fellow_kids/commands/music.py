@@ -153,7 +153,7 @@ class Music(commands.Cog):
     @commands.command(aliases=['dc'])
     async def disconnect(self, ctx):
         """ Disconnects the player from the voice channel and clears its queue. """
-        player = self.bot.lavalink.player_manager.get(ctx.guild.id)
+        player: lavalink.DefaultPlayer = self.bot.lavalink.player_manager.get(ctx.guild.id)
 
         if not player.is_connected:
             # We can't disconnect, if we're not connected.
@@ -163,6 +163,11 @@ class Music(commands.Cog):
             # Abuse prevention. Users not in voice channels, or not in the same voice channel as the bot
             # may not disconnect the bot.
             return await ctx.send('You\'re not in my voicechannel!')
+
+        player.queue.clear()
+        await player.stop()
+        await self.connect_to(ctx, None)
+        await ctx.send('Disconnected')
 
     @commands.command()
     async def np(self, ctx):
@@ -175,6 +180,20 @@ class Music(commands.Cog):
         for idx, song in enumerate(player.queue):
             embed.add_field(name=idx + 1, value=song.title, inline=False)
         await ctx.send(embed=embed)
+
+    @commands.command()
+    async def volume(self, ctx, *, value: int=None):
+        player: lavalink.DefaultPlayer = self.bot.lavalink.player_manager.get(ctx.guild.id)
+
+        if value is None: return await ctx.send(f'Current volume is {player.volume}')
+
+        if value < 0 or value > 100: return await ctx.send('Select a value from 1 to 100')
+
+        if not player.is_playing:
+            return await ctx.send('Theres nothing currently playing')
+
+        await player.set_volume(value)
+        await ctx.send(f'Set volume to {value}')
 
 def setup(bot):
     bot.add_cog(Music(bot))
