@@ -195,5 +195,16 @@ class Music(commands.Cog):
         await player.set_volume(value)
         await ctx.send(f'Set volume to {value}')
 
+    @commands.command()
+    async def skip(self, ctx):
+        player: lavalink.DefaultPlayer = self.bot.lavalink.player_manager.get(ctx.guild.id)
+
+        if not player.is_connected: return await ctx.send('Not connected')
+        if not player.is_playing: return await ctx.send('Nothing playing')
+        if not ctx.author.voice or (player.is_connected and ctx.author.voice.channel.id != int(player.channel_id)): return await ctx.send('You\'re not in my voice channel!')
+
+        await ctx.send(f'Skipping {player.current.title}...')
+        await player.skip()
+
 def setup(bot):
     bot.add_cog(Music(bot))
