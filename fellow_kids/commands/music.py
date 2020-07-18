@@ -199,12 +199,19 @@ class Music(commands.Cog):
     async def skip(self, ctx):
         player: lavalink.DefaultPlayer = self.bot.lavalink.player_manager.get(ctx.guild.id)
 
-        if not player.is_connected: return await ctx.send('Not connected')
-        if not player.is_playing: return await ctx.send('Nothing playing')
-        if not ctx.author.voice or (player.is_connected and ctx.author.voice.channel.id != int(player.channel_id)): return await ctx.send('You\'re not in my voice channel!')
-
         await ctx.send(f'Skipping {player.current.title}...')
         await player.skip()
+
+    @commands.command()
+    async def loop(self, ctx):
+        player: lavalink.DefaultPlayer = self.bot.lavalink.player_manager.get(ctx.guild.id)
+
+        if player.repeat is False:
+            await ctx.send(f'Looping {player.current.title}...')
+            player.repeat = True
+        else:
+            await ctx.send(f'Stopping loop of {player.current.title}...')
+            player.repeat = False
 
 def setup(bot):
     bot.add_cog(Music(bot))
