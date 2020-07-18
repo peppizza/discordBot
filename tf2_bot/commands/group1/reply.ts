@@ -1,6 +1,6 @@
 import { Command, CommandoMessage, CommandoClient } from "discord.js-commando";
 
-export class ReplyCommand extends Command {
+module.exports = class ReplyCommand extends Command {
   constructor(client: CommandoClient) {
     super(client, {
       name: "reply",
@@ -14,4 +14,4 @@ export class ReplyCommand extends Command {
   run(msg: CommandoMessage) {
     return msg.say("Hello");
   }
-}
+};
