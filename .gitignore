@@ -14,3 +14,5 @@ tf2_bot/settings.sqlite3
 *env
 fellow_kids/Lavalink.jar
 fellow_kids/logs
+*.js
+!webhook/*.js
