@@ -6,6 +6,7 @@
         "strict": true,
         "watch": true,
         "target": "ESNext",
-        "resolveJsonModule": true
+        "resolveJsonModule": true,
+        "outDir": "build"
     }
 }
