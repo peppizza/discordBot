@@ -164,5 +164,17 @@ class Music(commands.Cog):
             # may not disconnect the bot.
             return await ctx.send('You\'re not in my voicechannel!')
 
+    @commands.command()
+    async def np(self, ctx):
+        player: lavalink.DefaultPlayer = self.bot.lavalink.player_manager.get(ctx.guild.id)
+
+        if not player.is_connected:
+            return await ctx.send('There is nothing currently playing')
+
+        embed = discord.Embed(title="Now playing", description=f"Currently playing {player.current.title}")
+        for idx, song in enumerate(player.queue):
+            embed.add_field(name=idx + 1, value=song.title, inline=False)
+        await ctx.send(embed=embed)
+
 def setup(bot):
     bot.add_cog(Music(bot))
