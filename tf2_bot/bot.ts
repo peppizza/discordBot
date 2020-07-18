@@ -6,7 +6,6 @@ import {
 import path from "path";
 import { token } from "./config.json";
 import sqlite from "sqlite";
-import sqlite3 from "sqlite3";
 import { oneLine } from "common-tags";
 
 const client = new CommandoClient({
@@ -70,14 +69,9 @@ client
       `);
   });
 
-sqlite
-  .open({
-    filename: path.join(__dirname, "settings.sqlite3"),
-    driver: sqlite3.Database,
-  })
-  .then((db) => {
-    client.setProvider(new SQLiteProvider(db));
-  })
-  .catch(console.error);
+(async () => {
+  const db = await sqlite.open("settings.sqlite3");
+  client.setProvider(new SQLiteProvider(db));
+})();
 
 client.login(token);
