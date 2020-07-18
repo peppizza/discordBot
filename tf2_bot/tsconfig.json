@@ -1,16 +1,11 @@
 {
     "compileOnSave": true,
     "compilerOptions": {
-        "target": "ESNext",
-        "strict": true,
-        "module": "ESNext",
+        "module": "CommonJS",
         "moduleResolution": "Node",
-        "experimentalDecorators": true,
-        "noFallthroughCasesInSwitch": true,
-        "noImplicitReturns": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "esModuleInterop": true,
-        "resolveJsonModule": true,
+        "strict": true,
+        "watch": true,
+        "target": "ESNext",
+        "resolveJsonModule": true
     }
 }
