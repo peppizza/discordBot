@@ -11,7 +11,8 @@ module.exports = class ReplyCommand extends Command {
     });
   }
 
-  run(msg: CommandoMessage) {
-    return msg.say("Hello");
+  async run(msg: CommandoMessage) {
+    const message = await msg.say("Hi");
+    return message.edit("Bye");
   }
 };
