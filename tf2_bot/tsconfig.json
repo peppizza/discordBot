@@ -2,13 +2,14 @@
     "compileOnSave": true,
     "compilerOptions": {
         "target": "ESNext",
-        "module": "UMD",
         "strict": true,
         "moduleResolution": "Node",
         "experimentalDecorators": true,
         "noFallthroughCasesInSwitch": true,
         "noImplicitReturns": true,
         "noUnusedLocals": true,
-        "noUnusedParameters": true
+        "noUnusedParameters": true,
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
     }
 }
