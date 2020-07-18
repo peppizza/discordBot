@@ -166,7 +166,7 @@ class Music(commands.Cog):
 
         player.queue.clear()
         await player.stop()
-        await self.connect_to(ctx, None)
+        await self.connect_to(ctx.guild.id, None)
         await ctx.send('Disconnected')
 
     @commands.command()
