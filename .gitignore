@@ -1,5 +1,5 @@
 
-fellow_kids/.env
+fellow_kids/config.json
 navi/.env
 tf2_bot/config.json
 fellow_kids/__pycache__/
