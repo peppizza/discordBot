@@ -14,6 +14,7 @@ handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w'
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
 
+
 class FellowKids(commands.AutoShardedBot):
     def __init__(self):
         super().__init__(command_prefix='!', owner_id=253290704384557057, reconnect=True, case_insensitive=False)
@@ -26,6 +27,11 @@ class FellowKids(commands.AutoShardedBot):
 
     async def on_ready(self):
         await self.change_presence(activity=discord.Game(name='DM me !report to report a user'))
+
+    async def on_message(self, message):
+        if message.author.bot: return
+
+        await self.process_commands(message)
 
     def load_extensions(self):
         for file in os.listdir('commands'):
