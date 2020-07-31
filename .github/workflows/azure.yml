@@ -1,0 +1,35 @@
+on: [push]
+
+name: Linux_Container_Node_Workflow
+
+jobs:
+  build-and-deploy:
+    runs-on: debian-latest
+    steps:
+    # checkout the repo
+    - name: 'Checkout GitHub Action' 
+      uses: actions/checkout@master
+    
+    - name: 'Login via Azure CLI'
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    - uses: azure/docker-login@v1
+      with:
+        login-server: discordbot.azurecr.io
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+    
+    - run: |
+        docker build ./fellow_kids/dockerfile -t discordbot.azurecr.io/discordbot:${{ github.sha }}
+        docker push discordbot.azurecr.io/discordbot:${{ github.sha }}
+
+    - uses: azure/webapps-container-deploy@v1
+      with:
+        app-name: 'fellow_kids'
+        images: 'discordbot.azurecr.io/discordbot:${{ github.sha }}'
+    
+    - name: Azure logout
+      run: |
+        az logout
