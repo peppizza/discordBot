@@ -1,6 +1,12 @@
-on: [push]
+on:
+  push:
+    branches: master
 
 name: Linux_Container_Node_Workflow
+
+defaults:
+  run:
+    working-directory: fellow_kids
 
 jobs:
   build-and-deploy:
@@ -22,7 +28,7 @@ jobs:
         password: ${{ secrets.REGISTRY_PASSWORD }}
     
     - run: |
-        docker build ./fellow_kids/dockerfile -t discordbot.azurecr.io/discordbot:${{ github.sha }}
+        docker build -t discordbot.azurecr.io/discordbot:${{ github.sha }} .
         docker push discordbot.azurecr.io/discordbot:${{ github.sha }}
 
     - uses: azure/webapps-container-deploy@v1
