@@ -31,11 +31,6 @@ jobs:
         docker build -t discordbot.azurecr.io/discordbot:${{ github.sha }} .
         docker push discordbot.azurecr.io/discordbot:${{ github.sha }}
 
-    - uses: azure/webapps-deploy@v2
-      with:
-        app-name: 'fellowkids'
-        images: 'discordbot.azurecr.io/discordbot:${{ github.sha }}'
-    
     - name: Azure logout
       run: |
         az logout
