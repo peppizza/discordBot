@@ -4,17 +4,11 @@
 
 Two discord bots for the french fortress discord server
 
-## `Place Lavalink.jar in the fellow_kids folder`
+## Docker
+Create a docker build using the docker file located in the fellow_kids folder and set the following environment variables at run time
 
-## Compilation
-
-fellow_kids bot:
-
-`python3 fellow_kids.py`
-
-navi bot:
-
-`python3 navi.py`
+\(required)DISCORD_TOKEN=\<your discord api key>\
+\(optional)MERRIAM_TOKEN=\<your merriam webster thesaurus api token used for the mimic command>
 
 [discord-badge]: https://img.shields.io/discord/684472795639447621.svg?logo=discord&style=flat-square
 [discord-url]: https://discord.gg/nP9JY4C
