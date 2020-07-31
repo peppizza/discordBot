@@ -3,7 +3,6 @@ import discord
 import logging
 import aiosqlite3
 
-from dotenv import load_dotenv
 from discord.ext import commands
 
 # https://dictionaryapi.com/api/v3/references/thesaurus/json/{word}?key={key}
@@ -14,8 +13,22 @@ handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w'
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
 
-load_dotenv()
-API_TOKEN = os.getenv('DISCORD_TOKEN')
+class TokenWasNotFound(Exception):
+    def __init__(self):
+        super().__init__('The discord api token was not found... the bot will shut down')
+
+if os.environ.get('IS_IN_DOCKER', None):
+    API_TOKEN = os.getenv('DISCORD_TOKEN')
+    if API_TOKEN is None:
+        raise TokenWasNotFound
+else:
+    from json import load
+    with open('config.json', 'r') as in_file:
+        API_TOKEN = load(in_file)
+        try:
+            API_TOKEN = API_TOKEN['DISCORD_TOKEN']
+        except KeyError:
+            raise TokenWasNotFound
 
 
 class FellowKids(commands.AutoShardedBot):

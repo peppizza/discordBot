@@ -2,6 +2,7 @@ import discord
 import aiohttp
 import random
 import os
+import warnings
 
 from discord.ext import commands
 
@@ -10,7 +11,23 @@ class ArgCommands(commands.Cog):
     def __init__(self, bot: commands.AutoShardedBot):
         """Simple commands that contain arguments."""
         self.bot = bot
-        self.API_KEY = os.getenv('MERRIAM_TOKEN')
+        if os.environ.get('IS_IN_DOCKER', None):
+            self.API_KEY = os.getenv('MERRIAM_TOKEN')
+            if self.API_KEY is None:
+                warnings.warn('The dictionaryapi token was not found, mimic will not be availible')
+                self.is_mimic_availible = False
+            else:
+                self.is_mimic_availible = True
+        else:
+            from json import load
+            with open('config.json', 'r') as in_file:
+                API_KEY = load(in_file)
+                try:
+                    self.API_KEY = API_KEY['MERRIAM_TOKEN']
+                    self.is_mimic_availible = True
+                except KeyError:
+                    warnings.warn('The dictionaryapi token was not found, mimic will not be availible')
+                    self.is_mimic_availible = False
 
     @commands.command(help='kill someone')
     async def die(self, ctx, arg):
