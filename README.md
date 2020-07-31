@@ -5,7 +5,7 @@
 Two discord bots for the french fortress discord server
 
 ## Docker
-Create a docker build using the docker file located in the fellow_kids folder and set the following environment variables at either run or build time
+Create a docker build using the docker file located in the fellow_kids folder and set the following environment variables at run time
 
 \(required)DISCORD_TOKEN=\<your discord api key>\
 \(optional)MERRIAM_TOKEN=\<your merriam webster thesaurus api token used for the mimic command>
