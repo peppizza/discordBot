@@ -4,7 +4,7 @@ name: Linux_Container_Node_Workflow
 
 jobs:
   build-and-deploy:
-    runs-on: debian-latest
+    runs-on: ubuntu-latest
     steps:
     # checkout the repo
     - name: 'Checkout GitHub Action' 
