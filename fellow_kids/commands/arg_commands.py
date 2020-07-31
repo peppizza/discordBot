@@ -1,18 +1,16 @@
 import discord
 import aiohttp
 import random
+import os
 
 from discord.ext import commands
-from json import load
 
 class ArgCommands(commands.Cog):
 
     def __init__(self, bot: commands.AutoShardedBot):
         """Simple commands that contain arguments."""
         self.bot = bot
-        with open('config.json', 'r') as in_file:
-            API_KEY = load(in_file)
-            self.API_KEY = API_KEY['DICTIONARY_KEY']
+        self.API_KEY = os.getenv('MERRIAM_TOKEN')
 
     @commands.command(help='kill someone')
     async def die(self, ctx, arg):

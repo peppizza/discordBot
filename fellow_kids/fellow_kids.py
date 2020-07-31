@@ -3,7 +3,7 @@ import discord
 import logging
 import aiosqlite3
 
-from json import load
+from dotenv import load_dotenv
 from discord.ext import commands
 
 # https://dictionaryapi.com/api/v3/references/thesaurus/json/{word}?key={key}
@@ -13,6 +13,9 @@ logger.setLevel(logging.DEBUG)
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
+
+load_dotenv()
+API_TOKEN = os.getenv('DISCORD_TOKEN')
 
 
 class FellowKids(commands.AutoShardedBot):
@@ -46,7 +49,4 @@ class FellowKids(commands.AutoShardedBot):
 
 
 if __name__ == '__main__':
-    with open('config.json', 'r') as in_file:
-        API_TOKEN = load(in_file)
-        API_TOKEN = API_TOKEN['DISCORD_TOKEN']
     FellowKids().run(API_TOKEN)
