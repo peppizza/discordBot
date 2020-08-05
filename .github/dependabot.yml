@@ -5,7 +5,14 @@
 
 version: 2
 updates:
-  - package-ecosystem: "pip" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  # Check for updates in main fellow_kids bot
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "daily"
+     
+  # Check for updates in the nodejs webhook
+  - package-ecosystem: "npm"
+    directory: "/"
     schedule:
       interval: "daily"
