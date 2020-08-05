@@ -29,15 +29,5 @@ class Admin(commands.Cog):
     async def load_extension_on_error(self, ctx, error):
         await ctx.send(error)
 
-    @commands.command(name='eval')
-    @commands.is_owner()
-    async def evalCommand(self, ctx, arg: str):
-        try:
-            response = eval(arg)
-        except Exception as ex:
-            await ctx.send(f'command {arg} resulted in error {ex}')
-            return
-        await ctx.send(response)
-
 def setup(bot):
     bot.add_cog(Admin(bot))
