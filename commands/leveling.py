@@ -3,7 +3,7 @@ import asyncio
 import aiosqlite3
 
 from discord.ext import commands, tasks
-from .constants import THIS_FOLDER, ROLE_ADMINISTRATOR
+from .constants import ROLE_ADMINISTRATOR
 
 class Leveling(commands.Cog):
     def __init__(self, bot: commands.AutoShardedBot):
@@ -126,7 +126,7 @@ class Leveling(commands.Cog):
             await ctx.send('levels erased')
         else:
             await self.db.rollback()
-        
+
     @commands.command()
     @commands.has_role(ROLE_ADMINISTRATOR)
     async def cancel(self, ctx):
