@@ -21,11 +21,11 @@ class ArgCommands(commands.Cog):
         else:
             from json import load
             with open('config.json', 'r') as in_file:
-                API_KEY = load(in_file)
-                try:
-                    self.API_KEY = API_KEY['MERRIAM_TOKEN']
+                config = load(in_file)
+                if 'MERRIAM_TOKEN' in config:
+                    self.API_KEY = config['MERRIAM_TOKEN']
                     self.is_mimic_availible = True
-                except KeyError:
+                else:
                     warnings.warn('The dictionaryapi token was not found, mimic will not be availible')
                     self.is_mimic_availible = False
 

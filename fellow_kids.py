@@ -2,6 +2,7 @@ import os
 import discord
 import logging
 import aiosqlite3
+import asyncio
 
 from discord.ext import commands
 
@@ -15,6 +16,7 @@ logger.addHandler(handler)
 
 class TokenWasNotFound(Exception):
     def __init__(self):
+        """Error raised when the discord api token is not found"""
         super().__init__('The discord api token was not found... the bot will shut down')
 
 if os.environ.get('IS_IN_DOCKER', None):
@@ -24,10 +26,10 @@ if os.environ.get('IS_IN_DOCKER', None):
 else:
     from json import load
     with open('config.json', 'r') as in_file:
-        API_TOKEN = load(in_file)
-        try:
-            API_TOKEN = API_TOKEN['DISCORD_TOKEN']
-        except KeyError:
+        config = load(in_file)
+        if 'DISCORD_TOKEN' in config:
+            API_TOKEN = config['DISCORD_TOKEN']
+        else:
             raise TokenWasNotFound
 
 
@@ -63,4 +65,9 @@ class FellowKids(commands.AutoShardedBot):
 
 
 if __name__ == '__main__':
-    FellowKids().run(API_TOKEN)
+    loop = asyncio.get_event_loop()
+    bot = FellowKids()
+    try:
+        loop.run_until_complete(bot.start(API_TOKEN))
+    except KeyboardInterrupt:
+        loop.run_until_complete(bot.logout())
