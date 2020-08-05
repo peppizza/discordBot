@@ -33,7 +33,7 @@ else:
 
 class FellowKids(commands.AutoShardedBot):
     def __init__(self):
-        """The main fellow_kids bot class"""
+        """The main fellow_kids bot class."""
         super().__init__(command_prefix='!', owner_id=253290704384557057, reconnect=True, case_insensitive=False)
         self.loop.create_task(self.async_init())
         self.load_extensions()
