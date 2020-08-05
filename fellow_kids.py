@@ -16,7 +16,7 @@ logger.addHandler(handler)
 
 class TokenWasNotFound(Exception):
     def __init__(self):
-        """Error raised when the discord api token is not found"""
+        """Error raised when the discord api token is not found."""
         super().__init__('The discord api token was not found... the bot will shut down')
 
 if os.environ.get('IS_IN_DOCKER', None):
