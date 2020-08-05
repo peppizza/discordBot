@@ -13,6 +13,6 @@ updates:
      
   # Check for updates in the nodejs webhook
   - package-ecosystem: "npm"
-    directory: "/"
+    directory: "/webhook"
     schedule:
       interval: "daily"
