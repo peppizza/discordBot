@@ -1,5 +1,7 @@
-const express = require('express');
-const simpleGit = require('simple-git');
+/* eslint-disable no-console */
+
+const express = require("express");
+const simpleGit = require("simple-git");
 
 const app = express();
 const git = simpleGit();
@@ -7,10 +9,10 @@ const PORT = 4567;
 
 app.use(express.json());
 
-app.post('/payload', async (req, res) => {
+app.post("/payload", async (req, res) => {
 	res.send();
-	if (req.body.ref === 'refs/heads/master') {
-		await git.pull(() => console.log('pulling data'));
+	if (req.body.ref === "refs/heads/master") {
+		await git.pull(() => console.log("pulling data"));
 	}
 });
 
