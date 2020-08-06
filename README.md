@@ -10,7 +10,5 @@ Create a docker build using Dockerfile and set the following environment variabl
 \(required)DISCORD_TOKEN=\<your discord api key>\
 \(optional)MERRIAM_TOKEN=\<your merriam webster thesaurus api token used for the mimic command>
 
-test
-
 [discord-badge]: https://img.shields.io/discord/684472795639447621.svg?logo=discord&style=flat-square
 [discord-url]: https://discord.gg/nP9JY4C
