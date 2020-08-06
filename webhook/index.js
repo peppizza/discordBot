@@ -12,7 +12,7 @@ app.use(express.json());
 app.post("/payload", async (req, res) => {
 	res.send();
 	if (req.body.ref === "refs/heads/master") {
-		await git.pull(() => console.log("pulling data"));
+		await git.pull("origin", "master");
 	}
 });
 
