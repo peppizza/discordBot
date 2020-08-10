@@ -4,3 +4,4 @@ levels.db
 commands/assets/final.png
 node_modules/
 discord.log
+.vscode/
