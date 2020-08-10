@@ -65,9 +65,4 @@ class FellowKids(commands.AutoShardedBot):
 
 
 if __name__ == '__main__':
-    loop = asyncio.get_event_loop()
-    bot = FellowKids()
-    try:
-        loop.run_until_complete(bot.start(API_TOKEN))
-    except KeyboardInterrupt:
-        loop.run_until_complete(bot.logout())
+    FellowKids().run(API_TOKEN)
