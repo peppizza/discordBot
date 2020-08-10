@@ -21,7 +21,8 @@ class TokenWasNotFound(Exception):
 
 if os.environ.get('IS_IN_DOCKER'):
     API_TOKEN = os.getenv('DISCORD_TOKEN')
-    if API_TOKEN is None:
+    POOL_CONFIG = os.getenv('POOL_CONFIG')
+    if API_TOKEN is None or POOL_CONFIG is None:
         raise TokenWasNotFound
 else:
     from json import load

@@ -1,12 +1,10 @@
 FROM python:3
-
-WORKDIR /usr/src/app
-
+ENV PYTHONUNBUFFERED 1
 ENV IS_IN_DOCKER Yes
-
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
-
-COPY . .
-
-CMD [ "python", "./fellow_kids.py" ]
+RUN mkdir /code
+WORKDIR /code
+COPY Pipfile .
+COPY Pipfile.lock .
+RUN pip install pipenv
+RUN pipenv install --deploy --ignore-pipfile
+COPY . /code/

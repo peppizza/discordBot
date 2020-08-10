@@ -1,0 +1,19 @@
+version: '3'
+services: 
+    db:
+        image: postgres
+        environment: 
+            - POSTGRES_DB=db_name
+            - POSTGRES_USER=user
+            - POSTGRES_PASSWORD=password
+
+    bot:
+        build: .
+        volumes: 
+            - .:/code
+        depends_on: 
+            - db
+        environment: 
+            - DISCORD_TOKEN=<Discord api token>
+            - POOL_CONFIG=postgresql://user:password@db/db_name
+        command: ["./wait-for-postgres.sh", "db:5432", "--", "pipenv", "run", "python", "fellow_kids.py"]

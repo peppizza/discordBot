@@ -46,7 +46,6 @@ class Leveling(commands.Cog):
                 for i in rows:
                     cachedLevels[i[0]] = i[1:]
 
-                print(cachedLevels)
                 self.cachedLevels = cachedLevels
                 self.saveLoop.start()
 
