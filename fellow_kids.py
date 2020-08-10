@@ -1,8 +1,8 @@
 import os
 import discord
 import logging
-import aiosqlite3
 import asyncio
+import asyncpg
 
 from discord.ext import commands
 
@@ -19,7 +19,7 @@ class TokenWasNotFound(Exception):
         """Error raised when the discord api token is not found."""
         super().__init__('The discord api token was not found... the bot will shut down')
 
-if os.environ.get('IS_IN_DOCKER', None):
+if os.environ.get('IS_IN_DOCKER'):
     API_TOKEN = os.getenv('DISCORD_TOKEN')
     if API_TOKEN is None:
         raise TokenWasNotFound
@@ -27,8 +27,9 @@ else:
     from json import load
     with open('config.json', 'r') as in_file:
         config = load(in_file)
-        if 'DISCORD_TOKEN' in config:
+        if 'DISCORD_TOKEN' in config and 'POOL_CONFIG' in config:
             API_TOKEN = config['DISCORD_TOKEN']
+            POOL_CONFIG = config['POOL_CONFIG']
         else:
             raise TokenWasNotFound
 
@@ -41,8 +42,17 @@ class FellowKids(commands.AutoShardedBot):
         self.load_extensions()
 
     async def async_init(self):
-        self.db = await aiosqlite3.connect('levels.db')
-        self.cursor = await self.db.cursor()
+        self.pool = await asyncpg.create_pool(POOL_CONFIG)
+        async with self.pool.acquire() as connection:
+            connection: asyncpg.Connection
+            async with connection.transaction():
+                await connection.execute("""
+                                    CREATE TABLE IF NOT EXISTS levels(
+                                        id BIGINT PRIMARY KEY,
+                                        messages INTEGER,
+                                        level TEXT
+                                    )
+                                """)
 
     async def on_ready(self):
         await self.change_presence(activity=discord.Game(name='DM me !report to report a user'))
@@ -61,7 +71,7 @@ class FellowKids(commands.AutoShardedBot):
 
     async def close(self):
         await super().close()
-        await self.db.close()
+        await self.pool.close()
 
 
 if __name__ == '__main__':

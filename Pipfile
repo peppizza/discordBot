@@ -8,8 +8,8 @@ pylint = "*"
 
 [packages]
 "discord.py" = "*"
-aiosqlite3 = "*"
 pillow = "*"
+asyncpg = "*"
 
 [requires]
 python_version = "3.8"

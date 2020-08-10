@@ -1,6 +1,6 @@
 import discord
 import asyncio
-import aiosqlite3
+import asyncpg
 
 from discord.ext import commands, tasks
 from .constants import ROLE_ADMINISTRATOR
@@ -38,25 +38,17 @@ class Leveling(commands.Cog):
 
     async def async_init(self):
         await self.bot.wait_until_ready()
-        self.db = self.bot.db
-        self.cursor: aiosqlite3.Cursor = self.bot.cursor
-        await self.cursor.execute("""
-            CREATE TABLE IF NOT EXISTS levels(
-                id INTEGER PRIMARY KEY,
-                messages INTEGER
-            )
-        """)
-        await self.cursor.execute('SELECT * FROM levels')
-        rows = await self.cursor.fetchall()
-        self.cachedLevels = dict(rows)
-        self.calculateLevels()
-        self.saveLoop.start()
+        async with self.bot.pool.acquire() as connection:
+            connection: asyncpg.Connection
+            async with connection.transaction():
+                rows = await connection.fetch('SELECT * FROM levels')
+                cachedLevels = {}
+                for i in rows:
+                    cachedLevels[i[0]] = i[1:]
 
-    def calculateLevels(self):
-        for memberId in self.cachedLevels.keys():
-            level = self.cachedLevels[memberId]
-            levelName = self.levels.get(level, self.levels[min(self.levels.keys(), key=lambda k: abs(k-level))])
-            self.cachedLevels[memberId] = [level, levelName]
+                print(cachedLevels)
+                self.cachedLevels = cachedLevels
+                self.saveLoop.start()
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -96,21 +88,19 @@ class Leveling(commands.Cog):
     @tasks.loop(minutes=5.0)
     async def saveLoop(self):
         data = self.saveDB()
-        await self.cursor.executemany('REPLACE INTO levels(id,messages) VALUES(?,?)', data)
-        await self.db.commit()
+
+        await self.save_to_db(data)
 
     @commands.command()
     @commands.is_owner()
     async def save(self, ctx):
         data = self.saveDB()
 
-        await self.cursor.executemany('REPLACE INTO levels(id,messages) VALUES(?,?)', data)
-        await self.db.commit()
+        await self.save_to_db(data)
 
     @commands.command()
     @commands.has_role(ROLE_ADMINISTRATOR)
     async def reset(self, ctx):
-        await self.cursor.execute('DELETE FROM levels')
         self.erase = True
         await ctx.send('YOU\'VE LAUNCHED THE ROCKET')
         for x in range(5, 0, -1):
@@ -122,10 +112,11 @@ class Leveling(commands.Cog):
         if self.erase == True:
             await asyncio.sleep(1)
             self.cachedLevels = {}
-            await self.db.commit()
+            async with self.bot.pool.acquire() as connection:
+                connection: asyncpg.Connection
+                async with connection.transaction():
+                    await connection.execute('TRUNCATE levels')
             await ctx.send('levels erased')
-        else:
-            await self.db.rollback()
 
     @commands.command()
     @commands.has_role(ROLE_ADMINISTRATOR)
@@ -136,7 +127,7 @@ class Leveling(commands.Cog):
     def saveDB(self):
         data = []
         for key in list(self.cachedLevels.keys()):
-            data.append((key, self.cachedLevels[key][0]))
+            data.append((key, self.cachedLevels[key][0], self.cachedLevels[key][1]))
 
         return data
 
@@ -146,8 +137,14 @@ class Leveling(commands.Cog):
         self.bot.loop.create_task(self.save_to_db(data))
 
     async def save_to_db(self, data):
-        await self.cursor.executemany('REPLACE INTO levels(id,messages) VALUES(?,?)', data)
-        await self.db.commit()
+        async with self.bot.pool.acquire() as connection:
+            connection: asyncpg.Connection
+            async with connection.transaction():
+                await connection.executemany('''INSERT INTO levels(id,messages,level) VALUES ($1, $2, $3)
+                                             ON CONFLICT (id) DO UPDATE
+                                                SET id = EXCLUDED.id,
+                                                messages = EXCLUDED.messages,
+                                                level = EXCLUDED.level''', data)
 
 def setup(bot):
     bot.add_cog(Leveling(bot))
