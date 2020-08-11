@@ -16,4 +16,5 @@ services:
         environment: 
             - DISCORD_TOKEN=<Discord api token>
             - POOL_CONFIG=postgresql://user:password@db/db_name
-        command: ["./wait-for-postgres.sh", "db:5432", "--", "pipenv", "run", "python", "fellow_kids.py"]
+            - POSTGRES_PASSWORD=password
+        command: ["./wait-for-postgres.sh", "db", "pipenv", "run", "python", "fellow_kids.py"]
