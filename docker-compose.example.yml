@@ -3,8 +3,8 @@ services:
     db:
         image: postgres
         environment: 
-            - POSTGRES_DB=db_name
-            - POSTGRES_USER=user
+            - POSTGRES_DB=postgres
+            - POSTGRES_USER=postgres
             - POSTGRES_PASSWORD=password
 
     bot:
@@ -15,7 +15,9 @@ services:
             - db
         environment: 
             - DISCORD_TOKEN=<Discord api token>
-            - POOL_CONFIG=postgresql://user:password@db/db_name
+            # postgresql://user:password@db/db_name
+            - POOL_CONFIG=postgresql://postgres:postgres@db/postgres
             - POSTGRES_PASSWORD=password
+            # OPTIONAL used for mimic command
             - MERRIAM_TOKEN=<Merriam webster thesaurus api token>
         command: ["./wait-for-postgres.sh", "db", "pipenv", "run", "python", "fellow_kids.py"]

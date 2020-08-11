@@ -1,0 +1,5 @@
+{
+    "DISCORD_TOKEN": "<Discord api token>",
+    "POOL_CONFIG": "postgresql://fellow_kids:fellow_kids@localhost/fellow_kids",
+    "MERRIAM_TOKEN": "<Merriam Webster thesaraus api key>"
+}
