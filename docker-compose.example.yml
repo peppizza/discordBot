@@ -17,4 +17,5 @@ services:
             - DISCORD_TOKEN=<Discord api token>
             - POOL_CONFIG=postgresql://user:password@db/db_name
             - POSTGRES_PASSWORD=password
+            - MERRIAM_TOKEN=<Merriam webster thesaurus api token>
         command: ["./wait-for-postgres.sh", "db", "pipenv", "run", "python", "fellow_kids.py"]
