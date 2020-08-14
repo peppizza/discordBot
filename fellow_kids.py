@@ -56,7 +56,7 @@ class FellowKids(commands.AutoShardedBot):
                                 """)
 
     async def on_ready(self):
-        await self.change_presence(activity=discord.Game(name='DM me !report to report a user'))
+        await self.change_presence(activity=discord.Game(name='How do you do, fellow kids'))
 
     async def on_message(self, message):
         if message.author.bot: return
