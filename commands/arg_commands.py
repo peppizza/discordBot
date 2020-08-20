@@ -101,10 +101,7 @@ class ArgCommands(commands.Cog):
     @commands.command()
     async def mimic(self, ctx, member: discord.Member):
 
-        user = self.bot.get_user(681886537046163506)
-        if f'<@!{user.id}>' in ctx.message.content: return
-
-        msg = ()
+        if member.bot: return
 
         def check(m):
             return m.author == member
