@@ -101,6 +101,8 @@ class ArgCommands(commands.Cog):
     @commands.command()
     async def mimic(self, ctx, member: discord.Member):
 
+        if not self.is_mimic_availible: return await ctx.send('Mimic is not currently availible')
+
         if member.bot: return
 
         def check(m):
