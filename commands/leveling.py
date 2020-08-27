@@ -5,6 +5,7 @@ import asyncpg
 from discord.ext import commands, tasks
 from .constants import ROLE_ADMINISTRATOR
 
+
 class Leveling(commands.Cog):
     def __init__(self, bot: commands.AutoShardedBot):
         """The leveling system."""
@@ -51,16 +52,22 @@ class Leveling(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.author.bot: return
+        if message.author.bot:
+            return
         if self.cachedLevels.get(message.author.id) is None:
             self.cachedLevels[message.author.id] = [0, 'None']
-        self.cachedLevels[message.author.id] = [self.cachedLevels[message.author.id][0] + 1, self.cachedLevels[message.author.id][1]]
+        self.cachedLevels[message.author.id] = [
+            self.cachedLevels[message.author.id][0] + 1, self.cachedLevels[message.author.id][1]]
 
         if self.cachedLevels[message.author.id][0] in self.levels:
-            currentlevel = self.levels.get(self.cachedLevels[message.author.id][0])
-            embed = discord.Embed(title=f'{message.author} has leveled up', color=0x00ff00)
-            embed.set_thumbnail(url='https://france-amerique.com/wp-content/uploads/2018/01/flute-e1516288055295.jpg')
-            embed.add_field(name='messages sent:', value=self.cachedLevels[message.author.id][0])
+            currentlevel = self.levels.get(
+                self.cachedLevels[message.author.id][0])
+            embed = discord.Embed(
+                title=f'{message.author} has leveled up', color=0x00ff00)
+            embed.set_thumbnail(
+                url='https://france-amerique.com/wp-content/uploads/2018/01/flute-e1516288055295.jpg')
+            embed.add_field(name='messages sent:',
+                            value=self.cachedLevels[message.author.id][0])
             embed.add_field(name='level reached:', value=currentlevel)
             await message.channel.send(embed=embed)
             self.cachedLevels[message.author.id][1] = currentlevel
@@ -70,15 +77,19 @@ class Leveling(commands.Cog):
         embed = discord.Embed(title="Level")
         if member is None:
             if self.cachedLevels.get(ctx.author.id, None) is not None:
-                embed.add_field(name="messages sent", value=self.cachedLevels[ctx.author.id][0])
-                embed.add_field(name="current level", value=self.cachedLevels[ctx.author.id][1])
+                embed.add_field(name="messages sent",
+                                value=self.cachedLevels[ctx.author.id][0])
+                embed.add_field(name="current level",
+                                value=self.cachedLevels[ctx.author.id][1])
             else:
                 embed.description = "you have not sent any messages yet"
                 embed.color = 0xff0000
         else:
             if self.cachedLevels.get(member.id, None) is not None:
-                embed.add_field(name="messages sent", value=self.cachedLevels[member.id][0])
-                embed.add_field(name="current level", value=self.cachedLevels[member.id][1])
+                embed.add_field(name="messages sent",
+                                value=self.cachedLevels[member.id][0])
+                embed.add_field(name="current level",
+                                value=self.cachedLevels[member.id][1])
             else:
                 embed.description = "this user has not sent any messages yet"
                 embed.color = 0xff0000
@@ -126,7 +137,8 @@ class Leveling(commands.Cog):
     def saveDB(self):
         data = []
         for key in list(self.cachedLevels.keys()):
-            data.append((key, self.cachedLevels[key][0], self.cachedLevels[key][1]))
+            data.append(
+                (key, self.cachedLevels[key][0], self.cachedLevels[key][1]))
 
         return data
 
@@ -144,6 +156,7 @@ class Leveling(commands.Cog):
                                                 SET id = EXCLUDED.id,
                                                 messages = EXCLUDED.messages,
                                                 level = EXCLUDED.level''', data)
+
 
 def setup(bot):
     bot.add_cog(Leveling(bot))

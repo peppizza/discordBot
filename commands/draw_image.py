@@ -3,6 +3,7 @@ from discord import File
 from discord.ext import commands
 from .constants import THIS_FOLDER, BANNED_WORDS
 
+
 class DrawImage(commands.Cog):
     def __init__(self, bot: commands.AutoShardedBot):
         """Commands that need to draw on images."""
@@ -23,7 +24,8 @@ class DrawImage(commands.Cog):
         else:
             fontSize = 50
 
-        font = ImageFont.truetype("/usr/share/fonts/truetype/msttcorefonts/Impact.ttf", fontSize)
+        font = ImageFont.truetype(
+            "/usr/share/fonts/truetype/msttcorefonts/Impact.ttf", fontSize)
         await self.drawText(ctx, msg, font, W, '{}/assets/dio.jpg'.format(THIS_FOLDER))
 
     # @commands.command()
@@ -49,6 +51,7 @@ class DrawImage(commands.Cog):
                 return True
 
         return False
+
 
 def setup(bot):
     bot.add_cog(DrawImage(bot))

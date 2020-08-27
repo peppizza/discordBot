@@ -1,5 +1,6 @@
 from discord.ext import commands
 
+
 class Admin(commands.Cog):
     def __init__(self, bot: commands.AutoShardedBot):
         """Commands meant for reloading/loading extensions due to any changes."""
@@ -28,6 +29,7 @@ class Admin(commands.Cog):
     @loadextension.error
     async def load_extension_on_error(self, ctx, error):
         await ctx.send(error)
+
 
 def setup(bot):
     bot.add_cog(Admin(bot))

@@ -5,6 +5,7 @@ import asyncio
 from discord.ext import commands
 from .constants import THIS_FOLDER
 
+
 class SimpleCommands(commands.Cog):
 
     def __init__(self, bot: commands.AutoShardedBot):
@@ -101,7 +102,8 @@ class SimpleCommands(commands.Cog):
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, user):
-        if reaction.count != 1: return
+        if reaction.count != 1:
+            return
         message = reaction.message
         emoji = reaction.emoji
         await asyncio.sleep(random.randint(1, 3))
@@ -114,6 +116,7 @@ class SimpleCommands(commands.Cog):
     @commands.command()
     async def dumbfuck(self, ctx):
         await ctx.send('https://cdn.discordapp.com/attachments/696786725053399092/725474264941330482/vIPF3oY.mp4')
+
 
 def setup(bot):
     bot.add_cog(SimpleCommands(bot))

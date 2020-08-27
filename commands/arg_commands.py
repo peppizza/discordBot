@@ -6,6 +6,7 @@ import warnings
 
 from discord.ext import commands
 
+
 class ArgCommands(commands.Cog):
 
     def __init__(self, bot: commands.AutoShardedBot):
@@ -14,7 +15,8 @@ class ArgCommands(commands.Cog):
         if os.environ.get('IS_IN_DOCKER', None):
             self.API_KEY = os.getenv('MERRIAM_TOKEN')
             if self.API_KEY is None:
-                warnings.warn('The dictionaryapi token was not found, mimic will not be availible')
+                warnings.warn(
+                    'The dictionaryapi token was not found, mimic will not be availible')
                 self.is_mimic_availible = False
             else:
                 self.is_mimic_availible = True
@@ -26,7 +28,8 @@ class ArgCommands(commands.Cog):
                     self.API_KEY = config['MERRIAM_TOKEN']
                     self.is_mimic_availible = True
                 else:
-                    warnings.warn('The dictionaryapi token was not found, mimic will not be availible')
+                    warnings.warn(
+                        'The dictionaryapi token was not found, mimic will not be availible')
                     self.is_mimic_availible = False
 
     @commands.command(help='kill someone')
@@ -37,19 +40,20 @@ class ArgCommands(commands.Cog):
     async def die_on_error(self, ctx, error):
         await ctx.send('you fucked up the command you piece of subhuman trash')
 
-
     @commands.command(help='beanify')
     @commands.has_role('Moderators')
     async def bean(self, ctx, *args):
         if not args:
             await ctx.send('Please provide an argument for beaning')
             return
-        embed = discord.Embed(title="bean", description="you have been beaned", color=0xff0000)
+        embed = discord.Embed(
+            title="bean", description="you have been beaned", color=0xff0000)
         embed.set_author(name=ctx.message.author.name)
         embed.add_field(name="person", value=args[0])
         if len(args) >= 2:
             embed.add_field(name="reason", value=' '.join(args[1: len(args)]))
-        embed.set_image(url="https://images.immediate.co.uk/production/volatile/sites/4/2018/08/GettyImages-149069817-15d7368.jpg?webp=true&quality=45&resize=1880%2C799")
+        embed.set_image(
+            url="https://images.immediate.co.uk/production/volatile/sites/4/2018/08/GettyImages-149069817-15d7368.jpg?webp=true&quality=45&resize=1880%2C799")
         await ctx.send(embed=embed)
 
     @bean.error
@@ -101,9 +105,11 @@ class ArgCommands(commands.Cog):
     @commands.command()
     async def mimic(self, ctx, member: discord.Member):
 
-        if not self.is_mimic_availible: return await ctx.send('Mimic is not currently availible')
+        if not self.is_mimic_availible:
+            return await ctx.send('Mimic is not currently availible')
 
-        if member.bot: return
+        if member.bot:
+            return
 
         def check(m):
             return m.author == member
@@ -130,6 +136,7 @@ class ArgCommands(commands.Cog):
     @commands.command(aliases=['emoji'])
     async def emote(self, ctx, emoji: discord.Emoji):
         await ctx.send(emoji.url)
+
 
 def setup(bot):
     bot.add_cog(ArgCommands(bot))

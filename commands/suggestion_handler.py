@@ -23,7 +23,8 @@ class SuggestionHandler(commands.Cog):
         chosen = random.choice(inactivesuggestions)
         chosen = self.bot.get_channel(chosen)
         await chosen.edit(name='{}-✅'.format(chosen.name).replace('⌛', ''), category=opencategory, sync_permissions=True)
-        embed = discord.Embed(title='open', description='This channel is now open for suggestions', color=0x00ff00)
+        embed = discord.Embed(
+            title='open', description='This channel is now open for suggestions', color=0x00ff00)
         await chosen.send(embed=embed)
 
     @commands.Cog.listener()
@@ -35,7 +36,8 @@ class SuggestionHandler(commands.Cog):
             return
         sender = message.author
         if catagory.id == CATEGORY_OPENSUGGESTIONS and not ROLE_ADMINISTRATOR == sender.top_role.id and not sender.bot and not sender.id in self.bannedusers:
-            embed = discord.Embed(title='working on..', description='Your request is now being worked on by the devs', color=0x00ff00)
+            embed = discord.Embed(
+                title='working on..', description='Your request is now being worked on by the devs', color=0x00ff00)
             category = self.bot.get_channel(CATEGORY_CLOSEDSUGGESTIONS)
             guild = message.guild
             everyone = guild.get_role(ROLE_EVERYONE)
@@ -52,7 +54,8 @@ class SuggestionHandler(commands.Cog):
     async def close(self, ctx):
         channel = ctx.message.channel
         category = self.bot.get_channel(703314675529416785)
-        embed = discord.Embed(title='inactive', description='This channel is now inactive', color=0x000000)
+        embed = discord.Embed(
+            title='inactive', description='This channel is now inactive', color=0x000000)
         await channel.edit(name=str(channel.name).replace('⌛', ''), category=category, sync_permissions=True)
         await ctx.send(embed=embed)
 
@@ -65,6 +68,7 @@ class SuggestionHandler(commands.Cog):
     @commands.has_role(ROLE_MODERATOR)
     async def suggest(self, ctx, member: discord.Member):
         self.bannedusers.remove(member.id)
+
 
 def setup(bot):
     bot.add_cog(SuggestionHandler(bot))
