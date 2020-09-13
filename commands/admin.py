@@ -30,6 +30,12 @@ class Admin(commands.Cog):
     async def load_extension_on_error(self, ctx, error):
         await ctx.send(error)
 
+    @commands.command()
+    @commands.is_owner()
+    async def prune(self, ctx: commands.Context, arg: int):
+        deleted = await ctx.channel.purge(limit=arg)
+        await ctx.send(f"Deleted {deleted} message(s)")
+
 
 def setup(bot):
     bot.add_cog(Admin(bot))
