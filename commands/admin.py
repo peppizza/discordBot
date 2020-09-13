@@ -34,7 +34,7 @@ class Admin(commands.Cog):
     @commands.is_owner()
     async def prune(self, ctx: commands.Context, arg: int):
         deleted = await ctx.channel.purge(limit=arg)
-        await ctx.send(f"Deleted {deleted} message(s)")
+        await ctx.send(f"Deleted {len(deleted)} message(s)")
 
 
 def setup(bot):
