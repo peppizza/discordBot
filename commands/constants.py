@@ -14,5 +14,4 @@ CHANNEL_RULES = 704737000078704710
 CATEGORY_OPENSUGGESTIONS = 702882329332285471
 CATEGORY_CLOSEDSUGGESTIONS = 702882449159618663
 
-BANNED_WORDS = ['nigger', 'nigga', 'faggot', 'fag',
-                'dyke', 'niggers', 'niggas', 'faggots', 'fags']
+BANNED_WORDS = ['nigger', 'nigga', 'dyke', 'niggers', 'niggas']
